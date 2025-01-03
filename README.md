@@ -4,7 +4,9 @@
 (Add your notes and key learnings here as you progress)
 
 ## Resources to Add
+https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
 https://github.com/Swoorup/mysh?tab=readme-ov-file
+https://github.com/mli42/at42minishell
 
 ### Project Structure
 ```
