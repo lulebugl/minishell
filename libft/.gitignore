@@ -1,5 +1,4 @@
-minishell
-objs
+so_long
 
 # Prerequisites
 *.d
@@ -22,6 +21,7 @@ objs
 # Libraries
 *.lib
 *.a
+**/*.a
 *.la
 *.lo
 
