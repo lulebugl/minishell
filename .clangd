@@ -7,9 +7,9 @@ CompileFlags:
     - "-I${workspaceFolder}/includes"
     - "-I${workspaceFolder}/libft"
 
-Index:
-  Background: Build
-  StandardLibrary: Yes
+#Index:
+#  Background: Build
+#  StandardLibrary: Yes
 
 Diagnostics:
   UnusedIncludes: None
@@ -19,7 +19,9 @@ Diagnostics:
 ---
 # Special configuration for source files
 If:
-  PathMatch: srcs/.*\.c
+  PathMatch: [
+    srcs/.*\.c,
+  ]
 CompileFlags:
   Add:
     - "-I../includes"

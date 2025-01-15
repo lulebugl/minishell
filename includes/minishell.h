@@ -27,5 +27,6 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 
-#include "libft.h"
+# include "../libft/libft.h"
+
 #endif
