@@ -47,6 +47,7 @@ typedef struct s_list t_token;
 
 typedef struct s_data
 {
+	char 	**env;
 	t_token	*token;
 }			t_data;
 

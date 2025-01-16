@@ -19,7 +19,7 @@ int exec_prompt(const char *prompt)
 	return (0);
 }
 
-int launch_program()
+int launch_program(t_data *data)
 {
 	while (true)
 	{
@@ -35,7 +35,9 @@ int launch_program()
 
 int	main(int argc, char **argv, char **envp)
 {
+	t_data data;
 	
-	launch_program();
+	ft_memset(&data, 0, sizeof(t_data));
+	launch_program(&data);
 	return (0);
 }

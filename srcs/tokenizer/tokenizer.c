@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-int tokenize_input(char *prompt)
+int tokenize_input(char *prompt, t_token *token)
 {
 	
 	return (0);
