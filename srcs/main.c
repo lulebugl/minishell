@@ -16,8 +16,6 @@ int exec_prompt(const char *prompt)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)
 		exit(0);
-	if (prompt[0])
-		printf("%s\n", prompt);
 	return (0);
 }
 
