@@ -14,6 +14,5 @@
 
 int	main(int argc, char **argv, char **envp)
 {
-	printf("test\n");
 	return (0);
 }

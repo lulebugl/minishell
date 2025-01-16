@@ -23,10 +23,10 @@ OBJ_PATH = ./objs/
 INC_PATH = ./includes/
 
 SRC		= 	main.c \
-			lexer/lexer.c \
+			tokenizer/tokenizer.c \
 
-SRCS	= $(addprefix $(SRC_PATH), $(SRC))
-OBJ		= $(SRC:.c=.o)
+# OBJ		= $(SRC:.c=.o)
+OBJ		= $(SRCS:.c=.o)
 OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))
 INC		= -I $(INC_PATH) -I $(LIBFT_PATH)
 
