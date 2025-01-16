@@ -25,8 +25,7 @@ INC_PATH = ./includes/
 SRC		= 	main.c \
 			tokenizer/tokenizer.c \
 
-# OBJ		= $(SRC:.c=.o)
-OBJ		= $(SRCS:.c=.o)
+OBJ		= $(SRC:.c=.o)
 OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))
 INC		= -I $(INC_PATH) -I $(LIBFT_PATH)
 
@@ -40,7 +39,7 @@ all: $(OBJ_PATH) $(LIBFT) $(NAME)
 # Objects directory rule
 $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)
-	mkdir -p $(OBJ_PATH)/lexer
+	mkdir -p $(OBJ_PATH)/tokenizer
 # mkdir -p $(OBJ_PATH)/utils
 
 # Objects rule
