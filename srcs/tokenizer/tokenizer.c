@@ -11,3 +11,9 @@
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int tokenize_input(char *prompt)
+{
+	
+	return (0);
+}

@@ -24,6 +24,15 @@ typedef enum e_token_type
 	// TOKEN_ENV_VAR,       // $...
 	// TOKEN_EXIT_STATUS,   // $?
 	// TOKEN_EOF            // End of input
-}	t_token_type;
+}					t_token_type;
+
+
+// typedef struct s_token
+// {
+// 	// int				type;
+// 	void			*content;
+// 	struct s_token	*next;
+// }					t_token;
 
 #endif
+
