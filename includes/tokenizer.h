@@ -26,6 +26,9 @@ typedef enum e_token_type
 	// TOKEN_EOF            // End of input
 }					t_token_type;
 
+typedef struct s_list t_token;
+
+int tokenize_input(const char *s, t_token **token);
 
 // typedef struct s_token
 // {

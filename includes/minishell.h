@@ -16,6 +16,9 @@
 # include "../libft/libft.h"
 # include "tokenizer.h"
 
+/* for debug */
+#include "debug.h"
+
 /* standard */
 # include <errno.h>
 # include <fcntl.h>
@@ -42,8 +45,6 @@
 
 /* color codes high intensity */
 # define HI_CYAN "\e[1;96m"
-
-typedef struct s_list t_token;
 
 typedef struct s_data
 {

@@ -68,15 +68,15 @@ fclean: clean
 re: fclean all
 
 # Testing rule
-# TEST_NAME = test_lexer
-# TEST_SRC = sources/testing/test_lexer.c
-# TEST_OBJ = $(TEST_SRC:.c=.o)
+TEST_NAME = test_lexer
+TEST_SRC = srcs/tokenizer/test_tokenizer.c
+TEST_OBJ = $(TEST_SRC:.c=.o)
 
-# test: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
-# 	mkdir -p $(OBJ_PATH)/testing
-# 	$(CC) $(CFLAGS) -c $(TEST_SRC) -o $(OBJ_PATH)/testing/test_lexer.o $(INC)
-# 	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_lexer.o -o $(TEST_NAME) $(INC) $(LIBFT) -l readline
-# 	@echo "Test program compiled successfully!"
-# 	@./$(TEST_NAME)
+test: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
+	mkdir -p $(OBJ_PATH)/testing
+	$(CC) $(CFLAGS) -c $(TEST_SRC) -o $(OBJ_PATH)/testing/test_lexer.o $(INC)
+	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_lexer.o -o $(TEST_NAME) $(INC) $(LIBFT) -l readline
+	@echo "Test program compiled successfully!"
+# @./$(TEST_NAME)
 
 .PHONY: all re clean fclean test
