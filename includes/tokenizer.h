@@ -13,6 +13,9 @@
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 
+# define ERR_MSG_QUOTES "Unclosed quotes.\n"
+# define ERR_MSG_SYNTAX "syntax error : "
+
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -24,18 +27,15 @@ typedef enum e_token_type
 	// TOKEN_ENV_VAR,       // $...
 	// TOKEN_EXIT_STATUS,   // $?
 	// TOKEN_EOF            // End of input
-}					t_token_type;
+}						t_token_type;
 
-typedef struct s_list t_token;
+typedef struct s_list	t_token;
 
-int tokenize_input(const char *s, t_token **token);
-
-// typedef struct s_token
-// {
-// 	// int				type;
-// 	void			*content;
-// 	struct s_token	*next;
-// }					t_token;
+int						tokenize_input(const char *s, t_token **token);
+void					display_custom_err(char *msg, char *details);
+int						handle_quotes(const char *s, int *pos, char type,
+							t_token **tokens);
+int	handle_io(char *s, int *pos, char type, t_token **tokens);
 
 #endif
 

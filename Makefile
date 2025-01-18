@@ -16,14 +16,16 @@ NAME	= minishell
 # Compiler and compilation flags
 CC		= cc
 # CFLAGS	= -Werror -Wextra -Wall -gdwarf-4 -g
-CFLAGS	= 
+CFLAGS	=
 
 SRC_PATH = ./srcs/
 OBJ_PATH = ./objs/
 INC_PATH = ./includes/
 
 SRC		= 	main.c \
+			tokenizer/token_handlers.c \
 			tokenizer/tokenizer.c \
+			tokenizer/utils.c \
 
 OBJ		= $(SRC:.c=.o)
 OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))
@@ -68,15 +70,15 @@ fclean: clean
 re: fclean all
 
 # Testing rule
-TEST_NAME = test_lexer
+TEST_NAME = lexer
 TEST_SRC = srcs/tokenizer/test_tokenizer.c
 TEST_OBJ = $(TEST_SRC:.c=.o)
 
-test: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
+lexer: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
 	mkdir -p $(OBJ_PATH)/testing
 	$(CC) $(CFLAGS) -c $(TEST_SRC) -o $(OBJ_PATH)/testing/test_lexer.o $(INC)
 	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_lexer.o -o $(TEST_NAME) $(INC) $(LIBFT) -l readline
 	@echo "Test program compiled successfully!"
-# @./$(TEST_NAME)
+	@./$(TEST_NAME)
 
-.PHONY: all re clean fclean test
+.PHONY: all re clean fclean test lexer
