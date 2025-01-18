@@ -12,6 +12,8 @@
 
 #include "../../includes/minishell.h"
 
+// TO DO handle signals in handle_edge_pipe
+
 /* edge case for pipe as last token */
 int	handle_edge_pipe(t_token **tokens)
 {
