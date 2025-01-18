@@ -61,6 +61,7 @@ int	add_token(t_token **tokens, const char *prompt, int start, int len)
 int	handle_quotes(const char *s, int *pos, char type, t_token **tokens)
 {
 	char	*token;
+	bool	ex
 	int		j;
 
 	(*pos)++;
