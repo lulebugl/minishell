@@ -1,0 +1,8 @@
+ls ||| test
+echo >| test.txt
+echo > | test.txt
+ls |
+exit > test.txt
+echo >< test.txt
+ls| + ctrl-D
+ls | exit

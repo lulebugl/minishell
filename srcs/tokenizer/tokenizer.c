@@ -32,7 +32,6 @@ int	tokenize_input(const char *s, t_token **tokens)
 			i++;
 		if (!s[i])
 			break ;
-		pos = i;
 		if (s[i] == '\'' || s[i] == '\"')
 		{
 			if (handle_quotes(s, &i, s[i], tokens) != 0)
@@ -44,17 +43,21 @@ int	tokenize_input(const char *s, t_token **tokens)
 		}
 		else if (s[i] && (s[i] == '<' || s[i] == '>'))
 		{
-			if (handle_io((char *)s, &i, s[i], tokens) != 0)
+			if (handle_io(s, &i, s[i], tokens) != 0)
 				return (1);
 		}
-		// else if (s[i] && s[i] == '|')
-		// {
-		// 	if (handle_operator((char *)s, &i, s[i], tokens) != 0)
-		// 		return (1);
-		// }
+		else if (s[i] && s[i] == '|')
+		{
+			if (handle_pipes(s, &i, tokens) != 0)
+				return (1);
+		}
+		
+		/* not handling the env right for now, '$USER' and "$USER" is treated the same */
 		else
 		{
-			// Handle regular words and environment variables
+			pos = i;
+			if (!s[i])
+				return (0);
 			while (s[i] && s[i] != ' ' && !is_operator(s[i]) && s[i] != '\''
 				&& s[i] != '\"')
 				i++;

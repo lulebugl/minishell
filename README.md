@@ -1,5 +1,14 @@
 # Minishell
 
+## weird commands to tests
+```
+echo >| test.txt
+echo > | test.txt
+ls |
+exit > test.txt
+echo >< test.txt
+```
+
 ## Notes and Learnings
 (Add your notes and key learnings here as you progress)
 

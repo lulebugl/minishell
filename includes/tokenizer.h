@@ -32,10 +32,12 @@ typedef enum e_token_type
 typedef struct s_list	t_token;
 
 int						tokenize_input(const char *s, t_token **token);
-void					display_custom_err(char *msg, char *details);
+void					msg_custom_err(char *msg, char *details);
 int						handle_quotes(const char *s, int *pos, char type,
 							t_token **tokens);
-int	handle_io(char *s, int *pos, char type, t_token **tokens);
+int						handle_io(const char *s, int *pos, char type,
+							t_token **tokens);
+int						handle_pipes(const char *s, int *pos, t_token **tokens);
 
 #endif
 
