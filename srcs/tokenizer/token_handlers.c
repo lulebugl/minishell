@@ -61,11 +61,19 @@ int	add_token(t_token **tokens, const char *prompt, int start, int len)
 int	handle_quotes(const char *s, int *pos, char type, t_token **tokens)
 {
 	char	*token;
-	bool	ex
+	bool	expand;
 	int		j;
 
 	(*pos)++;
 	j = *pos;
+
+
+	// need to implement this
+	expand = true;
+	if (type == '\'')
+		expand = false;
+
+
 	while (s[j] && s[j] != type)
 	{
 		j++;
