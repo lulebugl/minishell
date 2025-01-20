@@ -16,8 +16,10 @@
 #include <assert.h>
 
 typedef struct s_data t_data;
+typedef struct s_token t_token;
 
 void	test_arg_input(const char *input, t_data *data);
+void	print_tokens_formatted(t_token *tokens);
 
 
 #endif 
