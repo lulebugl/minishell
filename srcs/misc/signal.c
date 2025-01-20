@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 19:19:54 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/20 20:09:37 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/20 20:33:48 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,9 @@ static void	sigint_handler(int signum)
 
 void init_signals(void)
 {
-	signal(SIGINT, &sigint_handler);
+	struct sigaction act;
+
+	ft_bzero(&act, sizeof(act));
+	act.sa_handler = &sigint_handler;
+	sigaction(SIGINT, &act, NULL);
 }
