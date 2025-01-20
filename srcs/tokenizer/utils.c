@@ -12,6 +12,17 @@
 
 #include "../../includes/minishell.h"
 
+void clear_tokens(t_token **tokens)
+{
+	if (tokens && *tokens)
+	{
+		if ((*tokens)->next)
+			clear_tokens(&(*tokens)->next);
+		free((*tokens)->content);
+		*tokens = NULL;
+	}
+}
+
 t_token	*new_token(char *content, t_token_type type)
 {
 	t_token	*new;

@@ -17,6 +17,7 @@ static inline int is_operator(char c)
 	return (c == '>' || c == '<' || c == '|');
 }
 
+//need to implement better error handling
 int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 {
 	int		i;
@@ -34,7 +35,8 @@ int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 			break ;
 		if (s[i] == '\'' || s[i] == '\"')
 		{
-			if (handle_quotes(s, &i, s[i], tokens, data) != 0)
+			data->status = handle_quotes(s, &i, s[i], tokens);
+			if (data->status != 0)
 			{
 				if (errno != 0)
 					perror(strerror(errno));
@@ -43,16 +45,16 @@ int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 		}
 		else if (s[i] && (s[i] == '<' || s[i] == '>'))
 		{
-			if (handle_io(s, &i, s[i], tokens, data) != 0)
+			data->status = handle_io(s, &i, s[i], tokens); 
+			if (data->status != 0)
 				return (1);
 		}
 		else if (s[i] && s[i] == '|')
 		{
-			if (handle_pipes(s, &i, tokens, data) != 0)
+			data->status = handle_pipes(s, &i, tokens, data); 
+			if (data->status != 0)
 				return (1);
 		}
-		
-		/* not handling the env right for now, '$USER' and "$USER" is treated the same */
 		else
 		{
 			pos = i;

@@ -47,40 +47,34 @@ int	handle_edge_pipe(t_token **tokens, t_data *data)
 	}
 }
 
-int	add_token(t_token **tokens, const char *prompt, int start, int len,
+int	add_token(t_token **tokens, const char *prompt, t_token_pos pos,
 		t_token_type type)
 {
 	char	*token;
 
-	token = ft_substr(prompt, start, len);
+	token = ft_substr(prompt, pos.start, pos.len);
 	if (!token)
 		return (1);
 	push_token(tokens, new_token(token, type));
 	return (0);
 }
 
-int	handle_quotes(const char *s, int *pos, char type, t_token **tokens, t_data *data)
+int	handle_quotes(const char *s, int *start, char type, t_token **tokens)
 {
-	char	*token;
-	bool	expand;
-	int		j;
-
-	(*pos)++;
-	j = *pos;
-	if (!s[j])
+	int	len;
+	t_token_pos pos;
+	
+	len = ++(*start);
+	if (!s[len])
 		return (msg_custom_err(ERR_MSG_QUOTES, ERR_MSG_SYNTAX), 1);
-	while (s[j] && s[j] != type)
-	{
-		j++;
-		if (s[j] == '\0')
-		{
-			msg_custom_err(ERR_MSG_QUOTES, ERR_MSG_SYNTAX);
-			return (1);
-		}
-	}
-	if (add_token(tokens, s, (*pos) - 1, j - (*pos) + 2, TOKEN_WORD))
+	while (s[len] && s[len] != type)
+		len++;
+	if (!s[len])
+		return (msg_custom_err(ERR_MSG_QUOTES, ERR_MSG_SYNTAX), 1);
+	if (add_token(tokens, s, (t_token_pos){((*start) - 1), (len - (*start)
+				+ 2)}, TOKEN_WORD))
 		return (ENOSPC);
-	*pos = j + 1;
+	*start = len + 1;
 	return (0);
 }
 
@@ -101,8 +95,7 @@ int	handle_pipes(const char *s, int *pos, t_token **tokens, t_data *data)
 			tmp++;
 		if (s[tmp + i] == '\0')
 		{
-			/* not implemented yet */
-			if (add_token(tokens, s, i, 1, TOKEN_PIPE))
+			if (add_token(tokens, s, (t_token_pos){i, 1}, TOKEN_PIPE))
 				return (ENOSPC);
 			if (handle_edge_pipe(tokens, data))
 			{
@@ -114,21 +107,21 @@ int	handle_pipes(const char *s, int *pos, t_token **tokens, t_data *data)
 		}
 		else
 		{
-			if (add_token(tokens, s, i, 1, TOKEN_PIPE))
+			if (add_token(tokens, s, (t_token_pos){i, 1}, TOKEN_PIPE))
 				return (ENOSPC);
 			(*pos) += tmp - 1;
 		}
 	}
 	else
 	{
-		if (add_token(tokens, s, i, 1, TOKEN_PIPE))
+		if (add_token(tokens, s, (t_token_pos){i, 1}, TOKEN_PIPE))
 			return (1);
 		(*pos)++;
 	}
 	return (0);
 }
 
-int	handle_io(const char *s, int *pos, char type, t_token **tokens, t_data *data)
+int	handle_io(const char *s, int *pos, char type, t_token **tokens)
 {
 	int		i;
 	char	next;
@@ -140,25 +133,25 @@ int	handle_io(const char *s, int *pos, char type, t_token **tokens, t_data *data
 		next = s[i + 1];
 	if (next && (s[i] == '<' && next == '<'))
 	{
-		if (add_token(tokens, s, i, 2, TOKEN_HEREDOC))
+		if (add_token(tokens, s, (t_token_pos){i, 2}, TOKEN_HEREDOC))
 			return (ENOSPC);
 		(*pos) += 2;
 	}
 	else if (next && (s[i] == '>' && next == '>'))
 	{
-		if (add_token(tokens, s, i, 2, TOKEN_APPEND))
+		if (add_token(tokens, s, (t_token_pos){i, 2}, TOKEN_APPEND))
 			return (ENOSPC);
 		(*pos) += 2;
 	}
 	else if (s[i] == '<')
 	{
-		if (add_token(tokens, s, i, 1, TOKEN_IN))
+		if (add_token(tokens, s, (t_token_pos){i, 1}, TOKEN_IN))
 			return (ENOSPC);
 		(*pos)++;
 	}
 	else if (s[i] == '>')
 	{
-		if (add_token(tokens, s, i, 1, TOKEN_OUT))
+		if (add_token(tokens, s, (t_token_pos){i, 1}, TOKEN_OUT))
 			return (ENOSPC);
 		(*pos)++;
 	}

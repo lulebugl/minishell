@@ -50,7 +50,7 @@ typedef struct s_data
 {
 	char 	**env;
 	t_token	*token;
-	int		exit_status;
+	int		status;
 }			t_data;
 
 #endif
