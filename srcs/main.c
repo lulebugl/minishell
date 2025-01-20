@@ -12,10 +12,12 @@
 
 #include "minishell.h"
 
-int exec_prompt(const char *prompt)
+int exec_prompt(const char *prompt, t_data *data)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)
 		exit(0);
+	// test_arg_input(prompt, data);
+	tokenize_input(prompt, &data->tokens, data);
 	return (0);
 }
 
@@ -28,7 +30,7 @@ int launch_program(t_data *data)
 		rl = readline(PROMPT);
 		if (!rl)
 			exit(1);
-		exec_prompt(rl);
+		exec_prompt(rl, data);
 	}
 	return (0);
 }
