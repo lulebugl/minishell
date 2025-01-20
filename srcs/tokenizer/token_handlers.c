@@ -15,7 +15,7 @@
 // TO DO handle signals in handle_edge_pipe
 
 /* edge case for pipe as last token */
-int	handle_edge_pipe(t_token **tokens)
+int	handle_edge_pipe(t_token **tokens, t_data *data)
 {
 	char	*buf;
 
@@ -39,7 +39,7 @@ int	handle_edge_pipe(t_token **tokens)
 		}
 		if (buf)
 		{
-			if (tokenize_input(buf, tokens))
+			if (tokenize_input(buf, tokens, data))
 				return (1);
 			free(buf);
 			return (0);
@@ -59,7 +59,7 @@ int	add_token(t_token **tokens, const char *prompt, int start, int len,
 	return (0);
 }
 
-int	handle_quotes(const char *s, int *pos, char type, t_token **tokens)
+int	handle_quotes(const char *s, int *pos, char type, t_token **tokens, t_data *data)
 {
 	char	*token;
 	bool	expand;
@@ -84,7 +84,7 @@ int	handle_quotes(const char *s, int *pos, char type, t_token **tokens)
 	return (0);
 }
 
-int	handle_pipes(const char *s, int *pos, t_token **tokens)
+int	handle_pipes(const char *s, int *pos, t_token **tokens, t_data *data)
 {
 	int		i;
 	char	next;
@@ -104,7 +104,7 @@ int	handle_pipes(const char *s, int *pos, t_token **tokens)
 			/* not implemented yet */
 			if (add_token(tokens, s, i, 1, TOKEN_PIPE))
 				return (ENOSPC);
-			if (handle_edge_pipe(tokens))
+			if (handle_edge_pipe(tokens, data))
 			{
 				perror(strerror(errno));
 				return (1);
@@ -128,7 +128,7 @@ int	handle_pipes(const char *s, int *pos, t_token **tokens)
 	return (0);
 }
 
-int	handle_io(const char *s, int *pos, char type, t_token **tokens)
+int	handle_io(const char *s, int *pos, char type, t_token **tokens, t_data *data)
 {
 	int		i;
 	char	next;

@@ -34,7 +34,7 @@ int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 			break ;
 		if (s[i] == '\'' || s[i] == '\"')
 		{
-			if (handle_quotes(s, &i, s[i], tokens) != 0)
+			if (handle_quotes(s, &i, s[i], tokens, data) != 0)
 			{
 				if (errno != 0)
 					perror(strerror(errno));
@@ -43,12 +43,12 @@ int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 		}
 		else if (s[i] && (s[i] == '<' || s[i] == '>'))
 		{
-			if (handle_io(s, &i, s[i], tokens) != 0)
+			if (handle_io(s, &i, s[i], tokens, data) != 0)
 				return (1);
 		}
 		else if (s[i] && s[i] == '|')
 		{
-			if (handle_pipes(s, &i, tokens) != 0)
+			if (handle_pipes(s, &i, tokens, data) != 0)
 				return (1);
 		}
 		
