@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/15 18:56:56 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/01/20 20:08:37 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,17 @@ int exec_prompt(const char *prompt, t_data *data)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)
 		exit(0);
-	// test_arg_input(prompt, data);
-	tokenize_input(prompt, &data->tokens, data);
+	test_arg_input(prompt, data);
+	//tokenize_input(prompt, &data->tokens, data);
 	return (0);
 }
 
 int launch_program(t_data *data)
 {
+	init_signals();
 	while (true)
 	{
+		
 		char *rl;
 		
 		rl = readline(PROMPT);

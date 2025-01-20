@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+         #
+#    By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 18:54:13 by llebugle          #+#    #+#              #
-#    Updated: 2025/01/15 18:54:19 by llebugle         ###   ########.fr        #
+#    Updated: 2025/01/20 20:10:24 by maxweert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ SRC		= 	main.c \
 			tokenizer/tokenizer.c \
 			tokenizer/utils.c \
 			tokenizer/debug.c \
+			misc/signal.c
 
 OBJ		= $(SRC:.c=.o)
 OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))
@@ -43,6 +44,7 @@ all: $(OBJ_PATH) $(LIBFT) $(NAME)
 $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)
 	mkdir -p $(OBJ_PATH)/tokenizer
+	mkdir -p $(OBJ_PATH)/misc
 # mkdir -p $(OBJ_PATH)/utils
 
 # Objects rule

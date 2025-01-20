@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/15 18:58:44 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/01/20 20:07:54 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,11 @@
 
 typedef struct s_data
 {
-	char 	**env;
+	t_list	*env;
 	t_token	*tokens;
 	int		status;
 }			t_data;
+
+void		init_signals(void);
 
 #endif
