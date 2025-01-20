@@ -26,6 +26,7 @@ SRC		= 	main.c \
 			tokenizer/token_handlers.c \
 			tokenizer/tokenizer.c \
 			tokenizer/utils.c \
+			tokenizer/debug.c \
 
 OBJ		= $(SRC:.c=.o)
 OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))

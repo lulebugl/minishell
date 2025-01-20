@@ -17,7 +17,7 @@
 # include "tokenizer.h"
 
 /* for debug */
-#include "debug.h"
+# include "debug.h"
 
 /* standard */
 # include <errno.h>
@@ -49,7 +49,7 @@
 typedef struct s_data
 {
 	char 	**env;
-	t_token	*token;
+	t_token	*tokens;
 	int		status;
 }			t_data;
 

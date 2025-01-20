@@ -15,4 +15,9 @@
 
 #include <assert.h>
 
+typedef struct s_data t_data;
+
+void	test_arg_input(const char *input, t_data *data);
+
+
 #endif 
