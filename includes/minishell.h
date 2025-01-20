@@ -34,7 +34,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-# define PROMPT "\e[0;36mminishell > \033[0m"
+# define PROMPT "\x1b[38;5;87mminishell > \033[0m"
 
 /* color codes */
 # define PURPLE "\e[0;35m"
@@ -50,6 +50,7 @@ typedef struct s_data
 {
 	char 	**env;
 	t_token	*token;
+	int		exit_status;
 }			t_data;
 
 #endif

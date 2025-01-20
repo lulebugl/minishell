@@ -47,14 +47,15 @@ int	handle_edge_pipe(t_token **tokens)
 	}
 }
 
-int	add_token(t_token **tokens, const char *prompt, int start, int len)
+int	add_token(t_token **tokens, const char *prompt, int start, int len,
+		t_token_type type)
 {
 	char	*token;
 
 	token = ft_substr(prompt, start, len);
 	if (!token)
 		return (1);
-	ft_lstadd_back(tokens, ft_lstnew(token));
+	push_token(tokens, new_token(token, type));
 	return (0);
 }
 
@@ -66,14 +67,8 @@ int	handle_quotes(const char *s, int *pos, char type, t_token **tokens)
 
 	(*pos)++;
 	j = *pos;
-
-
-	// need to implement this
-	expand = true;
-	if (type == '\'')
-		expand = false;
-
-
+	if (!s[j])
+		return (msg_custom_err(ERR_MSG_QUOTES, ERR_MSG_SYNTAX), 1);
 	while (s[j] && s[j] != type)
 	{
 		j++;
@@ -83,7 +78,7 @@ int	handle_quotes(const char *s, int *pos, char type, t_token **tokens)
 			return (1);
 		}
 	}
-	if (add_token(tokens, s, *pos, j - *pos))
+	if (add_token(tokens, s, (*pos) - 1, j - (*pos) + 2, TOKEN_WORD))
 		return (ENOSPC);
 	*pos = j + 1;
 	return (0);
@@ -107,7 +102,7 @@ int	handle_pipes(const char *s, int *pos, t_token **tokens)
 		if (s[tmp + i] == '\0')
 		{
 			/* not implemented yet */
-			if (add_token(tokens, s, i, 1))
+			if (add_token(tokens, s, i, 1, TOKEN_PIPE))
 				return (ENOSPC);
 			if (handle_edge_pipe(tokens))
 			{
@@ -119,14 +114,14 @@ int	handle_pipes(const char *s, int *pos, t_token **tokens)
 		}
 		else
 		{
-			if (add_token(tokens, s, i, 1))
+			if (add_token(tokens, s, i, 1, TOKEN_PIPE))
 				return (ENOSPC);
 			(*pos) += tmp - 1;
 		}
 	}
 	else
 	{
-		if (add_token(tokens, s, i, 1))
+		if (add_token(tokens, s, i, 1, TOKEN_PIPE))
 			return (1);
 		(*pos)++;
 	}
@@ -143,15 +138,27 @@ int	handle_io(const char *s, int *pos, char type, t_token **tokens)
 	next = 0;
 	if (s[i + 1])
 		next = s[i + 1];
-	if (next && (s[i] == '>' && next == '>') || (s[i] == '<' && next == '<'))
+	if (next && (s[i] == '<' && next == '<'))
 	{
-		if (add_token(tokens, s, i, 2))
+		if (add_token(tokens, s, i, 2, TOKEN_HEREDOC))
 			return (ENOSPC);
 		(*pos) += 2;
 	}
-	else
+	else if (next && (s[i] == '>' && next == '>'))
 	{
-		if (add_token(tokens, s, i, 1))
+		if (add_token(tokens, s, i, 2, TOKEN_APPEND))
+			return (ENOSPC);
+		(*pos) += 2;
+	}
+	else if (s[i] == '<')
+	{
+		if (add_token(tokens, s, i, 1, TOKEN_IN))
+			return (ENOSPC);
+		(*pos)++;
+	}
+	else if (s[i] == '>')
+	{
+		if (add_token(tokens, s, i, 1, TOKEN_OUT))
 			return (ENOSPC);
 		(*pos)++;
 	}

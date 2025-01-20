@@ -17,7 +17,7 @@ static inline int is_operator(char c)
 	return (c == '>' || c == '<' || c == '|');
 }
 
-int	tokenize_input(const char *s, t_token **tokens)
+int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 {
 	int		i;
 	int		tmp;
@@ -62,7 +62,7 @@ int	tokenize_input(const char *s, t_token **tokens)
 				&& s[i] != '\"')
 				i++;
 			word = ft_substr(s, pos, i - pos);
-			ft_lstadd_back(tokens, ft_lstnew(word));
+			push_token(tokens, new_token(word, TOKEN_WORD));
 		}
 	}
 	return (0);

@@ -16,23 +16,61 @@
 #include <string.h>
 
 // Helper function to print tokens in a clear format
-void	print_tokens_formatted(t_token *tokens)
-{
-	t_token	*current;
-	int		token_count;
+#define COLOR_RESET   "\x1b[0m"
+#define COLOR_WORD    "\x1b[38;5;87m"    // Light blue
+#define COLOR_PIPE    "\x1b[38;5;213m"   // Pink
+#define COLOR_REDIR   "\x1b[38;5;220m"   // Yellow
+#define COLOR_SPECIAL "\x1b[38;5;159m"   // Cyan
 
-	current = tokens;
-	token_count = 0;
-	printf("\n=== Token List ===\n");
-	if (!current)
-		printf("No tokens found.\n");
-	while (current)
-	{
-		printf("Token[%d]: '%s'\n", token_count, (char *)current->content);
-		current = current->next;
-		token_count++;
-	}
-	printf("================\n");
+void print_tokens_formatted(t_token *tokens)
+{
+    t_token *current;
+    int token_count;
+    
+    // Type strings with their corresponding colors
+    const char *type_colors[] = {
+        COLOR_WORD,    // TOKEN_WORD
+        COLOR_PIPE,    // TOKEN_PIPE
+        COLOR_REDIR,   // TOKEN_REDIR_IN
+        COLOR_REDIR,   // TOKEN_REDIR_OUT
+        COLOR_REDIR,   // TOKEN_REDIR_APPEND
+        COLOR_SPECIAL, // TOKEN_HEREDOC
+    };
+    
+    const char *type_str[] = {
+        "WORD",
+        "PIPE",
+        "REDIR_IN",
+        "REDIR_OUT",
+        "REDIR_APPEND",
+        "HEREDOC"
+    };
+
+    current = tokens;
+    token_count = 0;
+    printf("\n=== Token List ===\n");
+    
+    if (!current)
+    {
+        printf("No tokens found.\n");
+        printf("================\n");
+        return;
+    }
+
+    while (current)
+    {
+        printf("Token[%d]: Type: %s%-12s%s Value: '%s%s%s'\n",
+            token_count,
+            type_colors[current->type],
+            type_str[current->type],
+            COLOR_RESET,
+            type_colors[current->type],
+            (char *)current->content,
+            COLOR_RESET);
+        current = current->next;
+        token_count++;
+    }
+    printf("================\n");
 }
 
 // Helper function to free token list
@@ -51,14 +89,14 @@ void	free_tokens(t_token *tokens)
 	}
 }
 
-void	test_arg_input(const char *input)
+void	test_arg_input(const char *input, t_data *data)
 {
 	t_token	*tokens;
 	int		err;
 
 	tokens = NULL;
 	printf(PURPLE);
-	err = tokenize_input(input, &tokens);
+	err = tokenize_input(input, &tokens, data);
 	if (err)
 	{
 		// printf("err tokenize input : %d\n", err);
@@ -70,36 +108,71 @@ void	test_arg_input(const char *input)
 	free_tokens(tokens);
 }
 
-void	run_basic_tests(void)
+static int	exec_prompt(const char *prompt, t_data *data)
 {
-	t_token	*tokens;
-
-	tokens = NULL;
-	// Test 1: Basic input
-	printf("\n--- Test 1: Basic Input ---\n");
-	tokens = NULL;
-	tokenize_input("echo hello world", &tokens);
-	print_tokens_formatted(tokens);
-	free_tokens(tokens);
-	// Test 2: Multiple spaces
-	printf("\n--- Test 2: Multiple Spaces ---\n");
-	tokens = NULL;
-	tokenize_input("ls   -l     /home", &tokens);
-	print_tokens_formatted(tokens);
-	free_tokens(tokens);
-	// Test 3: Leading/trailing spaces
-	printf("\n--- Test 3: Leading/Trailing Spaces ---\n");
-	tokens = NULL;
-	tokenize_input("   cat test.txt   ", &tokens);
-	print_tokens_formatted(tokens);
-	free_tokens(tokens);
-	// Test 4: Empty input
-	printf("\n--- Test 4: Empty Input ---\n");
-	tokens = NULL;
-	tokenize_input("", &tokens);
-	print_tokens_formatted(tokens);
-	free_tokens(tokens);
+	if (ft_strncmp(prompt, "exit", 5) == 0)
+		exit(0);
+	test_arg_input(prompt, data);
+	return (0);
 }
+
+static int	launch_program(t_data *data)
+{
+	char *rl;
+
+	while (true)
+	{
+		rl = readline(PROMPT);
+		if (!rl)
+			exit(1);
+		exec_prompt(rl, data);
+	}
+	return (0);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_data data;
+
+	ft_memset(&data, 0, sizeof(t_data));
+	launch_program(&data);
+	return (0);
+}
+
+
+
+
+
+// void	run_basic_tests(void)
+// {
+// 	t_token	*tokens;
+
+// 	tokens = NULL;
+// 	// Test 1: Basic input
+// 	printf("\n--- Test 1: Basic Input ---\n");
+// 	tokens = NULL;
+// 	tokenize_input("echo hello world", &tokens);
+// 	print_tokens_formatted(tokens);
+// 	free_tokens(tokens);
+// 	// Test 2: Multiple spaces
+// 	printf("\n--- Test 2: Multiple Spaces ---\n");
+// 	tokens = NULL;
+// 	tokenize_input("ls   -l     /home", &tokens);
+// 	print_tokens_formatted(tokens);
+// 	free_tokens(tokens);
+// 	// Test 3: Leading/trailing spaces
+// 	printf("\n--- Test 3: Leading/Trailing Spaces ---\n");
+// 	tokens = NULL;
+// 	tokenize_input("   cat test.txt   ", &tokens);
+// 	print_tokens_formatted(tokens);
+// 	free_tokens(tokens);
+// 	// Test 4: Empty input
+// 	printf("\n--- Test 4: Empty Input ---\n");
+// 	tokens = NULL;
+// 	tokenize_input("", &tokens);
+// 	print_tokens_formatted(tokens);
+// 	free_tokens(tokens);
+// }
 
 // int main(int argc, char **argv) {
 //     printf("=== Minishell Lexer Test ===\n");
@@ -116,34 +189,3 @@ void	run_basic_tests(void)
 
 //     return (0);
 // }
-
-int	exec_prompt(const char *prompt)
-{
-	if (ft_strncmp(prompt, "exit", 5) == 0)
-		exit(0);
-	test_arg_input(prompt);
-	return (0);
-}
-
-int	launch_program(t_data *data)
-{
-		char *rl;
-
-	while (true)
-	{
-		rl = readline(PROMPT);
-		if (!rl)
-			exit(1);
-		exec_prompt(rl);
-	}
-	return (0);
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	t_data data;
-
-	ft_memset(&data, 0, sizeof(t_data));
-	launch_program(&data);
-	return (0);
-}
