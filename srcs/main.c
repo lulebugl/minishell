@@ -17,7 +17,8 @@ int exec_prompt(const char *prompt, t_data *data)
 	if (ft_strncmp(prompt, "exit", 5) == 0)
 		exit(0);
 	test_arg_input(prompt, data);
-	//tokenize_input(prompt, &data->tokens, data);
+	// if (tokenize_input(prompt, &data->tokens, data))
+	// 		clear_tokens(&data->tokens);
 	return (0);
 }
 
@@ -26,12 +27,12 @@ int launch_program(t_data *data)
 	init_signals();
 	while (true)
 	{
-		
 		char *rl;
 		
 		rl = readline(PROMPT);
 		if (!rl)
 			exit(1);
+		add_history(rl);
 		exec_prompt(rl, data);
 	}
 	return (0);

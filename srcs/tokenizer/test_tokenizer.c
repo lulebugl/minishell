@@ -15,8 +15,6 @@
 #include <stdio.h>
 #include <string.h>
 
-// Helper function to print tokens in a clear format
-
 static int	exec_prompt(const char *prompt, t_data *data)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)

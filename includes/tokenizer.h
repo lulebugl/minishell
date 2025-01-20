@@ -13,7 +13,7 @@
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 
-# define ERR_MSG_QUOTES "Unclosed quotes.\n"
+# define ERR_MSG_QUOTES "unclosed quotes.\n"
 # define ERR_MSG_SYNTAX "syntax error : "
 
 # define ERR_SYNTAX 256

@@ -12,8 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-// TO DO handle signals in handle_edge_pipe
-
 /* edge case for pipe as last token */
 int	handle_edge_pipe(t_token **tokens, t_data *data)
 {
@@ -96,12 +94,9 @@ int	handle_pipes(const char *s, int *pos, t_token **tokens, t_data *data)
 		if (s[tmp + i] == '\0')
 		{
 			if (add_token(tokens, s, (t_token_pos){i, 1}, TOKEN_PIPE))
-				return (ENOSPC);
-			if (handle_edge_pipe(tokens, data))
-			{
-				perror(strerror(errno));
 				return (1);
-			}
+			if (handle_edge_pipe(tokens, data))
+				return (1);
 			(*pos) += tmp;
 			return (0);
 		}
