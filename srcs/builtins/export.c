@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 03:32:02 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 16:24:51 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 16:34:07 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,13 @@ static void	ft_sorted_list_insert(t_env **begin_list, char *key, char *value)
 static void	print_sorted_env(t_env *env)
 {
 	t_env	*sorted_env;
+
 	sorted_env = NULL;
 	while (env)
 	{
 		if (ft_strcmp(env->key, "_") != 0)
-			ft_sorted_list_insert(&sorted_env, ft_strdup(env->key), ft_strdup(env->value));
+			ft_sorted_list_insert(&sorted_env,
+				ft_strdup(env->key), ft_strdup(env->value));
 		env = env->next;
 	}
 	while (sorted_env)
@@ -119,7 +121,8 @@ int	ft_export(t_env *env, char **args)
 		else if (!env_var_is_valid(args[i]))
 		{
 			err = 1;
-			ft_printf_fd(2, "export: \'%s\' : not a valid identifier\n", args[i]);
+			ft_printf_fd(2, "export: \'%s\' : not a valid identifier\n",
+				args[i]);
 		}
 		i++;
 	}

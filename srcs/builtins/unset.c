@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 02:30:53 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 14:18:35 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 16:34:17 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,19 +79,17 @@ static void	remove_env_elem(t_env **env, char *key)
  *	Remove a variable from env
  */
 
-int	ft_unset(t_env *env, char *var)
+int	ft_unset(t_env *env, char **args)
 {
 	int		i;
 
 	i = 0;
-	if (!var)
-		ft_printf_fd(2, "unset: not enough arguments\n");
-	else if (!env_var_key_is_valid(var))
-		ft_printf_fd(2, "unset: %s: invalid parameter name\n", var);
-	else
-	{
-		remove_env_elem(&env, var);
+	if (!args)
 		return (SUCCESS);
+	while (args[i])
+	{
+		remove_env_elem(&env, args[i]);
+		i++;
 	}
-	return (ERROR);
+	return (SUCCESS);
 }
