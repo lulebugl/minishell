@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/22 16:10:03 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:59:20 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,10 @@ int	exec_prompt(const char *prompt, t_data *data)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)
 		exit(0);
-	if (tokenize_input(prompt, &data->tokens, data))
-		clear_tokens(&data->tokens);
-	print_tokens_formatted(data->tokens);
+		
+	test_arg_input(prompt, data);
+	// if (tokenize_input(prompt, &data->tokens, data))
+	// 		clear_tokens(&data->tokens);
 	return (0);
 }
 
@@ -44,13 +45,14 @@ int	main(int argc, char **argv, char **envp)
 
 	ft_memset(&data, 0, sizeof(t_data));
 	env_init(&data.env, envp);
-	launch_program(&data);
-	// env(data.env);
-	// unset(data.env, argv[1]);
-	// ft_export(data.env, &argv[1]);
-	// ft_env(data.env);
-	// free_env(&data);
-	// ft_export(data.env, &argv[1]);
+	//launch_program(&data);
+	//env(data.env);
+	//unset(data.env, argv[1]);
+	ft_export(data.env, &argv[1]);
+	//ft_env(data.env);
+	//free_env(&data);
+	//ft_unset(data.env, &argv[1]);
+	ft_env(data.env);
 	env_free(data.env);
 	return (0);
 }

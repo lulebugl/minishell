@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 03:32:02 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 16:11:28 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:58:16 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,13 @@ static void	ft_sorted_list_insert(t_env **begin_list, char *key, char *value)
 static void	print_sorted_env(t_env *env)
 {
 	t_env	*sorted_env;
+
 	sorted_env = NULL;
 	while (env)
 	{
 		if (ft_strcmp(env->key, "_") != 0)
-			ft_sorted_list_insert(&sorted_env, ft_strdup(env->key), ft_strdup(env->value));
+			ft_sorted_list_insert(&sorted_env,
+				ft_strdup(env->key), ft_strdup(env->value));
 		env = env->next;
 	}
 	while (sorted_env)
@@ -115,15 +117,12 @@ int	ft_export(t_env *env, char **args)
 	while (args && args[i])
 	{
 		if (env_var_is_valid(args[i]) && ft_strchr(args[i], '='))
-			env_add(&env, args[i]);
-		else
+			env_add_key(&env, env_key_from_str(args[i]), env_value_from_str(args[i]));
+		else if (!env_var_is_valid(args[i]))
 		{
 			err = 1;
-			if (ft_isdigit(args[i][0]))
-				ft_printf_fd(2, "export: not an identifier: %s\n", args[i]);
-			else
-				ft_printf_fd(2, "export: not valid in this context: %s\n",
-					args[i]);
+			ft_printf_fd(2, "export: \'%s\' : not a valid identifier\n",
+				args[i]);
 		}
 		i++;
 	}
