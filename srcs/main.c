@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/22 15:02:17 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 15:53:06 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ int	main(int argc, char **argv, char **envp)
 	//ft_export(data.env, &argv[1]);
 	//ft_env(data.env);
 	//free_env(&data);
-	ft_export(data.env, &argv[1]);
+	//ft_export(data.env, &argv[1]);
+	ft_pwd();
 	env_free(data.env);
 	return (0);
 }
