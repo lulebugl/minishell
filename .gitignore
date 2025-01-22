@@ -1,6 +1,7 @@
 lexer
 minishell
 objs
+testers
 
 # Prerequisites
 *.d

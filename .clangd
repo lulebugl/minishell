@@ -17,12 +17,3 @@ Diagnostics:
     - unused-includes
 
 ---
-# Special configuration for source files
-If:
-  PathMatch: [
-    srcs/.*\.c,
-  ]
-CompileFlags:
-  Add:
-    - "-I../includes"
-    - "-I../libft"

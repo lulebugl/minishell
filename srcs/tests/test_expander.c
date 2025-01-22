@@ -12,13 +12,19 @@
 
 #include "minishell.h"
 
+int	expander(t_data *data);
+
 int	exec_prompt(const char *prompt, t_data *data)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)
 		exit(0);
+	if (ft_strcmp((char *)prompt, "env") == 0)
+		ft_env(data->env);
 	if (tokenize_input(prompt, &data->tokens, data))
 		clear_tokens(&data->tokens);
-	print_tokens_formatted(data->tokens);
+	if (expander(data))
+		return(1);
+	// print_tokens_formatted(data->tokens);
 	return (0);
 }
 

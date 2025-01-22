@@ -32,6 +32,7 @@ SRC		= 	main.c \
 			builtins/unset.c \
 			builtins/export.c \
 			misc/signal.c \
+			misc/expander.c \
 			misc/env_utils.c \
 			misc/env_utils2.c
 
@@ -74,6 +75,7 @@ clean:
 # Remove program executable
 fclean: clean
 	rm -f $(NAME)
+	rm -rf $(TESTER_DIR)
 	make -C $(LIBFT_PATH) fclean
 
 # Clean + remove executable
@@ -81,14 +83,22 @@ re: fclean all
 
 # Testing rule
 TEST_NAME = lexer
+TESTER_DIR = testers
 TEST_SRC = srcs/tokenizer/test_tokenizer.c
 TEST_OBJ = $(TEST_SRC:.c=.o)
 
 lexer: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
 	mkdir -p $(OBJ_PATH)/testing
 	$(CC) $(CFLAGS) -c $(TEST_SRC) -o $(OBJ_PATH)/testing/test_lexer.o $(INC)
-	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_lexer.o -o $(TEST_NAME) $(INC) $(LIBFT) -l readline
+	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_lexer.o -o $(TESTER_DIR)/lexer $(INC) $(LIBFT) -l readline
 	@echo "Test program compiled successfully!"
-	@./$(TEST_NAME)
+	@$(TESTER_DIR)/./$(TEST_NAME)
+	
+expander: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
+	mkdir -p $(OBJ_PATH)/testing
+	$(CC) $(CFLAGS) -c srcs/tests/test_expander.c -o $(OBJ_PATH)testing/test_expander.o $(INC)
+	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_expander.o -o $(TESTER_DIR)/expander $(INC) $(LIBFT) -l readline
+	@echo "expander program compiled successfully!"
+	@$(TESTER_DIR)/expander
 
-.PHONY: all re clean fclean test lexer
+.PHONY: all re clean fclean test lexer expander
