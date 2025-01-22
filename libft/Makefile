@@ -6,7 +6,7 @@
 #    By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/22 16:13:09 by llebugle          #+#    #+#              #
-#    Updated: 2025/01/22 03:11:11 by maxweert         ###   ########.fr        #
+#    Updated: 2025/01/22 14:24:57 by maxweert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ SRCS	= 	ft_isalpha.c		\
 			ft_strlcat.c 		\
 			ft_tolower.c 		\
 			ft_strncmp.c		\
+			ft_strcmp.c			\
 			ft_strnstr.c 		\
 			ft_calloc.c 		\
 			ft_strdup.c 		\

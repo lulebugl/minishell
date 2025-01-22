@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 17:55:01 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/22 02:40:46 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:25:07 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,6 @@ int					ft_is_charset(char c, char *charset);
 void				ft_free_tab(char **tab);
 long				ft_atol(const char *str);
 char				*ft_strndup(const char *s1, size_t n);
+int					ft_strcmp(char *s1, char *s2);
 
 #endif

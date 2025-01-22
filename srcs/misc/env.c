@@ -6,11 +6,30 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 22:23:44 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 12:31:14 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:41:12 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/*
+ * Function: env_create_elem
+ * ----------------------------
+ *	Create new env elem.
+ */
+
+t_env	*env_create_elem(char *key, char *value)
+{
+	t_env	*elem;
+
+	elem = (t_env *)malloc(sizeof(t_env));
+	if (!elem)
+		return (0);
+	elem->key = key;
+	elem->value = value;
+	elem->next = NULL;
+	return (elem);
+}
 
 /*
  * Function: add_env
@@ -27,14 +46,11 @@ void	add_env(t_env **env, char *str)
 	int		i;
 
 	i = 0;
+	if (!ft_strchr(str, '='))
+		return ;
 	while (str[i] && str[i] != '=')
 		i++;
-	new = malloc(sizeof(t_env));
-	if (!new)
-		return ;
-	new->key = ft_strndup(str, i);
-	new->value = ft_strdup(&str[i + 1]);
-	new->next = NULL;
+	new = env_create_elem(ft_strndup(str, i), ft_strdup(&str[i + 1]));
 	head = *env;
 	if (!head)
 		*env = new;
@@ -56,17 +72,16 @@ void	add_env(t_env **env, char *str)
  *	env.value = VALUE (MWEERTS)
  */
 
-void	init_env(t_data *data, char **env_arr)
+void	init_env(t_env **env, char **env_arr)
 {
 	int		i;
-	t_env	*env;
 
 	if (!env_arr || !env_arr[0])
 		return ;
 	i = 0;
 	while (env_arr[i])
 	{
-		add_env(&data->env, env_arr[i]);
+		add_env(env, env_arr[i]);
 		i++;
 	}
 }
@@ -77,17 +92,17 @@ void	init_env(t_data *data, char **env_arr)
  *	Free the list pointed by data->env
  */
 
-void	free_env(t_data *data)
+void	free_env(t_env *env)
 {
 	t_env	*tmp;
 
-	while (data->env)
+	while (env)
 	{
-		tmp = data->env->next;
-		free(data->env->key);
-		free(data->env->value);
-		free(data->env);
-		data->env = tmp;
+		tmp = env->next;
+		free(env->key);
+		free(env->value);
+		free(env);
+		env = tmp;
 	}
 }
 

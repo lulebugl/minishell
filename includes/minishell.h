@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/22 12:29:32 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:40:50 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,9 @@ typedef struct s_data
 }			t_data;
 
 
-// INIT FUNCTIONS
+// SIGNALS
 
 void		init_signals(void);
-void		init_env(t_data *data, char **env_arr);
-
-// FREE FUNCTIONS
-
-void		free_env(t_data *data);
 
 // BUILTINS
 
@@ -81,9 +76,12 @@ int		ft_pwd(void);
 int		ft_unset(t_env *env, char *var);
 int		ft_export(t_env *env, char **args);
 
-// MISC
+// ENV
 
+void	init_env(t_env **env, char **env_arr);
+void	free_env(t_env *env);
 char	*get_env_var(t_env *env, char *arg);
 void	add_env(t_env **env, char *str);
+t_env	*env_create_elem(char *key, char *value);
 
 #endif

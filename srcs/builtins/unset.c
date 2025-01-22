@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 02:30:53 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 12:29:41 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:18:35 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	env_var_key_is_valid(char *var)
  *	Util function to remove and free an elem from env list.
  */
 
-static void remove_env_elem(t_env **env, char *key)
+static void	remove_env_elem(t_env **env, char *key)
 {
 	t_env	*head;
 	t_env	*previous;
@@ -69,7 +69,7 @@ static void remove_env_elem(t_env **env, char *key)
 			return ;
 		}
 		previous = head;
-		head = head->next;		
+		head = head->next;
 	}
 }
 

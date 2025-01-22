@@ -6,11 +6,65 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 03:32:02 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 12:30:46 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:54:58 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/*
+ * Function: ft_sorted_list_insert
+ * ----------------------------
+ *	Insert elem into env list and keep a sorted order.
+ */
+
+static void	ft_sorted_list_insert(t_env **begin_list, char *key, char *value)
+{
+	t_env	*head;
+	t_env	*new;
+
+	head = *begin_list;
+	if (!head || ft_strcmp(head->key, key) >= 0)
+	{
+		*begin_list = env_create_elem(key, value);
+		(*begin_list)->next = head;
+		return ;
+	}
+	while (head)
+	{
+		if (head->next == 0 || ft_strcmp(head->next->key, key) >= 0)
+		{
+			new = env_create_elem(key, value);
+			new->next = head->next;
+			head->next = new;
+			return ;
+		}
+		head = head->next;
+	}
+}
+
+/*
+ * Function: print_sorted_env
+ * ----------------------------
+ *	Create a sorted copy of env and print it. 
+ *	Free and destroy the copy after printing it.
+ */
+
+static void	print_sorted_env(t_env *env)
+{
+	t_env	*sorted_env;
+
+	sorted_env = NULL;
+	while (env)
+	{
+		if (ft_strcmp(env->key, "_") != 0)
+			ft_sorted_list_insert(&sorted_env,
+				ft_strdup(env->key), ft_strdup(env->value));
+		env = env->next;
+	}
+	ft_env(sorted_env);
+	free_env(sorted_env);
+}
 
 /*
  * Function: env_var_is_valid
@@ -54,9 +108,9 @@ int	ft_export(t_env *env, char **args)
 
 	err = 0;
 	i = 0;
-	if (!args || !args[0])
-		ft_env(env);
-	while (args[i])
+	if (!args[0])
+		print_sorted_env(env);
+	while (args && args[i])
 	{
 		if (env_var_is_valid(args[i]) && ft_strchr(args[i], '='))
 			add_env(&env, args[i]);
@@ -66,7 +120,8 @@ int	ft_export(t_env *env, char **args)
 			if (ft_isdigit(args[i][0]))
 				ft_printf_fd(2, "export: not an identifier: %s\n", args[i]);
 			else
-				ft_printf_fd(2, "export: not valid in this context: %s\n", args[i]);
+				ft_printf_fd(2, "export: not valid in this context: %s\n",
+					args[i]);
 		}
 		i++;
 	}
