@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 02:30:53 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 03:12:36 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 03:34:49 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,33 +47,6 @@ static void remove_env_elem(t_env **env, char *key)
 }
 
 /*
- * Function: check_parameter
- * ----------------------------
- *	Check if the key of a variable env is correctly formatted :
- *	Contains only ALPHANUM and _ characters.
- * 	Does NOT begin with a number.
- * 
- * 	Returns 1 if variable name is correct, otherwise 0.
- */
-
-static int	check_parameter(char *var)
-{
-	int	i;
-
-	i = 0;
-	if (!ft_isalpha(var[i]) && var[i] != '_')
-		return (0);
-	i++;
-	while (var[i])
-	{
-		if (!ft_isalnum(var[i]) && var[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-/*
  * Function: unset
  * ----------------------------
  *	Remove a variable from env
@@ -86,7 +59,7 @@ int	unset(t_env *env, char *var)
 	i = 0;
 	if (!var)
 		ft_printf_fd(2, "unset: not enough arguments\n");
-	else if (!check_parameter(var))
+	else if (!env_var_name_is_valid(var))
 		ft_printf_fd(2, "unset: %s: invalid parameter name\n", var);
 	else
 	{

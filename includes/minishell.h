@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/22 03:11:52 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 03:34:25 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,6 @@ int		unset(t_env *env, char *var);
 // MISC
 
 char	*get_env_var(t_env *env, char *arg);
+int		env_var_name_is_valid(char *var);
 
 #endif
