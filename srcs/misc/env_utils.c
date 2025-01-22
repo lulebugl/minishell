@@ -6,61 +6,11 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 22:23:44 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 16:07:04 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:53:24 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
- * Function: env_create_elem
- * ----------------------------
- *	Create new env elem.
- */
-
-t_env	*env_create_elem(char *key, char *value)
-{
-	t_env	*elem;
-
-	elem = (t_env *)malloc(sizeof(t_env));
-	if (!elem)
-		return (0);
-	elem->key = key;
-	elem->value = value;
-	elem->next = NULL;
-	return (elem);
-}
-
-/*
- * Function: add_env
- * ----------------------------
- *	Util function for init_env.
- * 	Just add a new element in the list.	
- */
-
-void	env_add(t_env **env, char *str)
-{
-	t_env	*new;
-	t_env	*head;
-	char	**tmp;
-	int		i;
-
-	i = 0;
-	if (!ft_strchr(str, '='))
-		return ;
-	while (str[i] && str[i] != '=')
-		i++;
-	new = env_create_elem(ft_strndup(str, i), ft_strdup(&str[i + 1]));
-	head = *env;
-	if (!head)
-		*env = new;
-	else
-	{
-		while (head->next)
-			head = head->next;
-		head->next = new;
-	}
-}
 
 /*
  * Function: init_env
@@ -81,7 +31,7 @@ void	env_init(t_env **env, char **env_arr)
 	i = 0;
 	while (env_arr[i])
 	{
-		env_add(env, env_arr[i]);
+		env_add_key(env, env_key_from_str(env_arr[i]), env_value_from_str(env_arr[i]));
 		i++;
 	}
 }
@@ -116,13 +66,53 @@ void	env_free(t_env *env)
  *		get_env_var(env, "USER") returns mweerts
  */
 
-char	*env_get_var(t_env *env, char *arg)
+char	*env_get_value(t_env *env, char *key)
 {
+	if (!key)
+		return (NULL);
 	while (env)
 	{
-		if (ft_strncmp(arg, env->key, ft_strlen(arg)) == 0)
+		if (ft_strncmp(key, env->key, ft_strlen(key)) == 0)
 			return (env->value);
 		env = env->next;
 	}
 	return (NULL);
+}
+
+/*
+ * Function: env_key_from_str
+ * ----------------------------
+ *	Extract and returns the key from a string.
+ *	!!! The return value is MALLOCED !!!
+ */
+
+char	*env_key_from_str(char *str)
+{
+	int		i;
+
+	i = 0;
+	if (!ft_strchr(str, '='))
+		return(NULL);
+	while (str[i] && str[i] != '=')
+		i++;
+	return (ft_strndup(str, i));
+}
+
+/*
+ * Function: env_value_from_str
+ * ----------------------------
+ *	Extract and returns the value from a string.
+ *	!!! The return value is MALLOCED !!!
+ */
+
+char	*env_value_from_str(char *str)
+{
+	int		i;
+
+	i = 0;
+	if (!ft_strchr(str, '='))
+		return(NULL);
+	while (str[i] && str[i] != '=')
+		i++;
+	return (ft_strdup(&str[i + 1]));
 }

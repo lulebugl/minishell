@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/22 16:32:30 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:59:20 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ int	main(int argc, char **argv, char **envp)
 	//launch_program(&data);
 	//env(data.env);
 	//unset(data.env, argv[1]);
-	//ft_export(data.env, &argv[1]);
+	ft_export(data.env, &argv[1]);
 	//ft_env(data.env);
 	//free_env(&data);
-	ft_unset(data.env, &argv[1]);
+	//ft_unset(data.env, &argv[1]);
 	ft_env(data.env);
 	env_free(data.env);
 	return (0);
