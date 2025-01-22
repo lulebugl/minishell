@@ -14,6 +14,17 @@
 
 int	expander(t_data *data);
 
+void err_and_exit(t_data *data)
+{
+	
+	perror(strerror(errno));
+	if (data)
+	{
+		clear_tokens(&data->tokens);
+	}
+	exit(EXIT_FAILURE);
+}
+
 int	exec_prompt(const char *prompt, t_data *data)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)
@@ -23,7 +34,7 @@ int	exec_prompt(const char *prompt, t_data *data)
 	if (tokenize_input(prompt, &data->tokens, data))
 		clear_tokens(&data->tokens);
 	if (expander(data))
-		return(1);
+		err_and_exit(data);
 	clear_tokens(&data->tokens);
 	// print_tokens_formatted(data->tokens);
 	return (0);
