@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/22 17:52:29 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 18:43:38 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int		ft_env(t_env *env);
 int		ft_pwd(void);
 int		ft_unset(t_env *env, char **args);
 int		ft_export(t_env *env, char **args);
+int		ft_echo(char **args);
 
 // ENV
 
