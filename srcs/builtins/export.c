@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 03:32:02 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 17:58:16 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 18:45:25 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,8 @@ int	ft_export(t_env *env, char **args)
 	while (args && args[i])
 	{
 		if (env_var_is_valid(args[i]) && ft_strchr(args[i], '='))
-			env_add_key(&env, env_key_from_str(args[i]), env_value_from_str(args[i]));
+			env_add_key(&env, env_key_from_str(args[i]),
+				env_value_from_str(args[i]));
 		else if (!env_var_is_valid(args[i]))
 		{
 			err = 1;
