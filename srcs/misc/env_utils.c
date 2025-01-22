@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 22:23:44 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 17:53:24 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 19:02:34 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ void	env_init(t_env **env, char **env_arr)
 	i = 0;
 	while (env_arr[i])
 	{
-		env_add_key(env, env_key_from_str(env_arr[i]), env_value_from_str(env_arr[i]));
+		env_add_key(env, env_key_from_str(env_arr[i]),
+			env_value_from_str(env_arr[i]));
 		i++;
 	}
 }
@@ -68,11 +69,11 @@ void	env_free(t_env *env)
 
 char	*env_get_value(t_env *env, char *key)
 {
-	if (!key)
+	if (!key || !key[0])
 		return (NULL);
 	while (env)
 	{
-		if (ft_strncmp(key, env->key, ft_strlen(key)) == 0)
+		if (ft_strcmp(key, env->key) == 0)
 			return (env->value);
 		env = env->next;
 	}
@@ -92,7 +93,7 @@ char	*env_key_from_str(char *str)
 
 	i = 0;
 	if (!ft_strchr(str, '='))
-		return(NULL);
+		return (NULL);
 	while (str[i] && str[i] != '=')
 		i++;
 	return (ft_strndup(str, i));
@@ -111,7 +112,7 @@ char	*env_value_from_str(char *str)
 
 	i = 0;
 	if (!ft_strchr(str, '='))
-		return(NULL);
+		return (NULL);
 	while (str[i] && str[i] != '=')
 		i++;
 	return (ft_strdup(&str[i + 1]));
