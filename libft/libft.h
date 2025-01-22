@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <lucas.lebugle@student.s19.be>    +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 17:55:01 by llebugle          #+#    #+#             */
-/*   Updated: 2024/11/30 14:32:46 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/01/22 02:40:46 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,6 @@ char				*ft_strjoin_n_free(char *s1, char const *s2);
 int					ft_is_charset(char c, char *charset);
 void				ft_free_tab(char **tab);
 long				ft_atol(const char *str);
+char				*ft_strndup(const char *s1, size_t n);
 
 #endif

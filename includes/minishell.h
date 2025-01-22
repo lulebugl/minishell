@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/20 20:07:54 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 03:11:52 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
+# include <linux/limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -46,13 +47,41 @@
 /* color codes high intensity */
 # define HI_CYAN "\e[1;96m"
 
+# define SUCCESS 0
+# define ERROR 1
+
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
+
 typedef struct s_data
 {
-	t_list	*env;
+	t_env	*env;
 	t_token	*tokens;
 	int		status;
 }			t_data;
 
+
+// INIT FUNCTIONS
+
 void		init_signals(void);
+void		init_env(t_data *data, char **env_arr);
+
+// FREE FUNCTIONS
+
+void		free_env(t_data *data);
+
+// BUILTINS
+
+int		env(t_env *env);
+int		pwd(void);
+int		unset(t_env *env, char *var);
+
+// MISC
+
+char	*get_env_var(t_env *env, char *arg);
 
 #endif

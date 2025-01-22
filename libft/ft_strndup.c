@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/20 19:19:54 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 03:25:19 by maxweert         ###   ########.fr       */
+/*   Created: 2025/01/22 02:40:18 by maxweert          #+#    #+#             */
+/*   Updated: 2025/01/22 02:40:20 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-static void	sigint_handler(int signum)
+char	*ft_strndup(const char *s1, size_t n)
 {
-	(void)signum;
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
+	char	*s2;
+	size_t	i;
 
-void	init_signals(void)
-{
-	struct sigaction	act;
-
-	ft_bzero(&act, sizeof(act));
-	act.sa_handler = &sigint_handler;
-	sigaction(SIGINT, &act, NULL);
+	i = 0;
+	s2 = (char *)malloc(sizeof(char) * (ft_strlen(s1) + 1));
+	if (!s2)
+		return (NULL);
+	while (s1[i] && i < n)
+	{
+		s2[i] = s1[i];
+		i++;
+	}
+	s2[i] = '\0';
+	return (s2);
 }
