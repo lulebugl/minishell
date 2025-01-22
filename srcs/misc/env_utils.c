@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 22:23:44 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 14:41:12 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 15:01:41 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_env	*env_create_elem(char *key, char *value)
  * 	Just add a new element in the list.	
  */
 
-void	add_env(t_env **env, char *str)
+void	env_add(t_env **env, char *str)
 {
 	t_env	*new;
 	t_env	*head;
@@ -72,7 +72,7 @@ void	add_env(t_env **env, char *str)
  *	env.value = VALUE (MWEERTS)
  */
 
-void	init_env(t_env **env, char **env_arr)
+void	env_init(t_env **env, char **env_arr)
 {
 	int		i;
 
@@ -81,7 +81,7 @@ void	init_env(t_env **env, char **env_arr)
 	i = 0;
 	while (env_arr[i])
 	{
-		add_env(env, env_arr[i]);
+		env_add(env, env_arr[i]);
 		i++;
 	}
 }
@@ -92,7 +92,7 @@ void	init_env(t_env **env, char **env_arr)
  *	Free the list pointed by data->env
  */
 
-void	free_env(t_env *env)
+void	env_free(t_env *env)
 {
 	t_env	*tmp;
 
@@ -116,7 +116,7 @@ void	free_env(t_env *env)
  *		get_env_var(env, "USER") returns mweerts
  */
 
-char	*get_env_var(t_env *env, char *arg)
+char	*env_get_var(t_env *env, char *arg)
 {
 	while (env)
 	{

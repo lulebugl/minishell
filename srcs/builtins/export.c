@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 03:32:02 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 14:54:58 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 15:14:19 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,12 @@ static void	print_sorted_env(t_env *env)
 				ft_strdup(env->key), ft_strdup(env->value));
 		env = env->next;
 	}
-	ft_env(sorted_env);
-	free_env(sorted_env);
+	while (sorted_env)
+	{
+		printf("declare -x %s=\"%s\"\n", sorted_env->key, sorted_env->value);
+		sorted_env = sorted_env->next;
+	}
+	env_free(sorted_env);
 }
 
 /*
@@ -113,7 +117,7 @@ int	ft_export(t_env *env, char **args)
 	while (args && args[i])
 	{
 		if (env_var_is_valid(args[i]) && ft_strchr(args[i], '='))
-			add_env(&env, args[i]);
+			env_add(&env, args[i]);
 		else
 		{
 			err = 1;

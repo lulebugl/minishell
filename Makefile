@@ -6,7 +6,7 @@
 #    By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 18:54:13 by llebugle          #+#    #+#              #
-#    Updated: 2025/01/22 12:29:28 by maxweert         ###   ########.fr        #
+#    Updated: 2025/01/22 15:01:08 by maxweert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ SRC		= 	main.c \
 			builtins/unset.c \
 			builtins/export.c \
 			misc/signal.c \
-			misc/env.c 
+			misc/env_utils.c 
 
 OBJ		= $(SRC:.c=.o)
 OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))

@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/22 14:55:55 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 15:02:17 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	main(int argc, char **argv, char **envp)
 	t_data data;
 	
 	ft_memset(&data, 0, sizeof(t_data));
-	init_env(&data.env, envp);
+	env_init(&data.env, envp);
 	//launch_program(&data);
 	//env(data.env);
 	//unset(data.env, argv[1]);
@@ -51,6 +51,6 @@ int	main(int argc, char **argv, char **envp)
 	//ft_env(data.env);
 	//free_env(&data);
 	ft_export(data.env, &argv[1]);
-	free_env(data.env);
+	env_free(data.env);
 	return (0);
 }
