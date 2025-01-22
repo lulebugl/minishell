@@ -6,20 +6,20 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 00:11:33 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 02:27:47 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:10:35 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /*
- * Function: pwd
+ * Function: ft_pwd
  * ----------------------------
  *	Print the current working directory.
  * 	Returns SUCCESS if the current directory could be obtained, otherwise ERORR.
  */
 
-int	pwd(void)
+int	ft_pwd(void)
 {
 	char	curr[PATH_MAX];
 

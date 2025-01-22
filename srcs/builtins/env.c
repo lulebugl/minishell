@@ -6,20 +6,20 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 00:06:44 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 03:26:53 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:14:48 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /*
- * Function: env
+ * Function: ft_env
  * ----------------------------
  *	Print all the environment variables.
  * 	Returns SUCCESS
  */
 
-int	env(t_env *env)
+int	ft_env(t_env *env)
 {
 	while (env)
 	{

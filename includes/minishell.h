@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/22 03:34:25 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:29:32 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,14 @@ void		free_env(t_data *data);
 
 // BUILTINS
 
-int		env(t_env *env);
-int		pwd(void);
-int		unset(t_env *env, char *var);
+int		ft_env(t_env *env);
+int		ft_pwd(void);
+int		ft_unset(t_env *env, char *var);
+int		ft_export(t_env *env, char **args);
 
 // MISC
 
 char	*get_env_var(t_env *env, char *arg);
-int		env_var_name_is_valid(char *var);
+void	add_env(t_env **env, char *str);
 
 #endif

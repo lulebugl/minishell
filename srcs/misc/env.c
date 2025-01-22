@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 22:23:44 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 03:26:57 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:31:14 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  * 	Just add a new element in the list.	
  */
 
-static void	add_env(t_env **env, char *str)
+void	add_env(t_env **env, char *str)
 {
 	t_env	*new;
 	t_env	*head;
