@@ -19,6 +19,7 @@ int	expander(t_data *data)
 	int		i;
 	t_token	*tokens;
 	int		start;
+	char	*res;
 	char	*tmp;
 
 	tokens = data->tokens;
@@ -33,19 +34,25 @@ int	expander(t_data *data)
 			printf("Token -> %s\n", tokens->content);
 			expand = true;
 			if (tokens->content[i] == '\'')
+			{
 				expand = false;
+				i++;
+			}
+			else if (tokens->content[i] == '\'')
+				i++;
 			while (tokens->content[i] && tokens->content[i] != '$')
 				i++;
-			if (tokens->content[i] == '$' && expand)
+			if (tokens->content[i + 1] && tokens->content[i] == '$'
+				&& expand == true)
 			{
-				expand ? printf("expand == true\n") : printf("expand == false\n"); 
-				start = i;
-				while (ft_isalnum((int)tokens->content[i])
-					|| tokens->content[i] == '_')
+				start = i + 1;
+				while ((ft_isalnum((int)tokens->content[i])
+					|| tokens->content[i] == '_') && tokens->content[i] != '\"')
 					i++;
-				tmp = env_get_var(env, ft_strndup(tokens->content + start, i
-							- start));
-				printf("%s\n", tmp);
+				tmp = ft_strndup(tokens->content + start, i - start);
+				printf("key -> %s\n", tmp);
+				res = env_get_value(env, tmp);
+				printf("value -> %s\n", res);
 			}
 			else
 				i++;

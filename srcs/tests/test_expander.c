@@ -24,6 +24,7 @@ int	exec_prompt(const char *prompt, t_data *data)
 		clear_tokens(&data->tokens);
 	if (expander(data))
 		return(1);
+	clear_tokens(&data->tokens);
 	// print_tokens_formatted(data->tokens);
 	return (0);
 }
