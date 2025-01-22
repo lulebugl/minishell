@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 03:32:02 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 16:11:28 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/22 16:24:51 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,14 +116,10 @@ int	ft_export(t_env *env, char **args)
 	{
 		if (env_var_is_valid(args[i]) && ft_strchr(args[i], '='))
 			env_add(&env, args[i]);
-		else
+		else if (!env_var_is_valid(args[i]))
 		{
 			err = 1;
-			if (ft_isdigit(args[i][0]))
-				ft_printf_fd(2, "export: not an identifier: %s\n", args[i]);
-			else
-				ft_printf_fd(2, "export: not valid in this context: %s\n",
-					args[i]);
+			ft_printf_fd(2, "export: \'%s\' : not a valid identifier\n", args[i]);
 		}
 		i++;
 	}
