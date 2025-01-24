@@ -28,6 +28,10 @@ CC		= cc
 # CFLAGS	= -Werror -Wextra -Wall -gdwarf-4 -g
 CFLAGS	=
 
+ifeq ($(MODE), debug)
+	CFLAGS	+= -fsanitize=address -gdwarf-4 -g
+endif 
+
 SRC_PATH = ./srcs/
 OBJ_PATH = ./objs/
 INC_PATH = ./includes/

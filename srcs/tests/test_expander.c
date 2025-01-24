@@ -32,7 +32,8 @@ int	exec_prompt(const char *prompt, t_data *data)
 	if (ft_strcmp((char *)prompt, "env") == 0)
 		ft_env(data->env);
 	if (tokenize_input(prompt, &data->tokens, data))
-		clear_tokens(&data->tokens);
+		return (1);
+		// clear_tokens(&data->tokens);
 	if (expander(data))
 		err_and_exit(data);
 	clear_tokens(&data->tokens);
@@ -50,6 +51,11 @@ int	launch_program(t_data *data)
 		rl = readline(PROMPT);
 		if (!rl)
 			exit(1);
+		if (rl && rl[0] == '\0')
+		{
+			free(rl);
+			continue ;
+		}
 		add_history(rl);
 		exec_prompt(rl, data);
 	}
