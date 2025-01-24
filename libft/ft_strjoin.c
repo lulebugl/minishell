@@ -49,7 +49,7 @@ char	*ft_strjoin_n_free(char *s1, char const *s2)
 		len = ft_strlen(s1) + ft_strlen(s2);
 	new = malloc(sizeof(char) * len + 1);
 	if (!new)
-		return (NULL);
+		return (free(s1), NULL);
 	i = -1;
 	while (s1[++i] && i < len)
 		new[i] = s1[i];
