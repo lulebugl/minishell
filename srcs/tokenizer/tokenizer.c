@@ -40,7 +40,7 @@ int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 			{
 				if (errno != 0)
 					perror(strerror(errno));
-				return (1); // SYNTAX_ERR
+				return (1);
 			}
 		}
 		else if (s[i] && (s[i] == '<' || s[i] == '>'))
@@ -64,6 +64,8 @@ int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 				&& s[i] != '\"')
 				i++;
 			word = ft_substr(s, pos, i - pos);
+			if (!word)
+				return(1);
 			push_token(tokens, new_token(word, TOKEN_WORD));
 		}
 	}

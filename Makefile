@@ -22,14 +22,16 @@ BLUE	=\033[0;34m
 ORANGE	=\033[38;2;255;165;0m
 RESET	=\033[0m
 
-
 # Compiler and compilation flags
 CC		= cc
 # CFLAGS	= -Werror -Wextra -Wall -gdwarf-4 -g
 CFLAGS	=
+VALGRIND =
 
 ifeq ($(MODE), debug)
 	CFLAGS	+= -fsanitize=address -gdwarf-4 -g
+else ifeq ($(MODE), valgrind)
+	VALGRIND += valgrind --leak-check=full --show-leak-kinds=all --suppressions=leaks.supp
 endif 
 
 SRC_PATH = ./srcs/
@@ -100,16 +102,15 @@ re: fclean all
 # Testing rule
 TEST_NAME = lexer
 TESTER_DIR = testers
-TEST_SRC = srcs/tokenizer/test_tokenizer.c
 TEST_OBJ = $(TEST_SRC:.c=.o)
 
 lexer: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) 
 	mkdir -p $(OBJ_PATH)/testing
 	mkdir -p $(TESTER_DIR)
-	$(CC) $(CFLAGS) -c $(TEST_SRC) -o $(OBJ_PATH)/testing/test_lexer.o $(INC)
-	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_lexer.o -o $(TESTER_DIR)/lexer $(INC) $(LIBFT) -l readline
+	$(CC) $(CFLAGS) -c srcs/tests/test_tokenizer.c -o $(OBJ_PATH)/testing/test_tokenizer.o $(INC)
+	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_tokenizer.o -o $(TESTER_DIR)/lexer $(INC) $(LIBFT) -l readline
 	@echo "$(BLUE)lexer program compiled successfully!$(RESET)"
-	@$(TESTER_DIR)/./$(TEST_NAME)
+	@$(TESTER_DIR)/lexer
 	
 expander: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
 	mkdir -p $(TESTER_DIR)
@@ -117,6 +118,6 @@ expander: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
 	$(CC) $(CFLAGS) -c srcs/tests/test_expander.c -o $(OBJ_PATH)testing/test_expander.o $(INC)
 	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_expander.o -o $(TESTER_DIR)/expander $(INC) $(LIBFT) -l readline
 	@echo "$(BLUE)expander program compiled successfully!$(RESET)"
-	@$(TESTER_DIR)/expander
+	$(if $(VALGRIND), $(VALGRIND)) $(TESTER_DIR)/expander
 
 .PHONY: all re clean fclean test lexer expander

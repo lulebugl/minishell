@@ -16,7 +16,7 @@
 # define ERR_MSG_QUOTES "unclosed quotes.\n"
 # define ERR_MSG_SYNTAX "syntax error : "
 
-# define ERR_SYNTAX 256
+# define ERR_SYNTAX 2
 
 typedef struct s_data	t_data;
 

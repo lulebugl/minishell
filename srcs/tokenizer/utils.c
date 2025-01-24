@@ -19,6 +19,7 @@ void clear_tokens(t_token **tokens)
 		if ((*tokens)->next)
 			clear_tokens(&(*tokens)->next);
 		free((*tokens)->content);
+		free(*tokens);
 		*tokens = NULL;
 	}
 }

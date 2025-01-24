@@ -17,81 +17,95 @@
 // - [ ]better error management in expand tokens
 // - [ ]refactor expander
 // - [ ]remember to free everything
-// - [x]Handle special Case : [$$], [$?]
 
-/*
- * Function: remove_quotes
- * ----------------------------
- *	Remove the quotes at the start and end of the "word"
- *	Free the original string
- * 	Return the new string if no error occured, otherwise NULL
- */
-static char	*remove_quotes(char *str, bool *expand)
+char		*replace_key(char *str, char *replace, int start, int key_len);
+char		*remove_quotes(char *str, bool *expand);
+
+static int	handle_exit_status(t_data *data, t_token *token, int *i)
 {
-	char	*trimmed;
+	char	*value;
+	int		start;
 
-	if ((!*str) || (*str && (*str != '\'' && *str != '\"')))
-		return (str);
-	if (*str == '\'')
-		*expand = false;
-	trimmed = ft_substr(str, 1, ft_strlen(str) - 2);
-	if (!trimmed)
-		return (NULL);
-	free(str);
-	return (trimmed);
+	start = ++(*i);
+	value = ft_itoa(data->status);
+	if (!value)
+		return (1);
+	token->content = replace_key(token->content, value, start, 2);
+	free(value);
+	if (!token->content)
+		return (1);
+	return (0);
 }
 
-/*
- * Function: replace_key
- * ----------------------------
- *	Replace env variable in str with its value (*replace)
- *	from pos start.
- *  key_len is the len of the replaced var
- *	free the original str and returns a the new string if successful
- *	otherwise returns NULL without freeing the original str
- */
-char	*replace_key(char *str, char *replace, int start, int key_len)
+static int	handle_env_value(t_token *token, char *value, char *key, int start)
 {
-	char	*expanded;
-	char	*first;
-	char	*middle;
-	bool	quoted;
-	char	*end;
-
-	quoted = false;
-	if (!str || key_len < 0 || !replace)
-		return (NULL);
-	first = ft_substr(str, 0, start - 1);
-	if (!first)
-		return (NULL);
-	middle = ft_strjoin_n_free(first, replace);
-	if (!middle)
-		return (NULL);
-	end = ft_substr(str, start + key_len, ft_strlen(str));
-	if (!end)
-		return (free(middle), NULL);
-	// printf(GREEN);
-	// printf("end -> %s\n", end);
-	// printf(RESET);
-	expanded = ft_strjoin_n_free(middle, end);
-	if (!expanded)
-		return (free(end), NULL);
-	free(end);
-	free(str);
-	// printf("final -> %s\n", expanded);
-	return (expanded);
+	if (!value)
+	{
+		if (errno)
+			return (1);
+		token->content = replace_key(token->content, "", start, ft_strlen(key));
+		if (!token->content)
+			return (1);
+		return (0);
+	}
+	token->content = replace_key(token->content, value, start, ft_strlen(key));
+	if (!token->content)
+		return (1);
+	return (0);
 }
 
+static int	handle_env_var(t_token *token, t_env *env, int *i)
+{
+	char	*key;
+	char	*value;
+	int		start;
 
-int	expand_token(t_data *data, t_token *token, t_env *env, bool expand);
-int	expand_token_recursive(t_data *data, t_token *token, t_env *env,
-		bool expand);
+	start = ++(*i);
+	while ((ft_isalnum((int)token->content[*i]) || token->content[*i] == '_')
+		&& token->content[*i] != '\"')
+		(*i)++;
+	key = ft_strndup(token->content + start, *i - start);
+	if (!key)
+		return (1);
+	value = env_get_value(env, key);
+	if (handle_env_value(token, value, key, start))
+		return (1);
+	free(key);
+	return (0);
+}
+
+int	expand_token_recursive(t_data *data, t_token *token, bool expand)
+{
+	int	i;
+
+	i = 0;
+	if (!token)
+		return (1);
+	while (token->content[i] && token->content[i] != '$')
+		i++;
+	if (token->content[i] == '$' && token->content[i + 1] && token->content[i
+		+ 1] == '?' && expand)
+	{
+		if (handle_exit_status(data, token, &i))
+			return (1);
+		return (expand_token_recursive(data, token, expand));
+	}
+	else if (token->content[i] && token->content[i + 1] && token->content[i] == '$' && expand)
+	{
+		if (handle_env_var(token, data->env, &i))
+			return (1);
+		return (expand_token_recursive(data, token, expand));
+	}
+	if (token->content[i] && token->content[i + 1] != '\0' && expand)
+		return (expand_token_recursive(data, token, expand));
+	return (0);
+}
 
 int	expander(t_data *data)
 {
 	bool	expand;
-	t_token *token;
-	
+	t_token	*token;
+
 	// shouldn't need it
 	// if (!data->env)
 	// 	return (0);
@@ -102,15 +116,12 @@ int	expander(t_data *data)
 		{
 			expand = true;
 			token->content = remove_quotes(token->content, &expand);
-			printf("s : %s\n", token->content);
 			if (!token->content)
 				return (1);
-			if (expand_token_recursive(data, token, data->env, expand))
+			if (expand_token_recursive(data, token, expand))
 				return (1);
-			
 		}
 		token = token->next;
 	}
 	return (0);
 }
-

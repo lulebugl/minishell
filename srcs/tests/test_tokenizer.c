@@ -10,10 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-#include "../../includes/tokenizer.h"
-#include <stdio.h>
-#include <string.h>
+#include "minishell.h"
 
 static int	exec_prompt(const char *prompt, t_data *data)
 {
@@ -76,7 +73,8 @@ static const t_test_case	test_cases[] = {
 		TOKEN_OUT, TOKEN_WORD}, {"ls", ">", ">", "file"}, 4},
 
 	// Pipe edge cases
-	// {"||||", "Multiple consecutive pipes", {TOKEN_PIPE, TOKEN_PIPE, TOKEN_PIPE,
+	// {"||||", "Multiple consecutive pipes", {TOKEN_PIPE, TOKEN_PIPE,
+	//	TOKEN_PIPE,
 	// 	TOKEN_PIPE}, {"|", "|", "|", "|"}, 4},
 	// {"ls | | | grep", "Multiple pipes with spaces", {TOKEN_WORD, TOKEN_PIPE,
 	// 	TOKEN_PIPE, TOKEN_PIPE, TOKEN_WORD}, {"ls", "|", "|", "|", "grep"}, 5},
@@ -88,15 +86,16 @@ static const t_test_case	test_cases[] = {
 		"file"}, 4},
 	{"cat << \"EOF\" | grep 'pattern'",
 		"Heredoc with quoted delimiter and pipe", {TOKEN_WORD, TOKEN_HEREDOC,
-		TOKEN_WORD, TOKEN_PIPE, TOKEN_WORD}, {"cat", "<<", "\"EOF\"", "|", "grep",
-		"\'pattern\'"}, 6},
+		TOKEN_WORD, TOKEN_PIPE, TOKEN_WORD}, {"cat", "<<", "\"EOF\"", "|",
+		"grep", "\'pattern\'"}, 6},
 	{"<< EOF > outfile", "Heredoc with output redirect", {TOKEN_HEREDOC,
 		TOKEN_WORD, TOKEN_OUT, TOKEN_WORD}, {"<<", "EOF", ">", "outfile"}, 4},
 
 	// Special characters and edge cases
 	{"echo $?", "Exit status variable", {TOKEN_WORD, TOKEN_WORD}, {"echo",
 		"$?"}, 2},
-	// {"echo \\\"hello\\\"", "Escaped quotes", {TOKEN_WORD, TOKEN_WORD}, {"echo",
+	// {"echo \\\"hello\\\"", "Escaped quotes", {TOKEN_WORD, TOKEN_WORD},
+	//	{"echo",
 	// 	"\\\"hello\\\""}, 2},
 	// {"ls '-la'\"pwd\"", "Connected quoted strings", {TOKEN_WORD, TOKEN_WORD},
 	// 	{"ls", "'-la'\"pwd\""}, 2},
@@ -128,6 +127,7 @@ static void	validate_test_case(t_token *tokens, const t_test_case *test)
 	}
 	if (token_count != test->expected_token_count)
 	{
+		printf("%s🚨 Test not passed successfully\n%s", RED, RESET);
 		printf("❌ Failed: Expected %d tokens, got %d\n",
 			test->expected_token_count, token_count);
 		return ;
@@ -153,86 +153,84 @@ static void	validate_test_case(t_token *tokens, const t_test_case *test)
 		count++;
 	}
 	if (!failed)
-		printf("✅ Test passed successfully\n");
+		printf("%s✅ Test passed successfully\n%s", GREEN, RESET);
+	else
+		printf("%s🚨 Test not passed successfully\n%s", RED, RESET);
 	// Print actual tokens for reference
 	print_tokens_formatted(tokens);
 	printf("----------------------\n");
 }
 
-static void run_test_suite(t_token **tokens, t_data *data)
+static void	run_test_suite(t_token **tokens, t_data *data)
 {
-    int total_tests;
-    int passed_tests;
-    const char *failed_commands[50] = {0};  // Add this line
-    int fail_count = 0;                     // Add this line
+	int		total_tests;
+	int		passed_tests;
+	t_token	*tmp;
+	int		token_count;
 
-    total_tests = 0;
-    passed_tests = 0;
-    printf("\n=== Starting Tokenizer Test Suite ===\n");
-    for (int i = 0; test_cases[i].input != NULL; i++)
-    {
-        bool test_passed = true;            // Add this line
-        *tokens = NULL;
-        
-        if (tokenize_input(test_cases[i].input, tokens, data))
-        {
-            printf("❌ Test %d failed: Could not tokenize input\n", i + 1);
-            failed_commands[fail_count++] = test_cases[i].input;  // Add this line
-            continue;
-        }
-        
-        // Add token count validation
-        t_token *tmp = *tokens;
-        int token_count = 0;
-        while (tmp)
-        {
-            token_count++;
-            tmp = tmp->next;
-        }
-        
-        if (token_count != test_cases[i].expected_token_count)
-        {
-            test_passed = false;
-            failed_commands[fail_count++] = test_cases[i].input;
-        }
-        
-        validate_test_case(*tokens, &test_cases[i]);
-        total_tests++;
-        if (test_passed)                    // Add this line
-            passed_tests++;                 // Add this line
-    }
-
-    // Add summary section
-    printf("\n=== Test Suite Summary ===\n");
-    printf("Total tests:  %d\n", total_tests);
-    printf("Passed tests: %d\n", passed_tests);
-    printf("Failed tests: %d\n", total_tests - passed_tests);
-    
-    if (fail_count > 0)
-    {
-        printf("\nFailed commands:\n");
-        for (int i = 0; i < fail_count; i++)
-        {
-            printf("  - \"%s\"\n", failed_commands[i]);
-        }
-    }
-    else
-    {
-        printf("\n✅ All tests passed successfully!\n");
-    }
-    printf("\n=== End of Test Suite ===\n");
+	const char *failed_commands[50] = {0}; // Add this line
+	int fail_count = 0;                    // Add this line
+	total_tests = 0;
+	passed_tests = 0;
+	printf("\n=== Starting Tokenizer Test Suite ===\n");
+	for (int i = 0; test_cases[i].input != NULL; i++)
+	{
+		bool test_passed = true; // Add this line
+		*tokens = NULL;
+		if (tokenize_input(test_cases[i].input, tokens, data))
+		{
+			printf("❌ Test %d failed: Could not tokenize input\n", i + 1);
+			failed_commands[fail_count++] = test_cases[i].input;
+			// Add this line
+			continue ;
+		}
+		// Add token count validation
+		tmp = *tokens;
+		token_count = 0;
+		while (tmp)
+		{
+			token_count++;
+			tmp = tmp->next;
+		}
+		if (token_count != test_cases[i].expected_token_count)
+		{
+			test_passed = false;
+			failed_commands[fail_count++] = test_cases[i].input;
+		}
+		validate_test_case(*tokens, &test_cases[i]);
+		total_tests++;
+		if (test_passed)    // Add this line
+			passed_tests++; // Add this line
+	}
+	// Add summary section
+	printf("\n=== Test Suite Summary ===\n");
+	printf("Total tests:  %d\n", total_tests);
+	printf("Passed tests: %d\n", passed_tests);
+	printf("Failed tests: %d\n", total_tests - passed_tests);
+	if (fail_count > 0)
+	{
+		printf("\nFailed commands:\n");
+		for (int i = 0; i < fail_count; i++)
+		{
+			printf("  - \"%s\"\n", failed_commands[i]);
+		}
+	}
+	else
+	{
+		printf("\n✅ All tests passed successfully!\n");
+	}
+	printf("\n=== End of Test Suite ===\n");
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_data data;
-	t_token *tokens;
+	t_data	data;
+	t_token	*tokens;
 
 	ft_memset(&data, 0, sizeof(t_data));
-	if (argv[1] && ft_strncmp(argv[1], "auto", 4) == 0)
-			run_test_suite(&tokens, &data);
-	else
+	if (argv[1] && ft_strcmp(argv[1], "debug") == 0)
 		launch_program(&data);
-
+	else
+		run_test_suite(&tokens, &data);
 	return (0);
 }
