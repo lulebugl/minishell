@@ -29,6 +29,13 @@ void	err_and_exit(t_data *data)
 	exit(EXIT_FAILURE);
 }
 
+/*
+* i need to create function that clears everything without 
+* exiting and set the exit status
+* i.e when a syntax error occurs we display the error but give the prompt back 
+** same for exec errors
+*/
+
 int	exec_prompt(const char *prompt, t_data *data)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)
@@ -38,7 +45,7 @@ int	exec_prompt(const char *prompt, t_data *data)
 	if (ft_strcmp((char *)prompt, "env") == 0)
 		ft_env(data->env);
 	if (tokenize_input(prompt, &data->tokens, data))
-		return (clean_memory(data), 1);
+		return (clear_tokens(&data->tokens), 1);
 	if (validate_prompt(data, data->tokens))
 		return (clear_tokens(&data->tokens), 1);
 	if (expander(data))
