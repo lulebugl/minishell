@@ -28,6 +28,12 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (new);
 }
 
+/*
+ * Function: ft_strjoin_n_free
+ * ----------------------------
+ *	concatenate *s1 and *s2 and free *s1
+ *  Returns the allocated new strings if success, otherwise NULL
+ */
 char	*ft_strjoin_n_free(char *s1, char const *s2)
 {
 	char	*new;
