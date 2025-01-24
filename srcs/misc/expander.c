@@ -13,11 +13,11 @@
 #include "minishell.h"
 
 // TO DO :
-// - handle env var not found (empty replace)
-// - better error management in expand tokens
-// - refactor expander
-// - remember to free everything
-// - Handle special Case : [$$], [$?]
+// - [x] handle env var not found (empty replace)
+// - [ ]better error management in expand tokens
+// - [ ]refactor expander
+// - [ ]remember to free everything
+// - [x]Handle special Case : [$$], [$?]
 
 /*
  * Function: remove_quotes
@@ -78,79 +78,38 @@ char	*replace_key(char *str, char *replace, int start, int key_len)
 		return (free(end), NULL);
 	free(end);
 	free(str);
-	printf("final -> %s\n", expanded);
+	// printf("final -> %s\n", expanded);
 	return (expanded);
 }
 
-int		expand_token(t_token *token, t_env *env, bool expand)
-{
-	int i;
-	int start;
-	char *key;
-	char *value;
-	
-	i = 0;
-	while (token->content[i] && token->content[i] != '$')
-		i++;
-	if (token->content[i + 1] && token->content[i] == '$'
-		&& expand == true)
-	{
-		start = ++i;
-		while ((ft_isalnum((int)token->content[i])
-				|| token->content[i] == '_')
-			&& token->content[i] != '\"')
-			i++;
-		key = ft_strndup(token->content + start, i - start);
-		printf("key -> %s\n", key);
-		value = env_get_value(env, key);
-		if (!value)
-		{
-			// i need to replace the content with an empty string instead of the var
-			// not quit..
-			if (errno)
-				return (free(key), 1);
-			else
-			{
-				token->content = replace_key(token->content, "",
-						start, ft_strlen(key));
-				if (!token->content)
-					return (free(key), 1);
-				printf("new -> %s\n", token->content);
-				free(key);
-				return (expand_token(token, env, expand));
-			}
-		}
-		token->content = replace_key(token->content, value, start,
-				ft_strlen(key));
-		if (!token->content)
-			return (free(key), 1);
-		free(key);
-		// printf("new -> %s\n", tokens->content);
-	}
-	if (token->content[i] && token->content[i + 1] != '\0')
-		return (expand_token(token, env, expand));
-	return (0);
-}
 
-int	expander(t_data *data, t_token *tokens)
+int	expand_token(t_data *data, t_token *token, t_env *env, bool expand);
+int	expand_token_recursive(t_data *data, t_token *token, t_env *env,
+		bool expand);
+
+int	expander(t_data *data)
 {
 	bool	expand;
-
+	t_token *token;
+	
 	// shouldn't need it
 	// if (!data->env)
 	// 	return (0);
-	while (tokens)
+	token = data->tokens;
+	while (token)
 	{
-		if (tokens->content)
+		if (token->content)
 		{
 			expand = true;
-			tokens->content = remove_quotes(tokens->content, &expand);
-			if (!tokens->content)
+			token->content = remove_quotes(token->content, &expand);
+			printf("s : %s\n", token->content);
+			if (!token->content)
 				return (1);
-			if (expand_token(tokens, data->env, expand))
+			if (expand_token_recursive(data, token, data->env, expand))
 				return (1);
+			
 		}
-		tokens = tokens->next;
+		token = token->next;
 	}
 	return (0);
 }

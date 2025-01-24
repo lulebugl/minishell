@@ -63,7 +63,6 @@ typedef struct s_data
 	int		status;
 }			t_data;
 
-
 // SIGNALS
 
 void		init_signals(void);

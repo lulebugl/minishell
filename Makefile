@@ -48,6 +48,7 @@ SRC		= 	main.c \
 			builtins/echo.c \
 			misc/signal.c \
 			misc/expander.c \
+			misc/expander_utils.c \
 			misc/env_utils.c \
 			misc/env_utils2.c
 
