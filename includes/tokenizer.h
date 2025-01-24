@@ -54,6 +54,7 @@ int						handle_io(const char *s, int *pos, char type,
 							t_token **tokens);
 int						handle_pipes(const char *s, int *pos, t_token **tokens,
 							t_data *data);
+int						validate_prompt(t_data *data, t_token *token);
 
 /* utils */
 void					push_token(t_token **lst, t_token *node);

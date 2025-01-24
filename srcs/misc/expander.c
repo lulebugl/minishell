@@ -12,12 +12,6 @@
 
 #include "minishell.h"
 
-// TO DO :
-// - [x] handle env var not found (empty replace)
-// - [ ]better error management in expand tokens
-// - [ ]refactor expander
-// - [ ]remember to free everything
-
 char		*replace_key(char *str, char *replace, int start, int key_len);
 char		*remove_quotes(char *str, bool *expand);
 

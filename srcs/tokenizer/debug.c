@@ -1,7 +1,7 @@
 #include "../../includes/minishell.h"
 
 #define COLOR_RESET "\x1b[0m"
-#define COLOR_WORD "\x1b[38;5;87m"     // Light blue
+#define COLOR_WORD "\e[0;35m"    // Light blue
 #define COLOR_PIPE "\x1b[38;5;213m"    // Pink
 #define COLOR_REDIR "\x1b[38;5;220m"   // Yellow
 #define COLOR_SPECIAL "\x1b[38;5;159m" // Cyan
@@ -24,7 +24,7 @@ void	print_tokens_formatted(t_token *tokens)
 	};
 	current = tokens;
 	token_count = 0;
-	printf("\n=== Token List ===\n");
+	printf("=== Token List ===\n");
 	if (!current)
 	{
 		printf("No tokens found.\n");

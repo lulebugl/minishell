@@ -52,18 +52,3 @@ void	push_token(t_token **lst, t_token *node)
 		tmp->next = node;
 	}
 }
-
-void	msg_unexpected_token(char token)
-{
-	ft_printf_fd(STDERR_FILENO,
-		"minishell: syntax error near unexpected token `%c'\n", token);
-}
-
-void	msg_custom_err(char *msg, char *details)
-{
-	ft_printf_fd(STDERR_FILENO, "minishell: ");
-	if (details)
-		ft_printf_fd(STDERR_FILENO, details);
-	if (msg)
-		ft_printf_fd(STDERR_FILENO, msg);
-}

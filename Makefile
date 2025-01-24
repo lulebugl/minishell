@@ -42,6 +42,7 @@ SRC		= 	main.c \
 			tokenizer/token_handlers.c \
 			tokenizer/tokenizer.c \
 			tokenizer/utils.c \
+			tokenizer/validate_prompt.c \
 			tokenizer/debug.c \
 			builtins/env.c \
 			builtins/pwd.c \
@@ -49,6 +50,7 @@ SRC		= 	main.c \
 			builtins/export.c \
 			builtins/echo.c \
 			misc/signal.c \
+			misc/error.c \
 			misc/expander.c \
 			misc/expander_utils.c \
 			misc/env_utils.c \
@@ -64,7 +66,10 @@ LIBFT = ./libft/libft.a
 
 # Main rule
 all: $(OBJ_PATH) $(LIBFT) $(NAME)
-
+	
+run : all
+	@./$(NAME)
+	
 # Objects directory rule
 $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)
@@ -120,4 +125,4 @@ expander: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
 	@echo "$(BLUE)expander program compiled successfully!$(RESET)"
 	$(if $(VALGRIND), $(VALGRIND)) $(TESTER_DIR)/expander
 
-.PHONY: all re clean fclean test lexer expander
+.PHONY: all re clean fclean run test lexer expander

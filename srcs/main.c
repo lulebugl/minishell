@@ -12,20 +12,46 @@
 
 #include "minishell.h"
 
+void	clean_memory(t_data *data)
+{
+	if (data)
+	{
+		if (data->env)
+			env_free(data->env);
+		clear_tokens(&data->tokens);
+	}
+}
+
+void	err_and_exit(t_data *data)
+{
+	perror(strerror(errno));
+	clean_memory(data);
+	exit(EXIT_FAILURE);
+}
+
 int	exec_prompt(const char *prompt, t_data *data)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)
-		exit(0);
-		
-	test_arg_input(prompt, data);
-	// if (tokenize_input(prompt, &data->tokens, data))
-	// 		clear_tokens(&data->tokens);
+		return (clean_memory(data), exit(0), 0);
+	if (ft_strcmp((char*)prompt, "token") == 0) 	// toggle on/off to print tokens
+		data->print_token ^= 1;
+	if (ft_strcmp((char *)prompt, "env") == 0)
+		ft_env(data->env);
+	if (tokenize_input(prompt, &data->tokens, data))
+		return (clean_memory(data), 1);
+	if (validate_prompt(data, data->tokens))
+		return (clear_tokens(&data->tokens), 1);
+	if (expander(data))
+		err_and_exit(data);
+	if (data->print_token)
+		print_tokens_formatted(data->tokens);
+	clear_tokens(&data->tokens);
 	return (0);
 }
 
 int	launch_program(t_data *data)
 {
-		char *rl;
+	char	*rl;
 
 	init_signals();
 	while (true)
@@ -45,15 +71,15 @@ int	main(int argc, char **argv, char **envp)
 
 	ft_memset(&data, 0, sizeof(t_data));
 	env_init(&data.env, envp);
-	//launch_program(&data);
-	//env(data.env);
-	//unset(data.env, argv[1]);
-	//ft_export(data.env, &argv[1]);
-	//ft_env(data.env);
-	//free_env(&data);
-	//ft_unset(data.env, &argv[1]);
+	launch_program(&data);
+	// env(data.env);
+	// unset(data.env, argv[1]);
+	// ft_export(data.env, &argv[1]);
+	// ft_env(data.env);
+	// free_env(&data);
+	// ft_unset(data.env, &argv[1]);
 	ft_echo(&argv[1]);
-	env_free(data.env);
+	clean_memory(&data);
 	return (0);
 }
 

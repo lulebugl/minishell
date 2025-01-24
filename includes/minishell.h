@@ -54,36 +54,48 @@ typedef struct s_env
 	char			*key;
 	char			*value;
 	struct s_env	*next;
-}	t_env;
+}					t_env;
 
 typedef struct s_data
 {
-	t_env	*env;
-	t_token	*tokens;
-	int		status;
-}			t_data;
+	t_env			*env;
+	t_token			*tokens;
+	int				status;
+	bool			print_token;
+}					t_data;
 
 // SIGNALS
 
-void		init_signals(void);
+void				init_signals(void);
 
 // BUILTINS
 
-int		ft_env(t_env *env);
-int		ft_pwd(void);
-int		ft_unset(t_env *env, char **args);
-int		ft_export(t_env *env, char **args);
-int		ft_echo(char **args);
+int					ft_env(t_env *env);
+int					ft_pwd(void);
+int					ft_unset(t_env *env, char **args);
+int					ft_export(t_env *env, char **args);
+int					ft_echo(char **args);
 
 // ENV
 
-void	env_init(t_env **env, char **env_arr);
-void	env_free(t_env *env);
-t_env	*env_create_elem(char *key, char *value);
-void	env_add_key(t_env **env, char *key, char *value);
-char	*env_get_value(t_env *env, char *key);
-int		env_key_exists(t_env *env, char *key);
-void	env_update_key(t_env *env, char *key, char *value);
-char	*env_key_from_str(char *str);
-char	*env_value_from_str(char *str);
+void				env_init(t_env **env, char **env_arr);
+void				env_free(t_env *env);
+t_env				*env_create_elem(char *key, char *value);
+void				env_add_key(t_env **env, char *key, char *value);
+char				*env_get_value(t_env *env, char *key);
+int					env_key_exists(t_env *env, char *key);
+void				env_update_key(t_env *env, char *key, char *value);
+char				*env_key_from_str(char *str);
+char				*env_value_from_str(char *str);
+
+// EXPANDER
+
+int					expander(t_data *data);
+
+// ERROR
+
+void				msg_unexpected_token(char token);
+void				msg_custom_err(char *msg, char *details);
+
 #endif
+
