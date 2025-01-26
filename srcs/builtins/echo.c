@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 18:37:55 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 18:45:33 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/24 00:04:47 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,5 @@ int	ft_echo(char **args)
 	}
 	if (newline)
 		printf("\n");
+	return (SUCCESS);
 }

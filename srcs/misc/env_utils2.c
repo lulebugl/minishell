@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:57:10 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 17:59:58 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/24 00:16:15 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_env	*env_create_elem(char *key, char *value)
 
 	elem = (t_env *)malloc(sizeof(t_env));
 	if (!elem)
-		return (0);
+		return (NULL);
 	elem->key = key;
 	elem->value = value;
 	elem->next = NULL;
@@ -48,6 +48,8 @@ void	env_add_key(t_env **env, char *key, char *value)
 		return ;
 	}
 	new = env_create_elem(key, value);
+	if (!new)
+		return ;
 	head = *env;
 	if (!head)
 		*env = new;
