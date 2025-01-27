@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 03:32:02 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 18:45:25 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/27 16:19:35 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,8 @@ int	ft_export(t_env *env, char **args)
 		else if (!env_var_is_valid(args[i]))
 		{
 			err = 1;
-			ft_printf_fd(2, "export: \'%s\' : not a valid identifier\n",
+			ft_printf_fd(2,
+				"minishell: export: \'%s\' : not a valid identifier\n",
 				args[i]);
 		}
 		i++;
