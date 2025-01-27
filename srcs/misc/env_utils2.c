@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:57:10 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/24 00:16:15 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/27 17:45:57 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ t_env	*env_create_elem(char *key, char *value)
 /*
  * Function: env_add_key
  * ----------------------------
- * 	Add a new element in the env list.	
+ * 	Add a new element in the env list.
+ *	The value HAS to be malloced.
  */
 
 void	env_add_key(t_env **env, char *key, char *value)
@@ -42,6 +43,8 @@ void	env_add_key(t_env **env, char *key, char *value)
 	t_env	*new;
 	t_env	*head;
 
+	if (!key)
+		return ;
 	if (env_key_exists(*env, key))
 	{
 		env_update_key(*env, key, value);
@@ -69,6 +72,8 @@ void	env_add_key(t_env **env, char *key, char *value)
 
 void	env_update_key(t_env *env, char *key, char *value)
 {
+	if (!key)
+		return ;
 	while (env)
 	{
 		if (ft_strcmp(env->key, key) == 0)

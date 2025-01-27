@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/22 18:44:16 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/27 18:56:42 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,18 @@ void	err_and_exit(t_data *data)
 }
 
 /*
-* i need to create function that clears everything without 
-* exiting and set the exit status
-* i.e when a syntax error occurs we display the error but give the prompt back 
-** same for exec errors
-*/
+ * i need to create function that clears everything without
+ * exiting and set the exit status
+ * i.e when a syntax error occurs we display the error but give the prompt back
+ ** same for exec errors
+ */
 
 int	exec_prompt(const char *prompt, t_data *data)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)
 		return (clean_memory(data), exit(0), 0);
-	if (ft_strcmp((char*)prompt, "token") == 0) 	// toggle on/off to print tokens
+	if (ft_strcmp((char *)prompt, "token") == 0)
+		// toggle on/off to print tokens
 		data->print_token ^= 1;
 	if (ft_strcmp((char *)prompt, "env") == 0)
 		ft_env(data->env);
@@ -78,15 +79,16 @@ int	main(int argc, char **argv, char **envp)
 
 	ft_memset(&data, 0, sizeof(t_data));
 	env_init(&data.env, envp);
-	launch_program(&data);
+	data_init(&data);
+	// launch_program(&data);
 	// env(data.env);
 	// unset(data.env, argv[1]);
 	// ft_export(data.env, &argv[1]);
 	// ft_env(data.env);
 	// free_env(&data);
 	// ft_unset(data.env, &argv[1]);
-	ft_echo(&argv[1]);
+	ft_cd(data.env, &argv[1]);
+	ft_env(data.env);
 	clean_memory(&data);
 	return (0);
 }
-
