@@ -95,6 +95,8 @@ int	handle_pipes(const char *s, int *pos, t_token **tokens, t_data *data)
 		{
 			if (add_token(tokens, s, (t_token_pos){i, 1}, TOKEN_PIPE))
 				return (1);
+			if (validate_prompt(data, *tokens))
+				return (1);
 			if (handle_edge_pipe(tokens, data))
 				return (1);
 			(*pos) += tmp;

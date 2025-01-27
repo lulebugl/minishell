@@ -91,6 +91,7 @@ char				*env_value_from_str(char *str);
 // EXPANDER
 
 int					expander(t_data *data);
+int					expand_tilde(t_data *data, t_token *token, bool expand);
 
 // ERROR
 

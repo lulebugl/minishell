@@ -73,3 +73,33 @@ char	*replace_key(char *str, char *replace, int start, int key_len)
 	return (expanded);
 }
 
+/*
+ * Function: expand_tilde
+ * ----------------------------
+ *	if the token's first character is a tilde ('~') and is the only character or
+ *	the next character is '/', replace the tilde with the $HOME variable. 
+ *	returns 0 if successful or conditions not met, and 1 on error
+ */
+int	expand_tilde(t_data *data, t_token *token, bool expand)
+{
+	char	*value;
+	
+	if (!expand || !token || !token->content || !token->content[0])
+		return (0);
+	if (token->content[0] != '~' || (token->content[0] == '~' && token->content[1] && token->content[1] != '/'))
+		return (0);
+	value = env_get_value(data->env, "HOME");
+	if (!value)
+	{
+		if (errno)
+			return (1);
+		token->content = replace_key(token->content, "", 1, 0);
+		if (!token->content)
+			return (1);
+		return (0);
+	}
+	token->content = replace_key(token->content, value, 1, 0);
+	if (!token->content)
+		return (1);
+	return (0);
+}

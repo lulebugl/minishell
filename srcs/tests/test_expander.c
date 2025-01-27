@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int		expander(t_data *data);
+int			expander(t_data *data);
 
 void	clean_memory(t_data *data)
 {
@@ -30,7 +30,7 @@ void	err_and_exit(t_data *data)
 int	exec_prompt(const char *prompt, t_data *data)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)
-		return(clean_memory(data), exit (0), 0);
+		return (clean_memory(data), exit(0), 0);
 	if (ft_strcmp((char *)prompt, "env") == 0)
 		ft_env(data->env);
 	if (tokenize_input(prompt, &data->tokens, data))
@@ -64,141 +64,132 @@ int	launch_program(t_data *data)
 	return (0);
 }
 
-typedef struct s_test_case {
-    char *input;
-    char *expected_output;
-} t_test_case;
-
-void print_test_result(const char *test_name, const char *input, 
-    const char *expected, const char *got, bool success)
+typedef struct s_test_case
 {
-    printf("\n%s:\n", test_name);
-    printf("Input: \"%s\"\n", input);
-    printf("Expected: \"%s\"\n", expected);
-    printf("Got: \"%s\"\n", got);
-    if (success)
-        printf("\033[0;32m[OK]\033[0m\n");
-    else
-        printf("\033[0;31m[KO]\033[0m\n");
+	char	*input;
+	char	*expected_output;
+}			t_test_case;
+
+void	print_test_result(const char *test_name, const char *input,
+		const char *expected, const char *got, bool success)
+{
+	printf("\n%s:\n", test_name);
+	printf("Input: \"%s\"\n", input);
+	printf("Expected: \"%s\"\n", expected);
+	printf("Got: \"%s\"\n", got);
+	if (success)
+		printf("\033[0;32m[OK]\033[0m\n");
+	else
+		printf("\033[0;31m[KO]\033[0m\n");
 }
 
-char *get_token_content(t_token *tokens)
+char	*get_token_content(t_token *tokens)
 {
-    if (!tokens || !tokens->content)
-        return (NULL);
-    return (tokens->content);
+	if (!tokens || !tokens->content)
+		return (NULL);
+	return (tokens->content);
 }
 
-bool run_test(t_data *data, const char *test_name, const char *input, const char *expected)
+bool	run_test(t_data *data, const char *test_name, const char *input,
+		const char *expected)
 {
-    bool success;
-    char *result;
+	bool	success;
+	char	*result;
 
-    if (tokenize_input(input, &data->tokens, data))
-        return (false);
-    if (expander(data))
-    {
-        clear_tokens(&data->tokens);
-        return (false);
-    }
-    result = get_token_content(data->tokens);
-    success = (result && strcmp(result, expected) == 0);
-    print_test_result(test_name, input, expected, result ? result : "NULL", success);
-    clear_tokens(&data->tokens);
-    return (success);
+	if (tokenize_input(input, &data->tokens, data))
+		return (false);
+	if (expander(data))
+	{
+		clear_tokens(&data->tokens);
+		return (false);
+	}
+	result = get_token_content(data->tokens);
+	success = (result && strcmp(result, expected) == 0);
+	print_test_result(test_name, input, expected, result ? result : "NULL",
+		success);
+	clear_tokens(&data->tokens);
+	return (success);
 }
-int run_test_suite(t_data *data)
+int	run_test_suite(t_data *data)
 {
-    int passed = 0;
-    int total = 0;
-    t_test_case tests[] = {
-        // Basic environment variable expansion
-        {"$USER", getenv("USER")},
-        {"$HOME", getenv("HOME")},
-        
-        // Empty/undefined variables (bash removes them)
-        {"$NONEXISTENT", ""},
-        {"hello$NONEXISTENT", "hello"},
-        {"$NONEXISTENThello", ""},
-        
-        
-        // Quote handling
-        {"\"$USER\"", getenv("USER")},
-        {"'$USER'", "$USER"},
-        {"'$HOME'", "$HOME"},
-        {"\"$HOME\"", getenv("HOME")},
-        
-        // Mixed quotes
-        {"\"$USER'$HOME'\"", NULL},  // Will construct dynamically
-        {"'$USER\"$HOME\"'", "$USER\"$HOME\""},
-        
-        // Dollar sign edge cases
-        {"$", "$"},
-        {"$?", "0"},
-        {"\"$\"", "$"},
-        {"'$'", "$"},
-        {"$_", ""},  // Bash typically has this set but we'll expect empty
-        
-        // Variable boundaries
-        {"$USER_NAME", ""},  // Bash treats underscore as part of var name
-        {"$USER_", ""},
-        {"$USER.", NULL},    // Will construct dynamically
-        {"$USER/", NULL},    // Will construct dynamically
-        
-        // Complex combinations with spaces
-        {"\"The user is $USER\"", NULL},  // Will construct dynamically
-        {"'The user is $USER'", "The user is $USER"},
-        // {"The user is $USER", NULL},      // Will construct dynamically
-        
-        {NULL, NULL}  // End marker
-    };
+	int	passed;
+	int	total;
+		char expected[1024];
 
-    printf("\nRunning expander tests...\n");
-    printf("========================\n");
-
-    for (int i = 0; tests[i].input != NULL; i++)
-    {
-        char expected[1024];
-        total++;
-        
-        if (tests[i].expected_output)
-        {
-            if (run_test(data, tests[i].input, tests[i].input, 
-                tests[i].expected_output))
-                passed++;
-        }
-        else
-        {
-            // Handle cases that need dynamic expected values
-            if (strcmp(tests[i].input, "$USER $HOME") == 0)
-                snprintf(expected, sizeof(expected), "%s %s", 
-                    getenv("USER"), getenv("HOME"));
-            else if (strcmp(tests[i].input, "$USER  $HOME") == 0)
-                snprintf(expected, sizeof(expected), "%s  %s", 
-                    getenv("USER"), getenv("HOME"));
-            else if (strcmp(tests[i].input, "\"$USER'$HOME'\"") == 0)
-                snprintf(expected, sizeof(expected), "%s'%s'", 
-                    getenv("USER"), getenv("HOME"));
-            else if (strcmp(tests[i].input, "$USER.") == 0)
-                snprintf(expected, sizeof(expected), "%s.", 
-                    getenv("USER"));
-            else if (strcmp(tests[i].input, "$USER/") == 0)
-                snprintf(expected, sizeof(expected), "%s/", 
-                    getenv("USER"));
-            else if (strcmp(tests[i].input, "\"The user is $USER\"") == 0)
-                snprintf(expected, sizeof(expected), "The user is %s", 
-                    getenv("USER"));
-            else if (strcmp(tests[i].input, "The user is $USER") == 0)
-                snprintf(expected, sizeof(expected), "The user is %s", 
-                    getenv("USER"));
-            
-            if (run_test(data, tests[i].input, tests[i].input, expected))
-                passed++;
-        }
-    }
-
-    printf("\nTest Results: %d/%d passed\n", passed, total);
-    return (passed == total ? 0 : 1);
+	passed = 0;
+	total = 0;
+	t_test_case tests[] = {
+		// Basic environment variable expansion
+		{"$USER", getenv("USER")},
+		{"$HOME", getenv("HOME")},
+		// Empty/undefined variables (bash removes them)
+		{"$NONEXISTENT", ""},
+		{"hello$NONEXISTENT", "hello"},
+		{"$NONEXISTENThello", ""},
+		// Quote handling
+		{"\"$USER\"", getenv("USER")},
+		{"'$USER'", "$USER"},
+		{"'$HOME'", "$HOME"},
+		{"\"$HOME\"", getenv("HOME")},
+		// Mixed quotes
+		{"\"$USER'$HOME'\"", NULL}, // Will construct dynamically
+		{"'$USER\"$HOME\"'", "$USER\"$HOME\""},
+		// Dollar sign edge cases
+		{"$", "$"},
+		{"$?", "0"},
+		{"\"$\"", "$"},
+		{"'$'", "$"},
+		// {"$_", ""},  // Bash typically has this set but we'll expect empty
+		// Variable boundaries
+		{"$USER_NAME", ""}, // Bash treats underscore as part of var name
+		{"$USER_", ""},
+		{"$USER.", NULL}, // Will construct dynamically
+		{"$USER/", NULL}, // Will construct dynamically
+		// Complex combinations with spaces
+		{"\"The user is $USER\"", NULL}, // Will construct dynamically
+		{"'The user is $USER'", "The user is $USER"},
+		// {"The user is $USER", NULL},      // Will construct dynamically
+		{NULL, NULL} // End marker
+	};
+	printf("\nRunning expander tests...\n");
+	printf("========================\n");
+	for (int i = 0; tests[i].input != NULL; i++)
+	{
+		total++;
+		if (tests[i].expected_output)
+		{
+			if (run_test(data, tests[i].input, tests[i].input,
+					tests[i].expected_output))
+				passed++;
+		}
+		else
+		{
+			// Handle cases that need dynamic expected values
+			if (strcmp(tests[i].input, "$USER $HOME") == 0)
+				snprintf(expected, sizeof(expected), "%s %s", getenv("USER"),
+					getenv("HOME"));
+			else if (strcmp(tests[i].input, "$USER  $HOME") == 0)
+				snprintf(expected, sizeof(expected), "%s  %s", getenv("USER"),
+					getenv("HOME"));
+			else if (strcmp(tests[i].input, "\"$USER'$HOME'\"") == 0)
+				snprintf(expected, sizeof(expected), "%s'%s'", getenv("USER"),
+					getenv("HOME"));
+			else if (strcmp(tests[i].input, "$USER.") == 0)
+				snprintf(expected, sizeof(expected), "%s.", getenv("USER"));
+			else if (strcmp(tests[i].input, "$USER/") == 0)
+				snprintf(expected, sizeof(expected), "%s/", getenv("USER"));
+			else if (strcmp(tests[i].input, "\"The user is $USER\"") == 0)
+				snprintf(expected, sizeof(expected), "The user is %s",
+					getenv("USER"));
+			else if (strcmp(tests[i].input, "The user is $USER") == 0)
+				snprintf(expected, sizeof(expected), "The user is %s",
+					getenv("USER"));
+			if (run_test(data, tests[i].input, tests[i].input, expected))
+				passed++;
+		}
+	}
+	printf("\nTest Results: %d/%d passed\n", passed, total);
+	return (passed == total ? 0 : 1);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -209,9 +200,9 @@ int	main(int argc, char **argv, char **envp)
 	env_init(&data.env, envp);
 	if (argv[1] && ft_strcmp("debug", argv[1]) == 0)
 		launch_program(&data);
-	else 
-		run_test_suite(&data);
+	else
+		// run_test_suite(&data);
+		launch_program(&data);
 	env_free(data.env);
 	return (0);
 }
-
