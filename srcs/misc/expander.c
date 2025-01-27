@@ -63,10 +63,11 @@ static int	handle_env_var(t_token *token, t_env *env, int *i)
 		return (1);
 	value = env_get_value(env, key);
 	if (handle_env_value(token, value, key, start))
-		return (1);
+		return (free(key), 1);
 	free(key);
 	return (0);
 }
+
 
 int	expand_token_recursive(t_data *data, t_token *token, bool expand)
 {
@@ -84,7 +85,8 @@ int	expand_token_recursive(t_data *data, t_token *token, bool expand)
 			return (1);
 		return (expand_token_recursive(data, token, expand));
 	}
-	else if (token->content[i] && token->content[i + 1] && token->content[i] == '$' && expand)
+	else if (token->content[i] && token->content[i + 1]
+		&& token->content[i] == '$' && expand)
 	{
 		if (handle_env_var(token, data->env, &i))
 			return (1);
@@ -114,8 +116,11 @@ int	expander(t_data *data)
 				return (1);
 			if (expand_token_recursive(data, token, expand))
 				return (1);
+			if (expand_tilde(data, token, expand))
+				return (1);
 		}
 		token = token->next;
 	}
 	return (0);
 }
+
