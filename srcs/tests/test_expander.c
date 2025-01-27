@@ -31,14 +31,20 @@ int	exec_prompt(const char *prompt, t_data *data)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)
 		return (clean_memory(data), exit(0), 0);
+	if (ft_strcmp((char *)prompt, "token") == 0)
+		data->print_token ^= 1;
 	if (ft_strcmp((char *)prompt, "env") == 0)
 		ft_env(data->env);
-	if (tokenize_input(prompt, &data->tokens, data))
-		return (1);
-	// clear_tokens(&data->tokens);
+	data->status = tokenize_input(prompt, &data->tokens, data);
+	if (data->status)
+		return (clear_tokens(&data->tokens), 1);
+	data->status = validate_prompt(data, data->tokens);
+	if (data->status)
+		return (clear_tokens(&data->tokens), 1);
 	if (expander(data))
 		err_and_exit(data);
-	print_tokens_formatted(data->tokens);
+	if (data->print_token)
+		print_tokens_formatted(data->tokens);
 	clear_tokens(&data->tokens);
 	return (0);
 }
@@ -112,9 +118,9 @@ bool	run_test(t_data *data, const char *test_name, const char *input,
 }
 int	run_test_suite(t_data *data)
 {
-	int	passed;
-	int	total;
-		char expected[1024];
+	int		passed;
+	int		total;
+	char	expected[1024];
 
 	passed = 0;
 	total = 0;

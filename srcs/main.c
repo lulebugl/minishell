@@ -40,13 +40,14 @@ int	exec_prompt(const char *prompt, t_data *data)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)
 		return (clean_memory(data), exit(0), 0);
-	if (ft_strcmp((char*)prompt, "token") == 0) 	// toggle on/off to print tokens
+	if (ft_strcmp((char*)prompt, "token") == 0)
 		data->print_token ^= 1;
 	if (ft_strcmp((char *)prompt, "env") == 0)
 		ft_env(data->env);
 	if (tokenize_input(prompt, &data->tokens, data))
 		return (clear_tokens(&data->tokens), 1);
-	if (validate_prompt(data, data->tokens))
+	data->status = validate_prompt(data, data->tokens);
+	if (data->status)
 		return (clear_tokens(&data->tokens), 1);
 	if (expander(data))
 		err_and_exit(data);

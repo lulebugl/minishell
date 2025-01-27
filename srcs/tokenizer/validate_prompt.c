@@ -27,12 +27,15 @@ int	validate_prompt(t_data *data, t_token *token)
 	{
 		if (is_redirection(curr->type))
 		{
-			// bug chiant si le dernier token est pipe avec une syntax invalid
-			// il redonne quand meme le prompt avant d'afficher l'erreur
 			if (!curr->next)
 				return (msg_unexpected_token('\n'), 1);
 			if (curr->next->type != TOKEN_WORD)
 				return (msg_unexpected_token(curr->next->type), 1);
+		}
+		if (curr->type == TOKEN_PIPE)
+		{
+			if (curr->next && curr->next->type == TOKEN_PIPE)
+				return (msg_unexpected_token('|'), 1);
 		}
 		curr = curr->next;
 	}
