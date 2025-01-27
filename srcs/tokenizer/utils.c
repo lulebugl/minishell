@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:01:18 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/18 17:01:20 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/01/27 14:52:26 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void clear_tokens(t_token **tokens)
-{
-	if (tokens && *tokens)
-	{
-		if ((*tokens)->next)
-			clear_tokens(&(*tokens)->next);
-		free((*tokens)->content);
-		free(*tokens);
-		*tokens = NULL;
-	}
-}
 
 t_token	*new_token(char *content, t_token_type type)
 {

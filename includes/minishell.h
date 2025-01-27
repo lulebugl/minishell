@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/24 00:21:30 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/27 15:17:36 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,15 @@ typedef struct s_data
 	bool			print_token;
 }					t_data;
 
+// DATA
+
+void				data_init(t_data *data);
+void				data_free(t_data *data);
+
 // SIGNALS
 
 void				init_signals(void);
+void				sigint_handler(int signum);
 
 // BUILTINS
 
@@ -75,6 +81,7 @@ int					ft_pwd(void);
 int					ft_unset(t_env *env, char **args);
 int					ft_export(t_env *env, char **args);
 int					ft_echo(char **args);
+int					ft_exit(t_data *data, char **args);
 
 // ENV
 
@@ -98,4 +105,3 @@ void				msg_unexpected_token(char token);
 void				msg_custom_err(char *msg, char *details);
 
 #endif
-
