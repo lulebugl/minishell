@@ -54,7 +54,9 @@ SRC		= 	main.c \
 			misc/expander.c \
 			misc/expander_utils.c \
 			misc/env_utils.c \
-			misc/env_utils2.c
+			misc/env_utils2.c \
+			parsing/ast.c	\
+			parsing/ast_debug.c	\
 
 OBJ		= $(SRC:.c=.o)
 OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))
@@ -76,6 +78,7 @@ $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)/tokenizer
 	mkdir -p $(OBJ_PATH)/misc
 	mkdir -p $(OBJ_PATH)/builtins
+	mkdir -p $(OBJ_PATH)/parsing
 # mkdir -p $(OBJ_PATH)/utils
 
 # Objects rule
@@ -125,4 +128,11 @@ expander: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
 	@echo "$(BLUE)expander program compiled successfully!$(RESET)"
 	$(if $(VALGRIND), $(VALGRIND)) $(TESTER_DIR)/expander
 
+ast: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
+	mkdir -p $(TESTER_DIR)
+	mkdir -p $(OBJ_PATH)/testing
+	$(CC) $(CFLAGS) -c srcs/tests/test_ast.c -o $(OBJ_PATH)testing/test_ast.o $(INC)
+	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_ast.o -o $(TESTER_DIR)/ast $(INC) $(LIBFT) -l readline
+	@echo "$(BLUE)expander program compiled successfully!$(RESET)"
+	$(if $(VALGRIND), $(VALGRIND)) $(TESTER_DIR)/ast
 .PHONY: all re clean fclean run test lexer expander
