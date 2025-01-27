@@ -6,7 +6,7 @@
 #    By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 18:54:13 by llebugle          #+#    #+#              #
-#    Updated: 2025/01/27 15:04:38 by maxweert         ###   ########.fr        #
+#    Updated: 2025/01/27 16:32:26 by maxweert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,7 @@ SRC		= 	main.c \
 			builtins/export.c \
 			builtins/echo.c \
 			builtins/exit.c \
+			builtins/cd.c \
 			misc/signal.c \
 			misc/error.c \
 			misc/expander.c \
