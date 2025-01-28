@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/27 16:32:12 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/28 13:34:22 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,9 @@ int					expander(t_data *data);
 
 void				msg_unexpected_token(char token);
 void				msg_custom_err(char *msg, char *details);
+
+// MISC
+
+void				free_str_arr(char **strs);
 
 #endif
