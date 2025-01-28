@@ -15,10 +15,14 @@
 
 static void print_command(t_command *cmd, int level)
 {
-    for (int i = 0; i < level; i++)
+	int i;
+	
+    for (i = 0; i < level; i++)
         printf("  ");
     printf("CMD: ");
-    for (int i = 0; i < cmd->arg_count; i++)
+    
+    i = -1;
+    while (++i < cmd->arg_count)
     {
         printf("%s", cmd->args[i]);
         if (i < cmd->arg_count - 1)
@@ -38,7 +42,7 @@ void print_ast(t_ast_node *node, int level)
     switch (node->type)
     {
         case NODE_COMMAND:
-            print_command(node->data, 0);
+            print_command(node->cmd, 0);
             break;
         case NODE_PIPELINE:
             printf("PIPELINE:\n");

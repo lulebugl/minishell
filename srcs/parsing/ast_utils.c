@@ -13,27 +13,37 @@
 #include "minishell.h"
 #include "ast.h"
 
-t_ast_node *create_pipeline_node(t_ast_node **commands, int cmd_count)
+t_token *find_last_operator(t_token *start, t_token *end, t_token_type type)
 {
-    t_ast_node *node;
+    t_token *last = NULL;
+    t_token *current = start;
 
-    node = create_node(NODE_PIPELINE);
-    if (!node)
-        return (NULL);
-
-    node->pipeline = malloc(sizeof(t_ast_node *) * cmd_count);
-    if (!node->pipeline)
+    while (current != end)
     {
-        free(node);
-        return (NULL);
+        if (current->type == type)
+            last = current;
+        current = current->next;
     }
-
-    for (int i = 0; i < cmd_count; i++)
-        node->pipeline[i] = commands[i];
-    node->pipe_count = cmd_count;
-
-    return (node);
+    return last;
 }
+
+t_node_type token_to_node_type(t_token_type type)
+{
+    if (type == TOKEN_PIPE)
+        return NODE_PIPELINE;
+    else if (type == TOKEN_WORD)
+        return NODE_COMMAND;
+    else if (type == TOKEN_AND)
+        return NODE_AND;
+    else if (type == TOKEN_OR)
+        return NODE_OR;
+    return NODE_COMMAND;
+}
+
+/*
+** Create an ast node based on its type
+** Returns the node if successful, else NULL
+*/
 
 t_ast_node *create_node(t_node_type type)
 {
@@ -47,7 +57,7 @@ t_ast_node *create_node(t_node_type type)
     node->pipeline = NULL;
     node->pipe_count = 0;
     node->right = NULL;
-    node->data = NULL;
+    node->cmd = NULL;
     return (node);
 }
 
@@ -58,7 +68,7 @@ void free_ast(t_ast_node *node)
 
     if (node->type == NODE_COMMAND)
     {
-        t_command *cmd = node->data;
+        t_command *cmd = node->cmd;
         for (int i = 0; i < cmd->arg_count; i++)
             free(cmd->args[i]);
         free(cmd->args);

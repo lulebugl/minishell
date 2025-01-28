@@ -14,47 +14,6 @@
 #include "minishell.h"
 #include "ast.h"
 
-t_ast_node *parse_tokens(t_token *tokens);
-
-
-void test_parse(const char *input, t_data *data)
-{
-    t_ast_node *ast;
-
-    printf("\nTesting input: \"%s\"\n", input);
-    printf("----------------------------------------\n");
-
-    // Use your existing tokenizer
-    if (tokenize_input(input, &data->tokens, data))
-    {
-        printf("Error: Tokenization failed\n");
-        return;
-    }
-
-    // Print tokens (using your existing function)
-    printf("Tokens:\n");
-    print_tokens_formatted(data->tokens);
-    printf("\n");
-
-    // Parse tokens into AST
-    ast = parse_tokens(data->tokens);
-    if (!ast)
-    {
-        printf("Error: Parsing failed\n");
-        clear_tokens(&data->tokens);
-        return;
-    }
-
-    // Print resulting AST
-    printf("AST Structure:\n");
-    print_ast(ast, 0);
-    printf("\n");
-
-    // Cleanup
-    free_ast(ast);
-    clear_tokens(&data->tokens);
-}
-
 void	clean_memory(t_data *data)
 {
 	if (data)
@@ -72,13 +31,6 @@ void	err_and_exit(t_data *data)
 	exit(EXIT_FAILURE);
 }
 
-/*
-* i need to create function that clears everything without 
-* exiting and set the exit status
-* i.e when a syntax error occurs we display the error but give the prompt back 
-** same for exec errors
-*/
-
 int	exec_prompt(const char *prompt, t_data *data)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)
@@ -95,7 +47,7 @@ int	exec_prompt(const char *prompt, t_data *data)
 
 	/* Parse tokens into AST */
     t_ast_node *ast;
-	ast = parse_tokens(data->tokens);
+	ast = parse_tokens(data, data->tokens);
     if (!ast)
     {
         printf("Error: Parsing failed\n");
@@ -153,4 +105,42 @@ int	main(int argc, char **argv, char **envp)
 //     test_parse("ls || cat file | grep test && echo ok", &data);
     
 //     return 0;
+// }
+// 
+// void test_parse(const char *input, t_data *data)
+// {
+//     t_ast_node *ast;
+
+//     printf("\nTesting input: \"%s\"\n", input);
+//     printf("----------------------------------------\n");
+
+//     // Use your existing tokenizer
+//     if (tokenize_input(input, &data->tokens, data))
+//     {
+//         printf("Error: Tokenization failed\n");
+//         return;
+//     }
+
+//     // Print tokens (using your existing function)
+//     printf("Tokens:\n");
+//     print_tokens_formatted(data->tokens);
+//     printf("\n");
+
+//     // Parse tokens into AST
+//     ast = parse_tokens(data, data->tokens);
+//     if (!ast)
+//     {
+//         printf("Error: Parsing failed\n");
+//         clear_tokens(&data->tokens);
+//         return;
+//     }
+
+//     // Print resulting AST
+//     printf("AST Structure:\n");
+//     print_ast(ast, 0);
+//     printf("\n");
+
+//     // Cleanup
+//     free_ast(ast);
+//     clear_tokens(&data->tokens);
 // }

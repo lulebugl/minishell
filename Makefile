@@ -56,6 +56,7 @@ SRC		= 	main.c \
 			misc/env_utils.c \
 			misc/env_utils2.c \
 			parsing/ast.c	\
+			parsing/parser.c	\
 			parsing/ast_utils.c	\
 			parsing/create_commands.c	\
 			parsing/ast_debug.c	\
