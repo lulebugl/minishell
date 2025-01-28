@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:45:59 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/27 15:01:05 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/29 00:54:33 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,6 @@ void	init_signals(void)
 	ft_bzero(&act, sizeof(act));
 	act.sa_handler = &sigint_handler;
 	sigaction(SIGINT, &act, NULL);
+	act.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &act, NULL);
 }
