@@ -41,7 +41,10 @@ typedef struct s_ast_node
 {
 	t_node_type			type;
 	struct s_ast_node	*left;
-	struct s_ast_node **pipeline; // Array of commands in pipeline
+	// need to convert the pipeline to an array of commands (maybe?)
+	// don't know if necessary to keep it in ast. 
+	// i.e (((ls && echo "ok") | grep o) || (cat file && grep "pattern")) && echo "done" 
+	struct s_ast_node 	**pipeline; // Array of commands in pipeline
 	int pipe_count;               // Number of commands in pipeline but why??
 	struct s_ast_node	*right;
 	t_command			*cmd;
