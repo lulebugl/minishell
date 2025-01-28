@@ -76,6 +76,22 @@ int	handle_quotes(const char *s, int *start, char type, t_token **tokens)
 	return (0);
 }
 
+int	handle_logical_and(const char *s, int *pos, t_token **tokens)
+{
+	int		i;
+	char	next;
+	int		tmp;
+
+	i = *pos;
+	next = 0;
+	if (!s[i + 1] && s[i + 1] != '&')
+		return (0);
+	if (add_token(tokens, s, (t_token_pos){i, 2}, TOKEN_AND))
+		return (ENOSPC);
+	(*pos) += 2;
+	return (0);
+}
+
 int	handle_pipes(const char *s, int *pos, t_token **tokens, t_data *data)
 {
 	int		i;
@@ -86,6 +102,13 @@ int	handle_pipes(const char *s, int *pos, t_token **tokens, t_data *data)
 	next = 0;
 	if (s[i + 1])
 		next = s[i + 1];
+	if (next && next == '|')
+	{
+		if (add_token(tokens, s, (t_token_pos){i, 2}, TOKEN_OR))
+			return (ENOSPC);
+		(*pos) += 2;
+		return (0);
+	}
 	if (!next || next == ' ')
 	{
 		tmp = 1;

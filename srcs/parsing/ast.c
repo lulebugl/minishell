@@ -10,188 +10,138 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-/* ast.c */
 #include "ast.h"
+#include "minishell.h"
 
-static t_ast_node *create_node(t_node_type type, void *data)
+static t_node_type token_to_node_type(t_token_type type)
+{
+    if (type == TOKEN_PIPE)
+        return NODE_PIPELINE;
+    else if (type == TOKEN_WORD)
+        return NODE_COMMAND;
+    else if (type == TOKEN_AND)
+        return NODE_AND;
+    else if (type == TOKEN_OR)
+        return NODE_OR;
+    return NODE_COMMAND;
+}
+
+static t_ast_node *create_command_from_token(t_token *token)
+{
+    char *args[1];
+    
+    args[0] = token->content;
+    return create_command_node(args, 1);
+}
+
+// Find the last operator of given type in the token list
+static t_token *find_last_operator(t_token *start, t_token *end, t_token_type type)
+{
+    t_token *last = NULL;
+    t_token *current = start;
+
+    while (current != end)
+    {
+        if (current->type == type)
+            last = current;
+        current = current->next;
+    }
+    return last;
+}
+
+// Parse a sequence of tokens into an AST
+static t_ast_node *parse_tokens_range(t_token *start, t_token *end)
 {
     t_ast_node *node;
+    t_token *operator;
 
-    node = malloc(sizeof(t_ast_node));
+    // Base case: single token
+    if (start == end || !start)
+    {
+        if (!start)
+            return NULL;
+        return create_command_from_token(start);
+    }
+
+    // Look for OR first (lowest precedence)
+    operator = find_last_operator(start, end, TOKEN_OR);
+    if (!operator)
+        operator = find_last_operator(start, end, TOKEN_AND); // Then look for AND
+    if (!operator)
+        operator = find_last_operator(start, end, TOKEN_PIPE); // Then look for PIPE
+
+    // If no operator found, must be a single command
+    if (!operator)
+        return create_command_from_token(start);
+
+    // Create operator node
+    node = create_node(token_to_node_type(operator->type));
     if (!node)
-        return (NULL);
-    node->type = type;
-    node->data = data;
-    node->left = NULL;
-    node->right = NULL;
-    return (node);
-}
+        return NULL;
 
-// Count number of word tokens until a pipe or end
-static int count_command_words(t_token *token)
-{
-    int count;
-
-    count = 0;
-    while (token && token->type == TOKEN_WORD)
+    if (operator->type == TOKEN_PIPE)
     {
-        count++;
-        token = token->next;
-    }
-    return (count);
-}
+        // Count commands in pipeline
+        int cmd_count = 1;
+        t_token *curr = start;
+        t_ast_node **cmds;
+        int i = 0;
 
-// Build a command node from tokens
-static t_ast_node *build_command(t_token **tokens)
-{
-    t_command   *cmd;
-    t_ast_node  *node;
-    int         i;
-    int         word_count;
-
-    // Count words in this command
-    word_count = count_command_words(*tokens);
-    if (word_count == 0)
-        return (NULL);
-
-    // Allocate command structure
-    cmd = malloc(sizeof(t_command));
-    if (!cmd)
-        return (NULL);
-    cmd->args = malloc(sizeof(char *) * (word_count + 1));
-    if (!cmd->args)
-    {
-        free(cmd);
-        return (NULL);
-    }
-    cmd->arg_count = word_count;
-
-    // Copy command and arguments
-    i = 0;
-    while (i < word_count)
-    {
-        cmd->args[i] = ft_strdup((*tokens)->content);
-        *tokens = (*tokens)->next;
-        i++;
-    }
-    cmd->args[i] = NULL;  // NULL terminate the array
-
-    // Create the AST node
-    node = create_node(NODE_COMMAND, cmd);
-    if (!node)
-    {
-        // Free everything if node creation failed
-        for (i = 0; i < word_count; i++)
-            free(cmd->args[i]);
-        free(cmd->args);
-        free(cmd);
-        return (NULL);
-    }
-    return (node);
-}
-
-// Main function to build the AST
-t_ast_node *build_ast(t_token *tokens)
-{
-    t_ast_node  *left;
-    t_ast_node  *pipe_node;
-
-    if (!tokens)
-        return (NULL);
-
-    // Build the first command
-    left = build_command(&tokens);
-    if (!left)
-        return (NULL);
-
-    // If there's a pipe, continue building
-    while (tokens && tokens->type == TOKEN_PIPE)
-    {
-        // Create a pipe node
-        pipe_node = create_node(NODE_PIPE, NULL);
-        if (!pipe_node)
+        while (curr != end)
         {
-            free_ast(left);
-            return (NULL);
+            if (curr->type == TOKEN_PIPE)
+                cmd_count++;
+            curr = curr->next;
         }
 
-        // Skip the pipe token
-        tokens = tokens->next;
-
-        // Set the left child to our previous command/pipe
-        pipe_node->left = left;
-
-        // Build the right command
-        pipe_node->right = build_command(&tokens);
-        if (!pipe_node->right)
+        // Allocate command array
+        cmds = malloc(sizeof(t_ast_node *) * cmd_count);
+        if (!cmds)
         {
-            free_ast(pipe_node);
-            return (NULL);
+            free_ast(node);
+            return NULL;
         }
 
-        // Update left for the next iteration
-        left = pipe_node;
-    }
-
-    return (left);
-}
-
-// Print the AST with indentation for visualization
-void print_ast(t_ast_node *node, int level)
-{
-    int i;
-
-    if (!node)
-        return;
-
-    // Print indentation
-    for (i = 0; i < level; i++)
-        printf("  ");
-
-    // Print node content
-    if (node->type == NODE_PIPE)
-    {
-        printf("PIPE\n");
-    }
-    else if (node->type == NODE_COMMAND)
-    {
-        t_command *cmd = (t_command *)node->data;
-        printf("COMMAND: ");
-        for (i = 0; i < cmd->arg_count; i++)
+        // Fill command array
+        curr = start;
+        while (curr != end)
         {
-            printf("%s", cmd->args[i]);
-            if (i < cmd->arg_count - 1)
-                printf(" ");
+            if (curr->type == TOKEN_WORD)
+            {
+                cmds[i++] = create_command_from_token(curr);
+                if (!cmds[i-1])
+                {
+                    while (--i >= 0)
+                        free_ast(cmds[i]);
+                    free(cmds);
+                    free_ast(node);
+                    return NULL;
+                }
+            }
+            curr = curr->next;
         }
-        printf("\n");
+
+        node->pipeline = cmds;
+        node->pipe_count = cmd_count;
+    }
+    else
+    {
+        // Recursively parse left and right sides
+        node->left = parse_tokens_range(start, operator);
+        node->right = parse_tokens_range(operator->next, end);
+
+        if (!node->left || !node->right)
+        {
+            free_ast(node);
+            return NULL;
+        }
     }
 
-    // Print children
-    if (node->left)
-        print_ast(node->left, level + 1);
-    if (node->right)
-        print_ast(node->right, level + 1);
+    return node;
 }
 
-void free_ast(t_ast_node *node)
+// Main parsing function
+t_ast_node *parse_tokens(t_token *tokens)
 {
-    if (!node)
-        return;
-
-    // Free children first
-    free_ast(node->left);
-    free_ast(node->right);
-
-    // Free command data if this is a command node
-    if (node->type == NODE_COMMAND)
-    {
-        t_command *cmd = (t_command *)node->data;
-        for (int i = 0; i < cmd->arg_count; i++)
-            free(cmd->args[i]);
-        free(cmd->args);
-        free(cmd);
-    }
-
-    // Free the node itself
-    free(node);
+    return parse_tokens_range(tokens, NULL);
 }

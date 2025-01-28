@@ -4,6 +4,8 @@
 #define COLOR_WORD "\e[0;35m"    // Light blue
 #define COLOR_PIPE "\x1b[38;5;213m"    // Pink
 #define COLOR_REDIR "\x1b[38;5;220m"   // Yellow
+#define COLOR_AND "\e[0;36m"
+#define COLOR_OR "\e[0;36m"
 #define COLOR_SPECIAL "\x1b[38;5;159m" // Cyan
 
 void	print_tokens_formatted(t_token *tokens)
@@ -11,7 +13,7 @@ void	print_tokens_formatted(t_token *tokens)
 	t_token		*current;
 	int			token_count;
 	const char	*type_str[] = {"WORD", "PIPE", "REDIR_IN", "REDIR_OUT",
-			"REDIR_APPEND", "HEREDOC"};
+			"REDIR_APPEND", "HEREDOC", "AND", "OR"};
 
 	// Type strings with their corresponding colors
 	const char *type_colors[] = {
@@ -20,6 +22,8 @@ void	print_tokens_formatted(t_token *tokens)
 		COLOR_REDIR,   // TOKEN_REDIR_IN
 		COLOR_REDIR,   // TOKEN_REDIR_OUT
 		COLOR_REDIR,   // TOKEN_REDIR_APPEND
+		COLOR_AND,   // TOKEN_REDIR_APPEND
+		COLOR_OR,   // TOKEN_REDIR_APPEND
 		COLOR_SPECIAL, // TOKEN_HEREDOC
 	};
 	current = tokens;

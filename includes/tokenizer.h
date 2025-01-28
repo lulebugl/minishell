@@ -28,6 +28,8 @@ typedef enum e_token_type
 	TOKEN_OUT,
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
+	TOKEN_AND,
+	TOKEN_OR,
 }						t_token_type;
 
 // typedef struct s_list	t_token;
