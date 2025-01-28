@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:49:45 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/27 15:20:26 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/28 13:01:34 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,17 @@ void clear_tokens(t_token **tokens)
 		free(*tokens);
 		*tokens = NULL;
 	}
+}
+
+void	free_str_arr(char **strs)
+{
+	int	i;
+
+	i = 0;
+	while (strs[i])
+	{
+		free(strs[i]);
+		i++;
+	}
+	free(strs);
 }

@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 16:31:25 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/27 18:56:35 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/28 13:40:28 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,11 @@ int	ft_cd(t_env *env, char **args)
 		return (ERROR);
 	ret = chdir(path);
 	if (ret != 0)
-		return (printf("minishell: cd: No such file or directory\n"), ERROR);
-	env_add_key(&env, "PWD", ft_strdup(path));
+		return (printf("minishell: cd: %s\n", strerror(errno)), ERROR);
 	env_add_key(&env, "OLDPWD", ft_strdup(curr));
+	getcwd(curr, PATH_MAX);
+	if (!curr)
+		return (ERROR);
+	env_add_key(&env, "PWD", ft_strdup(curr));
 	return (SUCCESS);
 }
