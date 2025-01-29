@@ -59,9 +59,9 @@ int	add_token(t_token **tokens, const char *prompt, t_token_pos pos,
 
 int	handle_quotes(const char *s, int *start, char type, t_token **tokens)
 {
-	int	len;
-	t_token_pos pos;
-	
+	int			len;
+	t_token_pos	pos;
+
 	len = ++(*start);
 	if (!s[len])
 		return (msg_custom_err(ERR_MSG_QUOTES, ERR_MSG_SYNTAX), 1);
@@ -76,6 +76,29 @@ int	handle_quotes(const char *s, int *start, char type, t_token **tokens)
 	return (0);
 }
 
+int	handle_parenthesis(const char *s, int *pos, t_token **tokens)
+{
+	int		i;
+	char	next;
+	int		tmp;
+
+	i = *pos;
+	next = 0;
+	if (s[i] == '(')
+	{
+		if (add_token(tokens, s, (t_token_pos){i, 1}, TOKEN_OPEN_PAR))
+			return (ENOSPC);
+	}
+	else if (s[i] == ')')
+	{
+		if (add_token(tokens, s, (t_token_pos){i, 1}, TOKEN_CLOSE_PAR))
+			return (ENOSPC);
+	}
+	(*pos)++;
+	;
+	return (0);
+}
+
 int	handle_logical_and(const char *s, int *pos, t_token **tokens)
 {
 	int		i;
@@ -84,8 +107,6 @@ int	handle_logical_and(const char *s, int *pos, t_token **tokens)
 
 	i = *pos;
 	next = 0;
-	if (!s[i + 1] && s[i + 1] != '&')
-		return (0);
 	if (add_token(tokens, s, (t_token_pos){i, 2}, TOKEN_AND))
 		return (ENOSPC);
 	(*pos) += 2;

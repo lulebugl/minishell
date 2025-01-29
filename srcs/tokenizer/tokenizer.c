@@ -16,7 +16,14 @@ int	handle_logical_and(const char *s, int *pos, t_token **tokens);
 
 static inline int is_operator(char c)
 {
-	return (c == '>' || c == '<' || c == '|');
+	return (c == '>' || c == '<' || c == '|' || c == '(' || c == ')');
+}
+
+static int is_logical_and(const char *s)
+{
+	if (!(s + 1))
+		return (0);
+	return (*s == '&' && *(s + 1) == '&');
 }
 
 //need to implement better error handling
@@ -47,19 +54,25 @@ int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 		}
 		else if (s[i] && (s[i] == '<' || s[i] == '>'))
 		{
-			data->status = handle_io(s, &i, s[i], tokens); 
+			data->status = handle_io(s, &i, s[i], tokens);
 			if (data->status != 0)
 				return (1);
 		}
-		else if (s[i] && (s[i] == '&'))
+		else if (s[i] && (s[i] == '(' || s[i] == ')'))
 		{
-			data->status = handle_logical_and(s, &i, tokens); 
+			data->status = handle_parenthesis(s, &i, tokens);
+			if (data->status != 0)
+				return (1);
+		}
+		else if (s[i] && s[i + 1] && (s[i] == '&') && (s[i + 1] == '&'))
+		{
+			data->status = handle_logical_and(s, &i, tokens);
 			if (data->status != 0)
 				return (1);
 		}
 		else if (s[i] && s[i] == '|')
 		{
-			data->status = handle_pipes(s, &i, tokens, data); 
+			data->status = handle_pipes(s, &i, tokens, data);
 			if (data->status != 0)
 				return (1);
 		}
@@ -68,8 +81,7 @@ int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 			pos = i;
 			if (!s[i])
 				return (0);
-			while (s[i] && s[i] != ' ' && !is_operator(s[i]) && s[i] != '\''
-				&& s[i] != '\"')
+			while (s[i] && s[i] != ' ' && !is_operator(s[i]) && !is_logical_and(s + i) && s[i] != '\'' && s[i] != '\"')
 				i++;
 			word = ft_substr(s, pos, i - pos);
 			if (!word)
