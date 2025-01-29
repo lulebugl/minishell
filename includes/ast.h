@@ -31,7 +31,7 @@ typedef struct s_redirection
 
 typedef struct s_command
 {
-	char **args; // Command and its arguments
+	char 				**args;
 	int					arg_count;
 	t_redirection		**redirects;
 	int					redir_count;

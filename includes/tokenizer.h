@@ -30,6 +30,8 @@ typedef enum e_token_type
 	TOKEN_HEREDOC,
 	TOKEN_AND,
 	TOKEN_OR,
+	TOKEN_OPEN_PAR,
+	TOKEN_CLOSE_PAR,
 }						t_token_type;
 
 // typedef struct s_list	t_token;
