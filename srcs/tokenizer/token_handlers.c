@@ -12,50 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-/* edge case for pipe as last token */
-int	handle_edge_pipe(t_token **tokens, t_data *data)
-{
-	char	*buf;
-
-	while (1)
-	{
-		buf = readline("> ");
-		if (!buf)
-		{
-			// ctrl-D
-			if (errno == 0)
-				return (1);
-			// ctrl-C
-			else
-				return (1);
-		}
-		// empty line
-		if (buf && buf[0] == '\0')
-		{
-			free(buf);
-			continue ;
-		}
-		if (buf)
-		{
-			if (tokenize_input(buf, tokens, data))
-				return (1);
-			free(buf);
-			return (0);
-		}
-	}
-}
-
-int	add_token(t_token **tokens, const char *prompt, t_token_pos pos,
-		t_token_type type)
-{
-	char	*token;
-
-	token = ft_substr(prompt, pos.start, pos.len);
-	if (!token)
-		return (1);
-	push_token(tokens, new_token(token, type));
-	return (0);
-}
+int	handle_edge_pipe(t_token **tokens, t_data *data);
 
 int	handle_quotes(const char *s, int *start, char type, t_token **tokens)
 {
@@ -199,3 +156,35 @@ int	handle_io(const char *s, int *pos, char type, t_token **tokens)
 	return (0);
 }
 
+/* edge case for pipe as last token */
+int	handle_edge_pipe(t_token **tokens, t_data *data)
+{
+	char	*buf;
+
+	while (1)
+	{
+		buf = readline("> ");
+		if (!buf)
+		{
+			// ctrl-D
+			if (errno == 0)
+				return (1);
+			// ctrl-C
+			else
+				return (1);
+		}
+		// empty line
+		if (buf && buf[0] == '\0')
+		{
+			free(buf);
+			continue ;
+		}
+		if (buf)
+		{
+			if (tokenize_input(buf, tokens, data))
+				return (1);
+			free(buf);
+			return (0);
+		}
+	}
+}

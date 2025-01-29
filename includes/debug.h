@@ -15,6 +15,16 @@
 
 #include <assert.h>
 
+#define COLOR_RESET "\x1b[0m"
+#define COLOR_WORD "\e[0;35m"    // Light blue
+#define COLOR_PIPE "\x1b[38;5;213m"    // Pink
+#define COLOR_REDIR "\x1b[38;5;220m"   // Yellow
+#define COLOR_AND "\e[0;36m"
+#define COLOR_OR "\e[0;36m"
+#define COLOR_PAR "\e[0;32m"
+#define COLOR_SPECIAL "\x1b[38;5;159m" // Cyan
+
+
 typedef struct s_data t_data;
 typedef struct s_token t_token;
 

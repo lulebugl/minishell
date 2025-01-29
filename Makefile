@@ -39,9 +39,9 @@ OBJ_PATH = ./objs/
 INC_PATH = ./includes/
 
 SRC		= 	main.c \
+			tokenizer/token_utils.c \
 			tokenizer/token_handlers.c \
 			tokenizer/tokenizer.c \
-			tokenizer/utils.c \
 			tokenizer/validate_prompt.c \
 			tokenizer/debug.c \
 			builtins/env.c \

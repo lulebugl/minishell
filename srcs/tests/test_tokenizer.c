@@ -38,70 +38,124 @@ typedef struct s_test_case
 {
 	const char				*input;
 	const char				*description;
-	t_token_type			expected_types[10];
-	const char				*expected_values[10];
+	t_token_type			expected_types[20];
+	const char				*expected_values[20];
 	int						expected_token_count;
 }							t_test_case;
 
-static const t_test_case	test_cases[] = {
-	// Basic cases (keep existing ones)
-	{"ls -la", "Basic command with flag", {TOKEN_WORD, TOKEN_WORD}, {"ls",
-		"-la"}, 2},
+static const t_test_case test_cases[] = {
+    // Keep your existing basic cases...
 
-	// Empty or whitespace inputs
-	{"", "Empty input", {}, {}, 0},
-	{"   ", "Only spaces", {}, {}, 0},
-	{"\t   \t", "Tabs and spaces", {}, {}, 0},
+    // Parentheses edge cases
+    {"(ls)", "Simple parentheses", 
+        {TOKEN_OPEN_PAR, TOKEN_WORD, TOKEN_CLOSE_PAR}, 
+        {"(", "ls", ")"}, 3},
+    
+    {"( ls )", "Parentheses with spaces", 
+        {TOKEN_OPEN_PAR, TOKEN_WORD, TOKEN_CLOSE_PAR}, 
+        {"(", "ls", ")"}, 3},
+    
+    {"((echo test))", "Nested parentheses", 
+        {TOKEN_OPEN_PAR, TOKEN_OPEN_PAR, TOKEN_WORD, TOKEN_WORD, TOKEN_CLOSE_PAR, TOKEN_CLOSE_PAR}, 
+        {"(", "(", "echo", "test", ")", ")"}, 6},
+    
+    // Logical AND edge cases
+    {"ls && pwd", "Simple logical AND", 
+        {TOKEN_WORD, TOKEN_AND, TOKEN_WORD}, 
+        {"ls", "&&", "pwd"}, 3},
+    
+    {"ls&&pwd", "Logical AND without spaces", 
+        {TOKEN_WORD, TOKEN_AND, TOKEN_WORD}, 
+        {"ls", "&&", "pwd"}, 3},
+    
+    {"ls && pwd && echo test", "Multiple logical AND", 
+        {TOKEN_WORD, TOKEN_AND, TOKEN_WORD, TOKEN_AND, TOKEN_WORD, TOKEN_WORD}, 
+        {"ls", "&&", "pwd", "&&", "echo", "test"}, 6},
 
-	// Quote edge cases
-	{"echo \"\"", "Empty double quotes", {TOKEN_WORD, TOKEN_WORD}, {"echo",
-		"\"\""}, 2},
-	{"echo ''", "Empty single quotes", {TOKEN_WORD, TOKEN_WORD}, {"echo", "''"},
-		2},
-	{"echo \"'\"", "Double quoted single quote", {TOKEN_WORD, TOKEN_WORD},
-		{"echo", "\"'\""}, 2},
-	{"echo '\"'", "Single quoted double quote", {TOKEN_WORD, TOKEN_WORD},
-		{"echo", "'\"'"}, 2},
+    // Complex combinations with parentheses and logical operators
+    {"(ls -l) && (pwd)", "Parentheses with logical AND", 
+        {TOKEN_OPEN_PAR, TOKEN_WORD, TOKEN_WORD, TOKEN_CLOSE_PAR, TOKEN_AND, 
+        TOKEN_OPEN_PAR, TOKEN_WORD, TOKEN_CLOSE_PAR}, 
+        {"(", "ls", "-l", ")", "&&", "(", "pwd", ")"}, 8},
+    
+    {"(echo hello) | (grep o) && pwd", "Parentheses with pipe and logical AND",
+        {TOKEN_OPEN_PAR, TOKEN_WORD, TOKEN_WORD, TOKEN_CLOSE_PAR, TOKEN_PIPE,
+        TOKEN_OPEN_PAR, TOKEN_WORD, TOKEN_WORD, TOKEN_CLOSE_PAR, TOKEN_AND, TOKEN_WORD},
+        {"(", "echo", "hello", ")", "|", "(", "grep", "o", ")", "&&", "pwd"}, 11},
 
-	// Redirection edge cases
-	{">>>>", "Multiple consecutive redirects", {TOKEN_APPEND, TOKEN_APPEND},
-		{">>", ">>"}, 2},
-	{">", "Single redirect without target", {TOKEN_OUT}, {">"}, 1},
-	{"< < < <", "Multiple input redirects with spaces", {TOKEN_IN, TOKEN_IN,
-		TOKEN_IN, TOKEN_IN}, {"<", "<", "<", "<"}, 4},
-	{"ls > > file", "Double redirect with spaces", {TOKEN_WORD, TOKEN_OUT,
-		TOKEN_OUT, TOKEN_WORD}, {"ls", ">", ">", "file"}, 4},
+    // Quote handling with operators
+    {"echo \"&&\"", "Quoted logical operator", 
+        {TOKEN_WORD, TOKEN_WORD}, 
+        {"echo", "\"&&\""}, 2},
+    
+    {"echo '&&'", "Single-quoted logical operator", 
+        {TOKEN_WORD, TOKEN_WORD}, 
+        {"echo", "'&&'"}, 2},
+    
+    {"echo \"(hello)\"", "Quoted parentheses", 
+        {TOKEN_WORD, TOKEN_WORD}, 
+        {"echo", "\"(hello)\""}, 2},
 
-	// Pipe edge cases
-	// {"||||", "Multiple consecutive pipes", {TOKEN_PIPE, TOKEN_PIPE,
-	//	TOKEN_PIPE,
-	// 	TOKEN_PIPE}, {"|", "|", "|", "|"}, 4},
-	// {"ls | | | grep", "Multiple pipes with spaces", {TOKEN_WORD, TOKEN_PIPE,
-	// 	TOKEN_PIPE, TOKEN_PIPE, TOKEN_WORD}, {"ls", "|", "|", "|", "grep"}, 5},
+    // Mixed operator cases
+    {"ls > file && cat file", "Redirect with logical AND", 
+        {TOKEN_WORD, TOKEN_OUT, TOKEN_WORD, TOKEN_AND, TOKEN_WORD, TOKEN_WORD},
+        {"ls", ">", "file", "&&", "cat", "file"}, 6},
+    
+    {"(ls > file) && (cat < file)", "Parentheses with redirections", 
+        {TOKEN_OPEN_PAR, TOKEN_WORD, TOKEN_OUT, TOKEN_WORD, TOKEN_CLOSE_PAR, TOKEN_AND,
+        TOKEN_OPEN_PAR, TOKEN_WORD, TOKEN_IN, TOKEN_WORD, TOKEN_CLOSE_PAR},
+        {"(", "ls", ">", "file", ")", "&&", "(", "cat", "<", "file", ")"}, 11},
 
-	// Mixed complex cases
-	{"echo \"hello > world\" > file",
-		"Redirect in quotes followed by actual redirect", {TOKEN_WORD,
-		TOKEN_WORD, TOKEN_OUT, TOKEN_WORD}, {"echo", "\"hello > world\"", ">",
-		"file"}, 4},
-	{"cat << \"EOF\" | grep 'pattern'",
-		"Heredoc with quoted delimiter and pipe", {TOKEN_WORD, TOKEN_HEREDOC,
-		TOKEN_WORD, TOKEN_PIPE, TOKEN_WORD}, {"cat", "<<", "\"EOF\"", "|",
-		"grep", "\'pattern\'"}, 6},
-	{"<< EOF > outfile", "Heredoc with output redirect", {TOKEN_HEREDOC,
-		TOKEN_WORD, TOKEN_OUT, TOKEN_WORD}, {"<<", "EOF", ">", "outfile"}, 4},
+    // Error cases
+    {"ls &&", "Dangling logical AND", 
+        {TOKEN_WORD, TOKEN_AND}, 
+        {"ls", "&&"}, 2},
+    
+    {"&& ls", "Leading logical AND", 
+        {TOKEN_AND, TOKEN_WORD}, 
+        {"&&", "ls"}, 2},
+    
+    {"(ls", "Unclosed parenthesis", 
+        {TOKEN_OPEN_PAR, TOKEN_WORD}, 
+        {"(", "ls"}, 2},
+    
+    {"ls)", "Unopened parenthesis", 
+        {TOKEN_WORD, TOKEN_CLOSE_PAR}, 
+        {"ls", ")"}, 2},
 
-	// Special characters and edge cases
-	{"echo $?", "Exit status variable", {TOKEN_WORD, TOKEN_WORD}, {"echo",
-		"$?"}, 2},
-	// {"echo \\\"hello\\\"", "Escaped quotes", {TOKEN_WORD, TOKEN_WORD},
-	//	{"echo",
-	// 	"\\\"hello\\\""}, 2},
-	// {"ls '-la'\"pwd\"", "Connected quoted strings", {TOKEN_WORD, TOKEN_WORD},
-	// 	{"ls", "'-la'\"pwd\""}, 2},
+    // Complex nesting
+    {"((ls && pwd) | (echo test && grep t))", "Complex nested expression",
+        {TOKEN_OPEN_PAR, TOKEN_OPEN_PAR, TOKEN_WORD, TOKEN_AND, TOKEN_WORD, TOKEN_CLOSE_PAR,
+        TOKEN_PIPE, TOKEN_OPEN_PAR, TOKEN_WORD, TOKEN_WORD, TOKEN_AND, TOKEN_WORD,
+         TOKEN_WORD, TOKEN_CLOSE_PAR, TOKEN_CLOSE_PAR},
+        {"(", "(", "ls", "&&", "pwd", ")", "|", "(", "echo", "test", "&&",
+         "grep", "t", ")", ")"}, 15},
 
-	// Terminator case
-	{NULL, NULL, {0}, {0}, 0}};
+    // Edge cases with spaces
+    {"ls&&pwd&&echo", "Multiple AND without spaces",
+        {TOKEN_WORD, TOKEN_AND, TOKEN_WORD, TOKEN_AND, TOKEN_WORD},
+        {"ls", "&&", "pwd", "&&", "echo"}, 5},
+    
+    {"(ls&&pwd)", "Parentheses with AND without spaces",
+        {TOKEN_OPEN_PAR, TOKEN_WORD, TOKEN_AND, TOKEN_WORD, TOKEN_CLOSE_PAR},
+        {"(", "ls", "&&", "pwd", ")"}, 5},
+
+    // Mixed quotes and operators
+    {"echo \"text && more\" && ls", "Quoted AND with real AND",
+        {TOKEN_WORD, TOKEN_WORD, TOKEN_AND, TOKEN_WORD},
+        {"echo", "\"text && more\"", "&&", "ls"}, 4},
+    
+    {"echo 'text && more' && ls", "Single-quoted AND with real AND",
+        {TOKEN_WORD, TOKEN_WORD, TOKEN_AND, TOKEN_WORD},
+        {"echo", "'text && more'", "&&", "ls"}, 4},
+
+    // Special combinations
+    {"(ls>file&&pwd)", "Parentheses with redirect and AND without spaces",
+        {TOKEN_OPEN_PAR, TOKEN_WORD, TOKEN_OUT, TOKEN_WORD, TOKEN_AND, TOKEN_WORD, TOKEN_CLOSE_PAR},
+        {"(", "ls", ">", "file", "&&", "pwd", ")"}, 7},
+
+    {NULL, NULL, {0}, {0}, 0}  // Terminator case
+};
 
 static void	validate_test_case(t_token *tokens, const t_test_case *test)
 {

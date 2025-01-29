@@ -1,13 +1,17 @@
-#include "../../includes/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   debug.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/29 19:48:11 by llebugle          #+#    #+#             */
+/*   Updated: 2025/01/29 19:48:12 by llebugle         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#define COLOR_RESET "\x1b[0m"
-#define COLOR_WORD "\e[0;35m"    // Light blue
-#define COLOR_PIPE "\x1b[38;5;213m"    // Pink
-#define COLOR_REDIR "\x1b[38;5;220m"   // Yellow
-#define COLOR_AND "\e[0;36m"
-#define COLOR_OR "\e[0;36m"
-#define COLOR_PAR "\e[0;32m"
-#define COLOR_SPECIAL "\x1b[38;5;159m" // Cyan
+#include "debug.h"
+#include "minishell.h"
 
 void	print_tokens_formatted(t_token *tokens)
 {
@@ -16,18 +20,17 @@ void	print_tokens_formatted(t_token *tokens)
 	const char	*type_str[] = {"WORD", "PIPE", "REDIR_IN", "REDIR_OUT",
 			"REDIR_APPEND", "HEREDOC", "AND", "OR", "OPEN_PAR", "CLOSED_PAR"};
 
-	// Type strings with their corresponding colors
 	const char *type_colors[] = {
-		COLOR_WORD,    // TOKEN_WORD
-		COLOR_PIPE,    // TOKEN_PIPE
-		COLOR_REDIR,   // TOKEN_REDIR_IN
-		COLOR_REDIR,   // TOKEN_REDIR_OUT
-		COLOR_REDIR,   // TOKEN_REDIR_APPEND
-		COLOR_SPECIAL, // TOKEN_HEREDOC
-		COLOR_AND,   // TOKEN_REDIR_APPEND
-		COLOR_OR,   // TOKEN_REDIR_APPEND
-		COLOR_PAR,    // TOKEN_PARENTHESIS
-		COLOR_PAR,    // TOKEN_PARENTHESIS
+		COLOR_WORD,
+		COLOR_PIPE,
+		COLOR_REDIR,
+		COLOR_REDIR,
+		COLOR_REDIR,
+		COLOR_SPECIAL,
+		COLOR_AND,
+		COLOR_OR,
+		COLOR_PAR,
+		COLOR_PAR,
 	};
 	current = tokens;
 	token_count = 0;
@@ -49,22 +52,6 @@ void	print_tokens_formatted(t_token *tokens)
 	printf("================\n");
 }
 
-// Helper function to free token list
-void	free_tokens(t_token *tokens)
-{
-	t_token	*current;
-	t_token	*next;
-
-	current = tokens;
-	while (current)
-	{
-		next = current->next;
-		free(current->content);
-		free(current);
-		current = next;
-	}
-}
-
 void	test_arg_input(const char *input, t_data *data)
 {
 	t_token	*tokens;
@@ -75,11 +62,11 @@ void	test_arg_input(const char *input, t_data *data)
 	err = tokenize_input(input, &tokens, data);
 	if (err)
 	{
-		// printf("err tokenize input : %d\n", err);
 		printf(RESET);
 		return ;
 	}
 	printf(RESET);
 	print_tokens_formatted(tokens);
-	free_tokens(tokens);
+	clear_tokens(&tokens);
 }
+

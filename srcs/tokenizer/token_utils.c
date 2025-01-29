@@ -12,16 +12,16 @@
 
 #include "../../includes/minishell.h"
 
-void clear_tokens(t_token **tokens)
+int	add_token(t_token **tokens, const char *prompt, t_token_pos pos,
+		t_token_type type)
 {
-	if (tokens && *tokens)
-	{
-		if ((*tokens)->next)
-			clear_tokens(&(*tokens)->next);
-		free((*tokens)->content);
-		free(*tokens);
-		*tokens = NULL;
-	}
+	char	*token;
+
+	token = ft_substr(prompt, pos.start, pos.len);
+	if (!token)
+		return (1);
+	push_token(tokens, new_token(token, type));
+	return (0);
 }
 
 t_token	*new_token(char *content, t_token_type type)
@@ -50,5 +50,17 @@ void	push_token(t_token **lst, t_token *node)
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = node;
+	}
+}
+
+void	clear_tokens(t_token **tokens)
+{
+	if (tokens && *tokens)
+	{
+		if ((*tokens)->next)
+			clear_tokens(&(*tokens)->next);
+		free((*tokens)->content);
+		free(*tokens);
+		*tokens = NULL;
 	}
 }

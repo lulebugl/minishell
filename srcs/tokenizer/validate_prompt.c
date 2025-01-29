@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static bool	is_redirection(int type)
+static inline bool	is_redirection(int type)
 {
 	return (type == TOKEN_IN || type == TOKEN_OUT || type == TOKEN_APPEND
 		|| type == TOKEN_HEREDOC);
