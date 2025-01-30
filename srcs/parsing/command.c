@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:41:55 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/30 16:07:58 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 17:27:31 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,24 @@ static char	**get_args(t_token **start, int arg_count)
 	char	**args;
 	int		i;
 
+	i = 0;
 	args = malloc(sizeof(char *) * (arg_count + 1));
 	if (!args)
 		return (NULL);
+	ft_bzero(args, (sizeof(char *) * (arg_count + 1)));
+	i = 0;
 	while ((*start) && i < arg_count)
 	{
 		args[i] = ft_strdup((*start)->content);
-		if (!args[i]);
+		if (!args[i])
 		{
 			free_str_arr(args);
 			return (NULL);
 		}
-		start = (*start)->next;
+		*start = (*start)->next;
+		i++;
 	}
+	args[i] = NULL;
 	return (args);
 }
 
@@ -60,4 +65,5 @@ t_command	*get_command(t_token **token)
 		return (NULL);
 	cmd->arg_count = count_args(*token);
 	cmd->args = get_args(token, cmd->arg_count);
+	return (cmd);
 }

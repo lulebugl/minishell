@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:03:30 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/29 22:55:36 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 17:35:41 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,25 @@ void print_ast (t_tree_node *root, int level )
     padding ( '\t', level );
 	switch (root->type)
 	{
-	case NODE_AND:
-		printf("AND");
-		break;
-	case NODE_OR:
-		printf("OR");
-		break;
-	case NODE_PIPE:
-		printf("PIPE");
-		break;
-	case NODE_COMMAND:
-		printf("CMD");
-		break;
-	default:
-		break;
+    case NODE_AND:
+      printf("AND");
+      break;
+    case NODE_OR:
+      printf("OR");
+      break;
+    case NODE_PIPE:
+      printf("PIPE");
+      break;
+    case NODE_COMMAND:
+      //printf("CMD\n");
+      //padding ( '\t', level );
+      printf(COLOR_WORD);
+      printf("%s", root->cmd->args[0]);
+      printf(COLOR_RESET);
+      break;
+      break;
+    default:
+      break;
 	}
     printf ("\n");
     print_ast ( root->left, level + 1 );

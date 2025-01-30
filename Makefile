@@ -6,7 +6,7 @@
 #    By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 18:54:13 by llebugle          #+#    #+#              #
-#    Updated: 2025/01/30 16:00:36 by maxweert         ###   ########.fr        #
+#    Updated: 2025/01/30 16:31:26 by maxweert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ SRC		= 	main.c \
 			misc/env_utils2.c \
 			misc/free.c \
 			parsing/ast_debug.c \
+			parsing/command.c \
 			parsing/tree.c #\
 			parsing/ast.c \
 			parsing/parser.c	\

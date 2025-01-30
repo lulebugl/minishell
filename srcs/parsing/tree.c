@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 20:31:11 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/30 16:09:42 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 17:31:57 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ t_tree_node	*new_tree(t_data *data, t_token **token)
 		else if ((*token)->type == TOKEN_WORD)
 		{
 			tmp_node = new_node(NODE_COMMAND);
+			tmp_node->cmd = get_command(token);
 			while ((*token) && ((*token)->type != TOKEN_AND && (*token)->type != TOKEN_OR 
 				&& (*token)->type != TOKEN_PIPE && (*token)->type != TOKEN_OPEN_PAR && (*token)->type != TOKEN_CLOSE_PAR))
 				(*token) = (*token)->next;
