@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:49:25 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/30 23:29:25 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 23:46:53 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,10 @@ void	free_redirections(t_redirection *root)
 
 	if (!root)
 		return ;
-	while (root)
-	{
-		tmp = root->next;
-		if (root->filename)
-			free(root->filename);
-		free(root);
-		root = tmp;
-	}
+	if (root->next)
+		free_redirections(root->next);
+	free(root->filename);
+	free(root);
 }
 
 int	count_redirections(t_redirection *root)

@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:03:30 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/30 23:28:34 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 23:45:50 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,16 @@ void padding ( char ch, int n )
 
 void  print_command(t_command *cmd)
 {
+      t_redirection *head;
       printf(COLOR_WORD);
       for (int i = 0; cmd->args[i]; i++)
         printf("%s ", cmd->args[i]);
       printf(COLOR_REDIR);
+      head = cmd->redirections;
       for (int i = 0; i < cmd->redir_count; i++)
       {
-        printf("%s ", cmd->redirections->filename);
-        cmd->redirections = cmd->redirections->next;
+        printf("%s ", head->filename);
+        head = head->next;
       }
       printf(COLOR_RESET);
 }
