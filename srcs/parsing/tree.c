@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 20:31:11 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/30 23:59:13 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/31 00:09:25 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,13 @@ t_tree_node	*new_tree(t_data *data, t_token **token)
 		}
 		else if ((*token)->type == TOKEN_CLOSE_PAR)
 			return (root);
+		else if ((*token)->type == TOKEN_WORD)
+		{
+			tmp_node = new_node(get_node_type((*token)->type));
+			tmp_node->cmd = get_command(token);
+		}
 		else
 			tmp_node = new_node(get_node_type((*token)->type));
-		if (tmp_node->type == NODE_COMMAND)
-			tmp_node->cmd = get_command(token);
 		if (!root)
 			root = tmp_node;
 		else if (root->left && !root->right)
