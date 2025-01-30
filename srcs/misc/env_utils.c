@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 22:23:44 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/22 19:02:34 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:01:07 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,26 +34,6 @@ void	env_init(t_env **env, char **env_arr)
 		env_add_key(env, env_key_from_str(env_arr[i]),
 			env_value_from_str(env_arr[i]));
 		i++;
-	}
-}
-
-/*
- * Function: free_env
- * ----------------------------
- *	Free the list pointed by data->env
- */
-
-void	env_free(t_env *env)
-{
-	t_env	*tmp;
-
-	while (env)
-	{
-		tmp = env->next;
-		free(env->key);
-		free(env->value);
-		free(env);
-		env = tmp;
 	}
 }
 

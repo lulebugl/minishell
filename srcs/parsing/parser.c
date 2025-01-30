@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:42:23 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/28 19:42:24 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/01/29 20:45:16 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_ast_node  *create_pipeline_node(t_token *start, t_token *end)
         return (free(cmds), NULL);
     }
 
-    node = create_node(NODE_PIPELINE);
+    node = create_node(NODE_PIPE);
     if (!node)
     {
         while (--i >= 0)
@@ -93,21 +93,6 @@ t_ast_node  *create_pipeline_node(t_token *start, t_token *end)
     node->left = NULL;
     node->right = NULL;
     node->cmd = NULL;
-    
-    //printf("=== Successfully created pipeline with %d commands ===\n", cmd_count);
-    // Debug output final pipeline
-    //printf("Pipeline commands:\n");
-    // for (i = 0; i < cmd_count; i++)
-    //{
-        //printf("Command %d: ", i);
-        // if (cmds[i] && cmds[i]->cmd)
-        // {
-        //     for (int j = 0; j < cmds[i]->cmd->arg_count; j++)
-        //         //printf("%s ", cmds[i]->cmd->args[j]);
-        // }
-        //printf("\n");
-        //}
-    
     return (node);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_debug.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:03:30 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/28 19:03:32 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/01/29 22:55:36 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,33 +31,43 @@ static void print_command(t_command *cmd, int level)
     printf("\n");
 }
 
-void print_ast(t_ast_node *node, int level)
+void padding ( char ch, int n )
 {
-    if (!node)
-        return;
+  int i;
 
-    for (int i = 0; i < level; i++)
-        printf("  ");
+  for ( i = 0; i < n; i++ )
+    putchar ( ch );
+}
 
-    switch (node->type)
-    {
-        case NODE_COMMAND:
-            print_command(node->cmd, 0);
-            break;
-        case NODE_PIPELINE:
-            printf("PIPELINE:\n");
-            for (int i = 0; i < node->pipe_count; i++)
-                print_ast(node->pipeline[i], level + 1);
-            break;
-        case NODE_AND:
-            printf("AND\n");
-            print_ast(node->left, level + 1);
-            print_ast(node->right, level + 1);
-            break;
-        case NODE_OR:
-            printf("OR\n");
-            print_ast(node->left, level + 1);
-            print_ast(node->right, level + 1);
-            break;
-    }
+void print_ast (t_tree_node *root, int level )
+{
+  int i;
+
+  if ( root == NULL ) {
+    padding ( '\t', level );
+    puts ( "~" );
+  }
+  else {
+    print_ast ( root->right, level + 1 );
+    padding ( '\t', level );
+	switch (root->type)
+	{
+	case NODE_AND:
+		printf("AND");
+		break;
+	case NODE_OR:
+		printf("OR");
+		break;
+	case NODE_PIPE:
+		printf("PIPE");
+		break;
+	case NODE_COMMAND:
+		printf("CMD");
+		break;
+	default:
+		break;
+	}
+    printf ("\n");
+    print_ast ( root->left, level + 1 );
+  }
 }

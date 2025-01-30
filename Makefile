@@ -6,7 +6,7 @@
 #    By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 18:54:13 by llebugle          #+#    #+#              #
-#    Updated: 2025/01/22 18:43:51 by maxweert         ###   ########.fr        #
+#    Updated: 2025/01/30 16:00:36 by maxweert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,11 +55,14 @@ SRC		= 	main.c \
 			misc/expander_utils.c \
 			misc/env_utils.c \
 			misc/env_utils2.c \
-			parsing/ast.c	\
+			misc/free.c \
+			parsing/ast_debug.c \
+			parsing/tree.c #\
+			parsing/ast.c \
 			parsing/parser.c	\
 			parsing/ast_utils.c	\
 			parsing/create_commands.c	\
-			parsing/ast_debug.c	\
+			parsing/tree.c
 
 OBJ		= $(SRC:.c=.o)
 OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))

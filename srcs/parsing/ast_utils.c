@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:03:39 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/28 19:03:40 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/01/29 22:05:29 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_token *find_last_operator(t_token *start, t_token *end, t_token_type type)
 t_node_type token_to_node_type(t_token_type type)
 {
     if (type == TOKEN_PIPE)
-        return NODE_PIPELINE;
+        return NODE_PIPE;
     else if (type == TOKEN_WORD)
         return NODE_COMMAND;
     else if (type == TOKEN_AND)
@@ -74,7 +74,7 @@ void free_ast(t_ast_node *node)
         free(cmd->args);
         free(cmd);
     }
-    else if (node->type == NODE_PIPELINE)
+    else if (node->type == NODE_PIPE)
     {
         for (int i = 0; i < node->pipe_count; i++)
             free_ast(node->pipeline[i]);

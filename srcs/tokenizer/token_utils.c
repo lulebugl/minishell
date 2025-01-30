@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:01:18 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/18 17:01:20 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:01:44 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,5 @@ void	push_token(t_token **lst, t_token *node)
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = node;
-	}
-}
-
-void	clear_tokens(t_token **tokens)
-{
-	if (tokens && *tokens)
-	{
-		if ((*tokens)->next)
-			clear_tokens(&(*tokens)->next);
-		free((*tokens)->content);
-		free(*tokens);
-		*tokens = NULL;
 	}
 }

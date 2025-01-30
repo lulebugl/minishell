@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:01:18 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/27 20:01:21 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/01/29 22:55:44 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ int	exec_prompt(const char *prompt, t_data *data)
 		return (clear_tokens(&data->tokens), 1);
 
 	/* Parse tokens into AST */
-    t_ast_node *ast;
-	ast = parse_tokens(data, data->tokens);
+    t_tree_node *ast;
+	ast = new_tree(data, &data->tokens);
     if (!ast)
     {
         printf("Error: Parsing failed\n");
@@ -55,7 +55,7 @@ int	exec_prompt(const char *prompt, t_data *data)
     }
     printf("AST Structure:\n");
     print_ast(ast, 0);
-    printf("\n");
+	printf("\n");
     /* end */
 
     if (expander(data))
@@ -92,55 +92,3 @@ int	main(int argc, char **argv, char **envp)
 	clean_memory(&data);
 	return (0);
 }
-
-// int main(void)
-// {
-//     t_data data;
-
-//     ft_memset(&data, 0, sizeof(t_data));
-
-//     // Test cases
-//     test_parse("test || ls && echo", &data);
-//     test_parse("ls -l | grep .c && echo done", &data);
-//     test_parse("ls || cat file | grep test && echo ok", &data);
-    
-//     return 0;
-// }
-// 
-// void test_parse(const char *input, t_data *data)
-// {
-//     t_ast_node *ast;
-
-//     printf("\nTesting input: \"%s\"\n", input);
-//     printf("----------------------------------------\n");
-
-//     // Use your existing tokenizer
-//     if (tokenize_input(input, &data->tokens, data))
-//     {
-//         printf("Error: Tokenization failed\n");
-//         return;
-//     }
-
-//     // Print tokens (using your existing function)
-//     printf("Tokens:\n");
-//     print_tokens_formatted(data->tokens);
-//     printf("\n");
-
-//     // Parse tokens into AST
-//     ast = parse_tokens(data, data->tokens);
-//     if (!ast)
-//     {
-//         printf("Error: Parsing failed\n");
-//         clear_tokens(&data->tokens);
-//         return;
-//     }
-
-//     // Print resulting AST
-//     printf("AST Structure:\n");
-//     print_ast(ast, 0);
-//     printf("\n");
-
-//     // Cleanup
-//     free_ast(ast);
-//     clear_tokens(&data->tokens);
-// }

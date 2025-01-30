@@ -6,11 +6,12 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/22 18:44:16 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/29 20:54:05 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "ast.h"
 
 void	clean_memory(t_data *data)
 {
@@ -80,13 +81,7 @@ int	main(int argc, char **argv, char **envp)
 	ft_memset(&data, 0, sizeof(t_data));
 	env_init(&data.env, envp);
 	launch_program(&data);
-	// env(data.env);
-	// unset(data.env, argv[1]);
-	// ft_export(data.env, &argv[1]);
-	// ft_env(data.env);
-	// free_env(&data);
-	// ft_unset(data.env, &argv[1]);
-	ft_echo(&argv[1]);
+	
 	clean_memory(&data);
 	return (0);
 }

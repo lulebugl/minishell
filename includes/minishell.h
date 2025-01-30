@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/22 18:43:38 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:00:57 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ int					ft_echo(char **args);
 
 void				env_init(t_env **env, char **env_arr);
 void				env_free(t_env *env);
+void				free_str_arr(char **strs);
 t_env				*env_create_elem(char *key, char *value);
 void				env_add_key(t_env **env, char *key, char *value);
 char				*env_get_value(t_env *env, char *key);
