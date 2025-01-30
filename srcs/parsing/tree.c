@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 20:31:11 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/30 22:43:16 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 23:32:46 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	free_tree(t_tree_node *root)
 	free(root);
 }
 
-t_tree_node	*new_node(t_node_type type)
+static t_tree_node	*new_node(t_node_type type)
 {
 	t_tree_node	*node;
 
