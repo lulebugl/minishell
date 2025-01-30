@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:41:55 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/30 17:27:31 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 22:43:53 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,12 @@ static char	**get_args(t_token **start, int arg_count)
 	return (args);
 }
 
+void	free_command(t_command *cmd)
+{
+	free_str_arr(cmd->args);
+	free(cmd);
+}
+
 t_command	*get_command(t_token **token)
 {
 	t_token		*head;
@@ -65,5 +71,9 @@ t_command	*get_command(t_token **token)
 		return (NULL);
 	cmd->arg_count = count_args(*token);
 	cmd->args = get_args(token, cmd->arg_count);
+	if (!cmd->args)
+		return (free_command(cmd), NULL);
+	if (*token && token_is_redir(*token))
+		set_redirections(&(*token), cmd);
 	return (cmd);
 }

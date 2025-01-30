@@ -6,12 +6,23 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 20:31:11 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/30 17:31:57 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 22:43:16 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "ast.h"
+
+void	free_tree(t_tree_node *root)
+{
+	if (!root)
+		return ;
+	if (root->type == NODE_COMMAND)
+		free_command(root->cmd);
+	free_tree(root->left);
+	free_tree(root->right);
+	free(root);
+}
 
 t_tree_node	*new_node(t_node_type type)
 {
@@ -58,7 +69,7 @@ t_tree_node	*new_tree(t_data *data, t_token **token)
 		{
 			tmp_node = new_node(NODE_COMMAND);
 			tmp_node->cmd = get_command(token);
-			while ((*token) && ((*token)->type != TOKEN_AND && (*token)->type != TOKEN_OR 
+			while ((*token) && ((*token)->type != TOKEN_AND && (*token)->type != TOKEN_OR
 				&& (*token)->type != TOKEN_PIPE && (*token)->type != TOKEN_OPEN_PAR && (*token)->type != TOKEN_CLOSE_PAR))
 				(*token) = (*token)->next;
 		}
@@ -74,5 +85,5 @@ t_tree_node	*new_tree(t_data *data, t_token **token)
 		if ((*token) && tmp_node->type != NODE_COMMAND)
 			(*token) = (*token)->next;
 	}
-	return (root);	
+	return (root);
 }

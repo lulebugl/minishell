@@ -6,11 +6,18 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 17:01:18 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/30 16:01:44 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:36:36 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	token_is_redir(t_token *token)
+{
+	if (token->type == TOKEN_IN || token->type == TOKEN_OUT || token->type == TOKEN_APPEND || token->type == TOKEN_HEREDOC)
+		return (1);
+	return (0);
+}
 
 int	add_token(t_token **tokens, const char *prompt, t_token_pos pos,
 		t_token_type type)

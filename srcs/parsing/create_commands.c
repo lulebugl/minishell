@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:09:25 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/30 01:14:13 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:39:47 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,7 @@ static int	add_redirections(t_command *cmd, t_token *start)
 	return (1);
 }
 
-t_ast_node *
-create_command(t_token *token)
+t_ast_node *create_command(t_token *token)
 {
     t_ast_node  *node;
     int         arg_count;

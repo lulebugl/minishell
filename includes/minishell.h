@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/30 16:00:57 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 22:32:20 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,3 @@ void				msg_unexpected_token(char token);
 void				msg_custom_err(char *msg, char *details);
 
 #endif
-

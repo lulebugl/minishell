@@ -1,0 +1,64 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirections.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/30 18:49:25 by maxweert          #+#    #+#             */
+/*   Updated: 2025/01/30 22:43:39 by maxweert         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+#include "ast.h"
+
+void	free_redirections(t_redirection *root)
+{
+	t_redirection	*tmp;
+
+	while (root)
+	{
+		tmp = root->next;
+		free(root->filename);
+		free(root);
+		root = tmp;
+	}
+}
+
+t_redirection	*new_redirection(t_token_type type, char *filename)
+{
+	t_redirection	*elem;
+
+	elem = malloc(sizeof(t_redirection));
+	if (!elem)
+		return (NULL);
+	elem->type = type;
+	elem->filename = ft_strdup(filename);
+	if (!elem->filename)
+	{
+		free(elem);
+		return (NULL);
+	}
+	return (elem);
+}
+
+void	add_redirection(t_redirection **root, t_redirection *new)
+{
+	t_redirection	*head;
+
+	if (root && !*root)
+	{
+		*root = new;
+		return ;
+	}
+	head = *root;
+	while (head->next)
+		head = head->next;
+	head->next = new;
+}
+
+t_redirection	*set_redirections(t_token **token, t_command *cmd)
+{
+	
+}

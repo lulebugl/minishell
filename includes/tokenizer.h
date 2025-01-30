@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:54:03 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/16 17:54:18 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/01/30 22:35:07 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,6 @@ int						add_token(t_token **tokens, const char *prompt,
 void					push_token(t_token **lst, t_token *node);
 t_token					*new_token(char *content, t_token_type type);
 void					clear_tokens(t_token **tokens);
+int						token_is_redir(t_token *token);
 
 #endif
-

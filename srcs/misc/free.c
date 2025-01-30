@@ -6,11 +6,12 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:49:45 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/30 16:00:26 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 22:39:29 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "ast.h"
 
 /*
  * Function: free_data
@@ -44,7 +45,7 @@ void	env_free(t_env *env)
 	}
 }
 
-void clear_tokens(t_token **tokens)
+void	clear_tokens(t_token **tokens)
 {
 	if (tokens && *tokens)
 	{

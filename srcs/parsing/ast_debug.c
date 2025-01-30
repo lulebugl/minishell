@@ -6,30 +6,12 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:03:30 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/30 17:35:41 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 22:38:26 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "ast.h"
-
-static void print_command(t_command *cmd, int level)
-{
-	int i;
-	
-    for (i = 0; i < level; i++)
-        printf("  ");
-    printf("CMD: ");
-    
-    i = -1;
-    while (++i < cmd->arg_count)
-    {
-        printf("%s", cmd->args[i]);
-        if (i < cmd->arg_count - 1)
-            printf(" ");
-    }
-    printf("\n");
-}
 
 void padding ( char ch, int n )
 {
@@ -39,7 +21,7 @@ void padding ( char ch, int n )
     putchar ( ch );
 }
 
-void print_ast (t_tree_node *root, int level )
+void print_ast (t_tree_node *root, int level)
 {
   int i;
 

@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:01:18 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/29 22:55:44 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 22:30:51 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ int	exec_prompt(const char *prompt, t_data *data)
 
 	/* Parse tokens into AST */
     t_tree_node *ast;
-	ast = new_tree(data, &data->tokens);
+	t_token		*token_head;
+
+	token_head = data->tokens;
+	ast = new_tree(data, &token_head);
     if (!ast)
     {
         printf("Error: Parsing failed\n");
@@ -63,6 +66,7 @@ int	exec_prompt(const char *prompt, t_data *data)
 	if (data->print_token)
 		print_tokens_formatted(data->tokens);
 	clear_tokens(&data->tokens);
+	free_tree(ast);
 	return (0);
 }
 
