@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:03:30 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/30 22:38:26 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 23:28:34 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,20 @@ void padding ( char ch, int n )
 
   for ( i = 0; i < n; i++ )
     putchar ( ch );
+}
+
+void  print_command(t_command *cmd)
+{
+      printf(COLOR_WORD);
+      for (int i = 0; cmd->args[i]; i++)
+        printf("%s ", cmd->args[i]);
+      printf(COLOR_REDIR);
+      for (int i = 0; i < cmd->redir_count; i++)
+      {
+        printf("%s ", cmd->redirections->filename);
+        cmd->redirections = cmd->redirections->next;
+      }
+      printf(COLOR_RESET);
 }
 
 void print_ast (t_tree_node *root, int level)
@@ -46,10 +60,10 @@ void print_ast (t_tree_node *root, int level)
     case NODE_COMMAND:
       //printf("CMD\n");
       //padding ( '\t', level );
-      printf(COLOR_WORD);
-      printf("%s", root->cmd->args[0]);
-      printf(COLOR_RESET);
-      break;
+      //printf(COLOR_WORD);
+      //printf("%s", root->cmd->args[0]);
+      //printf(COLOR_RESET);
+      print_command(root->cmd);
       break;
     default:
       break;

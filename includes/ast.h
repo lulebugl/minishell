@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 19:57:44 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/30 22:37:51 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 23:09:12 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,11 @@ typedef struct s_tree_node
 t_tree_node		*new_tree(t_data *data, t_token **token);
 t_tree_node		*new_node(t_node_type type);
 t_command		*get_command(t_token **token);
+t_redirection	*get_redirections(t_token **token);
+int				count_redirections(t_redirection *root);
 void			free_command(t_command *cmd);
 void			free_redirections(t_redirection *root);
 void			free_tree(t_tree_node *root);
-t_redirection	*set_redirections(t_token **token, t_command *cmd);
 void			print_ast(t_tree_node *root, int level);
 
 #endif
