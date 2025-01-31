@@ -69,6 +69,8 @@ int	validate_prompt(t_data *data, t_token *token)
 		}
 		if (curr->type == TOKEN_PIPE)
 		{
+			if (curr->next && is_redirection(curr->next->type))
+				return (msg_unexpected_token(curr->next->content), ERR_SYNTAX);
 			if (curr->next && curr->next->type == TOKEN_PIPE)
 				return (msg_unexpected_token(curr->next->content), ERR_SYNTAX);
 		}
