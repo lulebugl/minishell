@@ -70,6 +70,7 @@ t_tree_node	*new_tree(t_data *data, t_token **token)
 		else if ((*token)->type == TOKEN_WORD)
 		{
 			tmp_node = new_node(get_node_type((*token)->type));
+			//rajouter protect
 			tmp_node->cmd = get_command(token);
 		}
 		else

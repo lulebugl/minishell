@@ -50,6 +50,8 @@ int	exec_prompt(const char *prompt, t_data *data)
 	t_token		*token_head;
 
 	token_head = data->tokens;
+	if (!data->tokens)
+		return (0);
 	ast = new_tree(data, &token_head);
     if (!ast)
     {
