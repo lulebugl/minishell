@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/30 22:32:20 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/31 17:30:55 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@
 # define SUCCESS 0
 # define ERROR 1
 
+typedef struct s_tree_node t_tree_node;
+
 typedef struct s_env
 {
 	char			*key;
@@ -60,6 +62,7 @@ typedef struct s_data
 {
 	t_env			*env;
 	t_token			*tokens;
+	t_tree_node		*ast;
 	int				status;
 	bool			print_token;
 }					t_data;

@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:41:55 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/30 23:44:39 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/31 17:33:49 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,12 @@ static char	**get_args(t_token **start, int arg_count)
 
 void	free_command(t_command *cmd)
 {
-	free_str_arr(cmd->args);
-	free_redirections(cmd->redirections);
+	if (!cmd)
+		return ;
+	if (cmd->args)
+		free_str_arr(cmd->args);
+	if (cmd->redirections)
+		free_redirections(cmd->redirections);
 	free(cmd);
 }
 
