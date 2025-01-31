@@ -12,56 +12,13 @@
 
 #include "../../includes/minishell.h"
 
-/* edge case for pipe as last token */
-int	handle_edge_pipe(t_token **tokens, t_data *data)
-{
-	char	*buf;
-
-	while (1)
-	{
-		buf = readline("> ");
-		if (!buf)
-		{
-			// ctrl-D
-			if (errno == 0)
-				return (1);
-			// ctrl-C
-			else
-				return (1);
-		}
-		// empty line
-		if (buf && buf[0] == '\0')
-		{
-			free(buf);
-			continue ;
-		}
-		if (buf)
-		{
-			if (tokenize_input(buf, tokens, data))
-				return (1);
-			free(buf);
-			return (0);
-		}
-	}
-}
-
-int	add_token(t_token **tokens, const char *prompt, t_token_pos pos,
-		t_token_type type)
-{
-	char	*token;
-
-	token = ft_substr(prompt, pos.start, pos.len);
-	if (!token)
-		return (1);
-	push_token(tokens, new_token(token, type));
-	return (0);
-}
+int	handle_edge_pipe(t_token **tokens, t_data *data);
 
 int	handle_quotes(const char *s, int *start, char type, t_token **tokens)
 {
-	int	len;
-	t_token_pos pos;
-	
+	int			len;
+	t_token_pos	pos;
+
 	len = ++(*start);
 	if (!s[len])
 		return (msg_custom_err(ERR_MSG_QUOTES, ERR_MSG_SYNTAX), 1);
@@ -76,6 +33,43 @@ int	handle_quotes(const char *s, int *start, char type, t_token **tokens)
 	return (0);
 }
 
+int	handle_parenthesis(const char *s, int *pos, t_token **tokens)
+{
+	int		i;
+	char	next;
+	int		tmp;
+
+	i = *pos;
+	next = 0;
+	if (s[i] == '(')
+	{
+		if (add_token(tokens, s, (t_token_pos){i, 1}, TOKEN_OPEN_PAR))
+			return (ENOSPC);
+	}
+	else if (s[i] == ')')
+	{
+		if (add_token(tokens, s, (t_token_pos){i, 1}, TOKEN_CLOSE_PAR))
+			return (ENOSPC);
+	}
+	(*pos)++;
+	;
+	return (0);
+}
+
+int	handle_logical_and(const char *s, int *pos, t_token **tokens)
+{
+	int		i;
+	char	next;
+	int		tmp;
+
+	i = *pos;
+	next = 0;
+	if (add_token(tokens, s, (t_token_pos){i, 2}, TOKEN_AND))
+		return (ENOSPC);
+	(*pos) += 2;
+	return (0);
+}
+
 int	handle_pipes(const char *s, int *pos, t_token **tokens, t_data *data)
 {
 	int		i;
@@ -86,6 +80,13 @@ int	handle_pipes(const char *s, int *pos, t_token **tokens, t_data *data)
 	next = 0;
 	if (s[i + 1])
 		next = s[i + 1];
+	if (next && next == '|')
+	{
+		if (add_token(tokens, s, (t_token_pos){i, 2}, TOKEN_OR))
+			return (ENOSPC);
+		(*pos) += 2;
+		return (0);
+	}
 	if (!next || next == ' ')
 	{
 		tmp = 1;
@@ -155,3 +156,35 @@ int	handle_io(const char *s, int *pos, char type, t_token **tokens)
 	return (0);
 }
 
+/* edge case for pipe as last token */
+int	handle_edge_pipe(t_token **tokens, t_data *data)
+{
+	char	*buf;
+
+	while (1)
+	{
+		buf = readline("> ");
+		if (!buf)
+		{
+			// ctrl-D
+			if (errno == 0)
+				return (1);
+			// ctrl-C
+			else
+				return (1);
+		}
+		// empty line
+		if (buf && buf[0] == '\0')
+		{
+			free(buf);
+			continue ;
+		}
+		if (buf)
+		{
+			if (tokenize_input(buf, tokens, data))
+				return (1);
+			free(buf);
+			return (0);
+		}
+	}
+}

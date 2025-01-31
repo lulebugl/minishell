@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 17:04:57 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/22 17:04:59 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/01/30 22:42:15 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ static int	handle_env_var(t_token *token, t_env *env, int *i)
 	return (0);
 }
 
-
 int	expand_token_recursive(t_data *data, t_token *token, bool expand)
 {
 	int	i;
@@ -79,7 +78,7 @@ int	expand_token_recursive(t_data *data, t_token *token, bool expand)
 	while (token->content[i] && token->content[i] != '$')
 		i++;
 	if (token->content[i] == '$' && token->content[i + 1] && token->content[i
-		+ 1] == '?' && expand)
+			+ 1] == '?' && expand)
 	{
 		if (handle_exit_status(data, token, &i))
 			return (1);
@@ -97,14 +96,16 @@ int	expand_token_recursive(t_data *data, t_token *token, bool expand)
 	return (0);
 }
 
+/* shouldn't need 
+	it if (!data->env)
+	return (0);
+*/
+
 int	expander(t_data *data)
 {
 	bool	expand;
 	t_token	*token;
 
-	// shouldn't need it
-	// if (!data->env)
-	// 	return (0);
 	token = data->tokens;
 	while (token)
 	{
@@ -123,4 +124,3 @@ int	expander(t_data *data)
 	}
 	return (0);
 }
-

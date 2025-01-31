@@ -10,23 +10,49 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
-static inline int is_operator(char c)
+static inline int	is_operator(char c)
 {
-	return (c == '>' || c == '<' || c == '|');
+	return (c == '>' || c == '<' || c == '|' || c == '(' || c == ')');
 }
 
-//need to implement better error handling
+static int	is_logical_and(const char *s)
+{
+	if (!(s + 1))
+		return (0);
+	return (*s == '&' && *(s + 1) == '&');
+}
+
+int	handle_word(const char *s, int *pos, t_token **tokens)
+{
+	int	start;
+
+	start = *pos;
+	if (!s[*pos])
+		return (0);
+	while (s[*pos] && s[*pos] != ' '
+		&& !is_operator(s[*pos])
+		&& !is_logical_and(s + *pos)
+		&& s[*pos] != '\'' && s[*pos] != '\"')
+		(*pos)++;
+	if (add_token(tokens, s, (t_token_pos){start, *pos - start}, TOKEN_WORD))
+		return (1);
+	return (0);
+}
+
+/*
+ *	Creates a linked list **tokens of every token encountered
+ *	in *s.
+ *	Return 0 on success, otherwise set data->status to last error status.
+ */
 int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 {
 	int		i;
-	int		tmp;
 	int		pos;
 	char	*word;
 
 	i = 0;
-	tmp = 0;
 	while (s[i])
 	{
 		while (s[i] && s[i] == ' ')
@@ -34,39 +60,25 @@ int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 		if (!s[i])
 			break ;
 		if (s[i] == '\'' || s[i] == '\"')
-		{
 			data->status = handle_quotes(s, &i, s[i], tokens);
-			if (data->status != 0)
-			{
-				if (errno != 0)
-					perror(strerror(errno));
-				return (1);
-			}
-		}
 		else if (s[i] && (s[i] == '<' || s[i] == '>'))
-		{
-			data->status = handle_io(s, &i, s[i], tokens); 
-			if (data->status != 0)
-				return (1);
-		}
+			data->status = handle_io(s, &i, s[i], tokens);
+		else if (s[i] && (s[i] == '(' || s[i] == ')'))
+			data->status = handle_parenthesis(s, &i, tokens);
+		else if (s[i] && s[i + 1] && (s[i] == '&') && (s[i + 1] == '&'))
+			data->status = handle_logical_and(s, &i, tokens);
 		else if (s[i] && s[i] == '|')
-		{
-			data->status = handle_pipes(s, &i, tokens, data); 
-			if (data->status != 0)
-				return (1);
-		}
+			data->status = handle_pipes(s, &i, tokens, data);
 		else
+			data->status = handle_word(s, &i, tokens);
+		if (data->status != 0)
 		{
-			pos = i;
-			if (!s[i])
-				return (0);
-			while (s[i] && s[i] != ' ' && !is_operator(s[i]) && s[i] != '\''
-				&& s[i] != '\"')
-				i++;
-			word = ft_substr(s, pos, i - pos);
-			if (!word)
-				return(1);
-			push_token(tokens, new_token(word, TOKEN_WORD));
+			if (errno != 0)
+			{
+				data->status = errno;
+				perror(strerror(errno));
+			}
+			return (1);
 		}
 	}
 	return (0);

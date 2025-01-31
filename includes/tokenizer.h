@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:54:03 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/16 17:54:18 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/01/30 22:35:07 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ typedef enum e_token_type
 	TOKEN_OUT,
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
+	TOKEN_AND,
+	TOKEN_OR,
+	TOKEN_OPEN_PAR,
+	TOKEN_CLOSE_PAR,
 }						t_token_type;
 
 // typedef struct s_list	t_token;
@@ -54,12 +58,19 @@ int						handle_io(const char *s, int *pos, char type,
 							t_token **tokens);
 int						handle_pipes(const char *s, int *pos, t_token **tokens,
 							t_data *data);
+int						handle_parenthesis(const char *s, int *pos,
+							t_token **tokens);
+int						handle_logical_and(const char *s, int *pos,
+							t_token **tokens);
+
 int						validate_prompt(t_data *data, t_token *token);
 
 /* utils */
+int						add_token(t_token **tokens, const char *prompt,
+							t_token_pos pos, t_token_type type);
 void					push_token(t_token **lst, t_token *node);
 t_token					*new_token(char *content, t_token_type type);
 void					clear_tokens(t_token **tokens);
+int						token_is_redir(t_token *token);
 
 #endif
-

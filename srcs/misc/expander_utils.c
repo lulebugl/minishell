@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 17:08:31 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/24 17:08:35 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/01/30 22:39:06 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,11 @@ char	*replace_key(char *str, char *replace, int start, int key_len)
 int	expand_tilde(t_data *data, t_token *token, bool expand)
 {
 	char	*value;
-	
+
 	if (!expand || !token || !token->content || !token->content[0])
 		return (0);
-	if (token->content[0] != '~' || (token->content[0] == '~' && token->content[1] && token->content[1] != '/'))
+	if (token->content[0] != '~' || (token->content[0] == '~'
+			&& token->content[1] && token->content[1] != '/'))
 		return (0);
 	value = env_get_value(data->env, "HOME");
 	if (!value)

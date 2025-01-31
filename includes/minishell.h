@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/28 13:34:22 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/30 22:32:20 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int					ft_cd(t_env *env, char **args);
 
 void				env_init(t_env **env, char **env_arr);
 void				env_free(t_env *env);
+void				free_str_arr(char **strs);
 t_env				*env_create_elem(char *key, char *value);
 void				env_add_key(t_env **env, char *key, char *value);
 char				*env_get_value(t_env *env, char *key);
@@ -105,9 +106,5 @@ int					expand_tilde(t_data *data, t_token *token, bool expand);
 
 void				msg_unexpected_token(char token);
 void				msg_custom_err(char *msg, char *details);
-
-// MISC
-
-void				free_str_arr(char **strs);
 
 #endif

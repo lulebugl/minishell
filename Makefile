@@ -6,7 +6,7 @@
 #    By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 18:54:13 by llebugle          #+#    #+#              #
-#    Updated: 2025/01/28 13:34:11 by maxweert         ###   ########.fr        #
+#    Updated: 2025/01/30 18:49:16 by maxweert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,9 +39,9 @@ OBJ_PATH = ./objs/
 INC_PATH = ./includes/
 
 SRC		= 	main.c \
+			tokenizer/token_utils.c \
 			tokenizer/token_handlers.c \
 			tokenizer/tokenizer.c \
-			tokenizer/utils.c \
 			tokenizer/validate_prompt.c \
 			tokenizer/debug.c \
 			builtins/env.c \
@@ -57,8 +57,16 @@ SRC		= 	main.c \
 			misc/expander_utils.c \
 			misc/env_utils.c \
 			misc/env_utils2.c \
-			misc/init.c \
-			misc/free.c
+			misc/free.c \
+			parsing/ast_debug.c \
+			parsing/command.c \
+			parsing/redirections.c \
+			parsing/tree.c #\
+			parsing/ast.c \
+			parsing/parser.c	\
+			parsing/ast_utils.c	\
+			parsing/create_commands.c	\
+			parsing/tree.c
 
 OBJ		= $(SRC:.c=.o)
 OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))
@@ -80,6 +88,7 @@ $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)/tokenizer
 	mkdir -p $(OBJ_PATH)/misc
 	mkdir -p $(OBJ_PATH)/builtins
+	mkdir -p $(OBJ_PATH)/parsing
 # mkdir -p $(OBJ_PATH)/utils
 
 # Objects rule
@@ -129,4 +138,11 @@ expander: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
 	@echo "$(BLUE)expander program compiled successfully!$(RESET)"
 	$(if $(VALGRIND), $(VALGRIND)) $(TESTER_DIR)/expander
 
+ast: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
+	mkdir -p $(TESTER_DIR)
+	mkdir -p $(OBJ_PATH)/testing
+	$(CC) $(CFLAGS) -c srcs/tests/test_ast.c -o $(OBJ_PATH)testing/test_ast.o $(INC)
+	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_ast.o -o $(TESTER_DIR)/ast $(INC) $(LIBFT) -l readline
+	@echo "$(BLUE)expander program compiled successfully!$(RESET)"
+	$(if $(VALGRIND), $(VALGRIND)) $(TESTER_DIR)/ast
 .PHONY: all re clean fclean run test lexer expander

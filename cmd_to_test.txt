@@ -6,4 +6,6 @@ exit > test.txt
 echo >< test.txt
 ls| + ctrl-D
 ls | exit
-echo "'"
+export TEST=~
+echo "test" | > test.txt
+expr 2 + 2 <>test1.txt

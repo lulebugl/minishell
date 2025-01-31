@@ -1,15 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   test_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/29 20:54:05 by maxweert         ###   ########.fr       */
+/*   Created: 2025/01/27 20:01:18 by llebugle          #+#    #+#             */
+/*   Updated: 2025/01/30 22:30:51 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* test_parser.c */
 #include "minishell.h"
 #include "ast.h"
 
@@ -30,13 +31,6 @@ void	err_and_exit(t_data *data)
 	exit(EXIT_FAILURE);
 }
 
-/*
- * i need to create function that clears everything without
- * exiting and set the exit status
- * i.e when a syntax error occurs we display the error but give the prompt back
- ** same for exec errors
- */
-
 int	exec_prompt(const char *prompt, t_data *data)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)
@@ -50,11 +44,31 @@ int	exec_prompt(const char *prompt, t_data *data)
 	data->status = validate_prompt(data, data->tokens);
 	if (data->status)
 		return (clear_tokens(&data->tokens), 1);
-	if (expander(data))
+
+	/* Parse tokens into AST */
+    t_tree_node *ast;
+	t_token		*token_head;
+
+	token_head = data->tokens;
+	if (!data->tokens)
+		return (0);
+	ast = new_tree(data, &token_head);
+    if (!ast)
+    {
+        printf("Error: Parsing failed\n");
+        err_and_exit(data);
+    }
+    printf("AST Structure:\n");
+    print_ast(ast, 0);
+	printf("\n");
+    /* end */
+
+    if (expander(data))
 		err_and_exit(data);
 	if (data->print_token)
 		print_tokens_formatted(data->tokens);
 	clear_tokens(&data->tokens);
+	free_tree(ast);
 	return (0);
 }
 
@@ -81,7 +95,6 @@ int	main(int argc, char **argv, char **envp)
 	ft_memset(&data, 0, sizeof(t_data));
 	env_init(&data.env, envp);
 	launch_program(&data);
-	
 	clean_memory(&data);
 	return (0);
 }

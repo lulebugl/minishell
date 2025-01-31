@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 20:56:06 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/24 20:56:07 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/01/30 22:39:59 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	msg_unexpected_token(char token)
 		s = "|";
 	else if (token == '\n')
 		s = "newline";
-	else 
+	else
 		s = NULL;
 	if (s)
 		ft_printf_fd(STDERR_FILENO,
@@ -46,4 +46,3 @@ void	msg_custom_err(char *msg, char *details)
 	if (msg)
 		ft_printf_fd(STDERR_FILENO, msg);
 }
-
