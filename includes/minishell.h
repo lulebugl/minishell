@@ -65,6 +65,7 @@ typedef struct s_data
 	t_tree_node		*ast;
 	int				status;
 	bool			print_token;
+	bool			print_ast;
 }					t_data;
 
 // DATA
@@ -107,7 +108,7 @@ int					expand_tilde(t_data *data, t_token *token, bool expand);
 
 // ERROR
 
-void				msg_unexpected_token(char token);
+void				msg_unexpected_token(char *str);
 void				msg_custom_err(char *msg, char *details);
 
 #endif

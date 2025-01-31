@@ -18,59 +18,62 @@ static inline bool	is_redirection(int type)
 		|| type == TOKEN_HEREDOC);
 }
 
-// int is_par_closed(t_token *token)
-// {
-// 	t_token *curr;
-	
-// 	curr = token->next;
-// 	while (curr)
-// 	{
-// 		if (token->type == TOKEN_CLOSE_PAR)
-// 			return (1);
-// 		curr = curr->next;
-// 	}
-// 	return (0);
-// }
+bool	has_balanced_parentheses(t_token *tokens)
+{
+	int		count;
+	t_token	*curr;
 
-// int is_par_closed(t_token *start, t_token *end)
-// {
-// 	t_token *curr;
-	
-// 	curr = start;
-// 	while (curr)
-// 	{
-// 		if (curr->type == TOKEN_OPEN_PAR)
-// 		{
-// 			// while curr
-// 			return (1);
-// 		curr = curr->next;
-// 	}
-// 	return (0);
-// }
+	if (!tokens)
+		return (true);
+	curr = tokens;
+	count = -1;
+	while (curr)
+	{
+		if (curr->type == TOKEN_OPEN_PAR)
+			count++;
+		else if (curr->type == TOKEN_CLOSE_PAR)
+		{
+			if (count < 0)
+				return (false);
+			count--;
+		}
+		curr = curr->next;
+	}
+	return (count == -1);
+}
 
 int	validate_prompt(t_data *data, t_token *token)
 {
-	t_token *curr;
-	
+	t_token	*curr;
+
 	curr = token;
+	if (has_balanced_parentheses(token) == false)
+		return (msg_custom_err("unclosed parentheses.\n", "syntax error : "),
+			ERR_SYNTAX);
 	while (curr)
 	{
+		if (curr->type == TOKEN_OPEN_PAR && curr->next
+			&& curr->next->type == TOKEN_CLOSE_PAR)
+		{
+			if (!curr->next->next)
+				return (msg_unexpected_token("\n"), ERR_SYNTAX);
+			return (msg_unexpected_token(curr->next->next->content),
+				ERR_SYNTAX);
+		}
 		if (is_redirection(curr->type))
 		{
 			if (!curr->next)
-				return (msg_unexpected_token('\n'), 1);
+				return (msg_unexpected_token("\n"), ERR_SYNTAX);
 			if (curr->next->type != TOKEN_WORD)
-				return (msg_unexpected_token(curr->next->type), 1);
+				return (msg_unexpected_token(curr->next->content), ERR_SYNTAX);
 		}
 		if (curr->type == TOKEN_PIPE)
 		{
 			if (curr->next && curr->next->type == TOKEN_PIPE)
-				return (msg_unexpected_token('|'), 1);
+				return (msg_unexpected_token(curr->next->content), ERR_SYNTAX);
 		}
-		// else if (curr->type == TOKEN_OPEN_PAR)
-		// 	if (!is_par_closed(curr))
-		// 		return (msg_custom_err("unclosed parenthesis\n", "syntax error :"), 1);
 		curr = curr->next;
 	}
 	return (0);
 }
+

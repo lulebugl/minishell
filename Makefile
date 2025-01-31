@@ -67,7 +67,9 @@ SRC		= 	main.c \
 			parsing/parser.c	\
 			parsing/ast_utils.c	\
 			parsing/create_commands.c	\
-			parsing/tree.c
+			parsing/tree.c \
+			exec/exec.c \
+		 
 
 OBJ		= $(SRC:.c=.o)
 OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))
@@ -90,7 +92,7 @@ $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)/misc
 	mkdir -p $(OBJ_PATH)/builtins
 	mkdir -p $(OBJ_PATH)/parsing
-# mkdir -p $(OBJ_PATH)/utils
+	mkdir -p $(OBJ_PATH)/exec
 
 # Objects rule
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
@@ -144,6 +146,15 @@ ast: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
 	mkdir -p $(OBJ_PATH)/testing
 	$(CC) $(CFLAGS) -c srcs/tests/test_ast.c -o $(OBJ_PATH)testing/test_ast.o $(INC)
 	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_ast.o -o $(TESTER_DIR)/ast $(INC) $(LIBFT) -l readline
-	@echo "$(BLUE)expander program compiled successfully!$(RESET)"
+	@echo "$(BLUE)ast program compiled successfully!$(RESET)"
 	$(if $(VALGRIND), $(VALGRIND)) $(TESTER_DIR)/ast
-.PHONY: all re clean fclean run test lexer expander
+	
+exec: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
+	mkdir -p $(TESTER_DIR)
+	mkdir -p $(OBJ_PATH)/testing
+	$(CC) $(CFLAGS) -c srcs/tests/test_exec.c -o $(OBJ_PATH)testing/test_exec.o $(INC)
+	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_exec.o -o $(TESTER_DIR)/exec $(INC) $(LIBFT) -l readline
+	@echo "$(BLUE)exec program compiled successfully!$(RESET)"
+	$(if $(VALGRIND), $(VALGRIND)) $(TESTER_DIR)/exec
+
+.PHONY: all re clean fclean run test lexer expander ast

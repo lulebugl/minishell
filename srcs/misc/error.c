@@ -12,30 +12,21 @@
 
 #include "minishell.h"
 
-void	msg_unexpected_token(char token)
+void	msg_unexpected_token(char *str)
 {
 	char	*s;
 
-	if (token == TOKEN_IN)
-		s = "<";
-	else if (token == TOKEN_OUT)
-		s = ">";
-	else if (token == TOKEN_APPEND)
-		s = ">>";
-	else if (token == TOKEN_HEREDOC)
-		s = "<<";
-	else if (token == TOKEN_PIPE)
-		s = "|";
-	else if (token == '\n')
+	if (!str)
+		s = "newline";
+	else if (ft_strcmp(str, "\n") == 0)
 		s = "newline";
 	else
-		s = NULL;
-	if (s)
-		ft_printf_fd(STDERR_FILENO,
-			"minishell: syntax error near unexpected token `%s'\n", s);
-	else
-		ft_printf_fd(STDERR_FILENO,
-			"minishell: syntax error near unexpected token `%c'\n", token);
+		s = str;
+	ft_printf_fd(STDERR_FILENO,
+		"minishell: syntax error near unexpected token `%s'\n", s);
+	// else
+	// 	ft_printf_fd(STDERR_FILENO,
+	// 		"minishell: syntax error near unexpected token `%c'\n", token);
 }
 
 void	msg_custom_err(char *msg, char *details)
@@ -46,3 +37,4 @@ void	msg_custom_err(char *msg, char *details)
 	if (msg)
 		ft_printf_fd(STDERR_FILENO, msg);
 }
+

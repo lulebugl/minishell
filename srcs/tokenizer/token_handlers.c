@@ -52,7 +52,6 @@ int	handle_parenthesis(const char *s, int *pos, t_token **tokens)
 			return (ENOSPC);
 	}
 	(*pos)++;
-	;
 	return (0);
 }
 
