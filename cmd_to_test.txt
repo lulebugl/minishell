@@ -9,3 +9,4 @@ ls | exit
 export TEST=~
 echo "test" | > test.txt
 expr 2 + 2 <>test1.txt
+oefwfe > ||

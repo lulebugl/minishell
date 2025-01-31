@@ -6,7 +6,7 @@
 #    By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 18:54:13 by llebugle          #+#    #+#              #
-#    Updated: 2025/01/30 18:49:16 by maxweert         ###   ########.fr        #
+#    Updated: 2025/01/31 17:02:25 by maxweert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,6 +58,7 @@ SRC		= 	main.c \
 			misc/env_utils.c \
 			misc/env_utils2.c \
 			misc/free.c \
+			misc/init.c \
 			parsing/ast_debug.c \
 			parsing/command.c \
 			parsing/redirections.c \
