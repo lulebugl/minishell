@@ -14,19 +14,14 @@
 
 void	msg_unexpected_token(char *str)
 {
-	char	*s;
+	const char	*s;
 
-	if (!str)
-		s = "newline";
-	else if (ft_strcmp(str, "\n") == 0)
+	if (!str || ft_strcmp(str, "\n") == 0)
 		s = "newline";
 	else
 		s = str;
 	ft_printf_fd(STDERR_FILENO,
 		"minishell: syntax error near unexpected token `%s'\n", s);
-	// else
-	// 	ft_printf_fd(STDERR_FILENO,
-	// 		"minishell: syntax error near unexpected token `%c'\n", token);
 }
 
 void	msg_custom_err(char *msg, char *details)
