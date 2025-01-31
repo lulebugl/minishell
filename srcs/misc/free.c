@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:49:45 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/30 22:39:29 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/01/31 17:34:55 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,8 @@ void	data_free(t_data *data)
 {
 	env_free(data->env);
 	clear_tokens(&data->tokens);
-}
-
-/*
- * Function: free_env
- * ----------------------------
- *	Free the list pointed by data->env
- */
-
-void	env_free(t_env *env)
-{
-	t_env	*tmp;
-
-	while (env)
-	{
-		tmp = env->next;
-		free(env->key);
-		free(env->value);
-		free(env);
-		env = tmp;
-	}
+	free_tree(data->ast);
+	data->ast = NULL;
 }
 
 void	clear_tokens(t_token **tokens)
@@ -62,6 +44,8 @@ void	free_str_arr(char **strs)
 	int	i;
 
 	i = 0;
+	if (!strs)
+		return ;
 	while (strs[i])
 	{
 		free(strs[i]);
