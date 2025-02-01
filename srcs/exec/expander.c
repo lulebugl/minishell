@@ -42,9 +42,7 @@ static char	*handle_env_value(char *str, char *value, char *key, int start)
 			return (NULL);
 		return (str);
 	}
-	printf("before replace_key = %s\n", str);
 	str = replace_key(str, value, start, ft_strlen(key));
-	printf("after replace_key = %s\n", str);
 	if (!str)
 		return (NULL);
 	return (str);
@@ -63,12 +61,9 @@ static char 	*handle_env_var(char *str, t_env *env, int *i)
 	if (!key)
 		return (NULL);
 	value = env_get_value(env, key);
-	printf("before handle_env_value = %s\n", str);
-	printf("value = %s\n", value);
 	str = handle_env_value(str, value, key, start);
 	if (!str)	
 		return (free(key), NULL);
-	printf("after handle_env_value = %s\n", str);
 	free(key);
 	return (str);
 }
@@ -94,12 +89,10 @@ char	*expand_arg(t_data *data, char *argv, bool expand)
 	}
 	else if (str[i] && str[i + 1] && str[i] == '$' && expand)
 	{
-		// printf("before str = %s\n", str);
 		str = handle_env_var(str, data->env, &i);
 		if (!str)
 			return (NULL);
 		argv = str;
-		// printf("after str = %s\n", str);
 		return (expand_arg(data, str, expand));
 	}
 	if (str[i] && str[i + 1] != '\0' && expand)
@@ -124,10 +117,7 @@ int	expander_new(t_data *data, char **argv, int argc)
 			argv[i] = expand_arg(data, argv[i], expand);
 			if (!argv[i])
 				err_and_exit(data);
-			// if (expand_tilde(data, str, expand))
-			// 	return (NULL);
 		}
-		printf("argv[%d] -> %s\n", i, argv[i]);
 		i++;
 	}
 	return (0);

@@ -37,7 +37,7 @@ void	init_exec(t_data *data, t_exec *exec, int child_count)
 		err_and_exit(data);
 }
 
-int expander_new(t_data *data, char **argv, int ac);
+int		expander_new(t_data *data, char **argv, int ac);
 
 int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec)
 {
@@ -52,7 +52,7 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec)
 	if (expander_new(data, cmd->args, cmd->arg_count))
 		err_and_exit(data);
 	while (++i < cmd->arg_count)
-		printf("%s ", cmd->args[i]);
+		printf(" [%s]",cmd->args[i]);
 	printf("\n");
 	return (0);
 }
@@ -76,7 +76,7 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 		data->status = exec_cmd(data, cmd, &exec);
 		current = current->next;
 	}
-	//wait_child(data, exec.child_pids, child_count);
+	// wait_child(data, exec.child_pids, child_count);
 	ft_lstclear(waitlist, NULL);
 	*waitlist = NULL;
 	printf("-- done executing --\n");
