@@ -13,6 +13,7 @@
 /* test_parser.c */
 #include "minishell.h"
 #include "ast.h"
+#include "exec.h"
 
 void	clean_memory(t_data *data)
 {
@@ -31,9 +32,11 @@ void	err_and_exit(t_data *data)
 	exit(EXIT_FAILURE);
 }
 
+int exec(t_data *data);
+
 int	exec_prompt(const char *prompt, t_data *data)
 {
-    t_tree_node *ast;
+    // t_tree_node *ast;
 	t_token		*token_head;
 
     if (ft_strncmp(prompt, "exit", 5) == 0)
@@ -52,17 +55,18 @@ int	exec_prompt(const char *prompt, t_data *data)
 	token_head = data->tokens;
 	if (!data->tokens)
 		return (0);
-	ast = new_tree(data, &token_head);
-    if (!ast)
+	data->ast = new_tree(data, &token_head);
+    if (!data->ast)
         err_and_exit(data);
     //   if (expander(data))
 	//		 err_and_exit(data);
 	if (data->print_token)
 		print_tokens_formatted(data->tokens);
     if (data->print_ast)
-    	print_ast_lucas(ast, 0);
-	clear_tokens(&data->tokens);
-	free_tree(ast);
+    	print_ast(data->ast, 0);
+	exec(data);
+    clear_tokens(&data->tokens);
+	free_tree(data->ast);
 	return (0);
 }
 

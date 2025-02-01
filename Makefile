@@ -51,6 +51,7 @@ SRC		= 	main.c \
 			builtins/echo.c \
 			builtins/exit.c \
 			builtins/cd.c \
+			exec/exec.c \
 			misc/signal.c \
 			misc/error.c \
 			misc/expander.c \
@@ -68,7 +69,6 @@ SRC		= 	main.c \
 			parsing/ast_utils.c	\
 			parsing/create_commands.c	\
 			parsing/tree.c \
-			exec/exec.c \
 		 
 
 OBJ		= $(SRC:.c=.o)
