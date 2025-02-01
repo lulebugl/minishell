@@ -28,6 +28,11 @@ static t_tree_node	*new_node(t_node_type type)
 {
 	t_tree_node	*node;
 
+	if (type < 0) // to prevent destroying my pc
+	{
+		printf("not implemented yet\n");
+		exit(1);
+	}
 	node = malloc(sizeof(t_tree_node));
 	if (!node)
 		return (NULL);
@@ -46,7 +51,10 @@ static t_node_type	get_node_type(t_token_type token_type)
 		return (NODE_OR);
 	if (token_type == TOKEN_PIPE)
 		return (NODE_PIPE);
-	return (NODE_COMMAND);
+	if (token_type == TOKEN_WORD)
+		return (NODE_COMMAND);
+	else 
+		return (-1); // to prevent destroying my pc
 }
 
 t_tree_node	*new_tree(t_data *data, t_token **token)
