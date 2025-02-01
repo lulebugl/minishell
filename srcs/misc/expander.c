@@ -96,11 +96,6 @@ int	expand_token_recursive(t_data *data, t_token *token, bool expand)
 	return (0);
 }
 
-/* shouldn't need 
-	it if (!data->env)
-	return (0);
-*/
-
 int	expander(t_data *data)
 {
 	bool	expand;

@@ -10,17 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef EXEC_H
+# define EXEC_H
+
 #include "minishell.h"
 
 // Execution context to track state
-typedef struct s_exec_context
+typedef struct s_exec
 {
 	int stdin_backup;  // For restoring stdin
 	int stdout_backup; // For restoring stdout
+	int fd_in;
+	int fd_out;
+	pid_t *child_pids;
 	int pipe_read;     // Read end of current pipe
 	int pipe_write;    // Write end of current pipe
-	// int     exit_status;   // Last command's exit status
-	// t_env   *env;          // Environment variables
-}	t_exec_context;
+}	t_exec;
 
 int	exec(t_data *data);
+int	exec_debug(t_data *data);
+
+
+#endif

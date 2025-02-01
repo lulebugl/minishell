@@ -12,6 +12,14 @@
 
 #include "minishell.h"
 
+
+void	err_and_exit(t_data *data)
+{
+	perror(strerror(errno));
+	data_free(data);
+	exit(EXIT_FAILURE);
+}
+
 void	msg_unexpected_token(char *str)
 {
 	const char	*s;

@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "ast.h"
+#include "minishell.h"
 
 /*
  * Function: free_data
@@ -21,10 +21,13 @@
 
 void	data_free(t_data *data)
 {
-	env_free(data->env);
-	clear_tokens(&data->tokens);
-	free_tree(data->ast);
-	data->ast = NULL;
+	if (data)
+	{
+		env_free(data->env);
+		clear_tokens(&data->tokens);
+		free_tree(data->ast);
+		data->ast = NULL;
+	}
 }
 
 void	clear_tokens(t_token **tokens)
@@ -44,7 +47,7 @@ void	free_str_arr(char **strs)
 	int	i;
 
 	i = 0;
-	if (!strs)
+	if (!strs || *strs)
 		return ;
 	while (strs[i])
 	{
@@ -53,3 +56,4 @@ void	free_str_arr(char **strs)
 	}
 	free(strs);
 }
+

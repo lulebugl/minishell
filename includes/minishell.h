@@ -17,6 +17,10 @@
 # include "tokenizer.h"
 
 /* for debug */
+# ifndef DEBUG
+#  define DEBUG false
+# endif
+
 # include "debug.h"
 
 /* standard */
@@ -49,66 +53,68 @@
 # define SUCCESS 0
 # define ERROR 1
 
-typedef struct s_tree_node t_tree_node;
+typedef struct s_tree_node	t_tree_node;
 
 typedef struct s_env
 {
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}					t_env;
+	char					*key;
+	char					*value;
+	struct s_env			*next;
+}							t_env;
 
 typedef struct s_data
 {
-	t_env			*env;
-	t_token			*tokens;
-	t_tree_node		*ast;
-	int				status;
-	bool			print_token;
-	bool			print_ast;
-}					t_data;
+	t_env					*env;
+	t_token					*tokens;
+	t_tree_node				*ast;
+	int						status;
+	bool					print_token;
+	bool					print_ast;
+}							t_data;
 
 // DATA
 
-void				data_init(t_data *data);
-void				data_free(t_data *data);
+void						data_init(t_data *data);
+void						data_free(t_data *data);
 
 // SIGNALS
 
-void				init_signals(void);
-void				sigint_handler(int signum);
+void						init_signals(void);
+void						sigint_handler(int signum);
 
 // BUILTINS
 
-int					ft_env(t_env *env);
-int					ft_pwd(void);
-int					ft_unset(t_env *env, char **args);
-int					ft_export(t_env *env, char **args);
-int					ft_echo(char **args);
-int					ft_exit(t_data *data, char **args);
-int					ft_cd(t_env *env, char **args);
+int							ft_env(t_env *env);
+int							ft_pwd(void);
+int							ft_unset(t_env *env, char **args);
+int							ft_export(t_env *env, char **args);
+int							ft_echo(char **args);
+int							ft_exit(t_data *data, char **args);
+int							ft_cd(t_env *env, char **args);
 
 // ENV
 
-void				env_init(t_env **env, char **env_arr);
-void				env_free(t_env *env);
-void				free_str_arr(char **strs);
-t_env				*env_create_elem(char *key, char *value);
-void				env_add_key(t_env **env, char *key, char *value);
-char				*env_get_value(t_env *env, char *key);
-int					env_key_exists(t_env *env, char *key);
-void				env_update_key(t_env *env, char *key, char *value);
-char				*env_key_from_str(char *str);
-char				*env_value_from_str(char *str);
+void						env_init(t_env **env, char **env_arr);
+void						env_free(t_env *env);
+void						free_str_arr(char **strs);
+t_env						*env_create_elem(char *key, char *value);
+void						env_add_key(t_env **env, char *key, char *value);
+char						*env_get_value(t_env *env, char *key);
+int							env_key_exists(t_env *env, char *key);
+void						env_update_key(t_env *env, char *key, char *value);
+char						*env_key_from_str(char *str);
+char						*env_value_from_str(char *str);
 
 // EXPANDER
 
-int					expander(t_data *data);
-int					expand_tilde(t_data *data, t_token *token, bool expand);
+int							expander(t_data *data);
+int							expand_tilde(t_data *data, t_token *token,
+								bool expand);
 
 // ERROR
 
-void				msg_unexpected_token(char *str);
-void				msg_custom_err(char *msg, char *details);
+void						msg_unexpected_token(char *str);
+void						msg_custom_err(char *msg, char *details);
+void						err_and_exit(t_data *data);
 
 #endif

@@ -14,27 +14,10 @@
 #include "minishell.h"
 #include "ast.h"
 
-void	clean_memory(t_data *data)
-{
-	if (data)
-	{
-		if (data->env)
-			env_free(data->env);
-		clear_tokens(&data->tokens);
-	}
-}
-
-void	err_and_exit(t_data *data)
-{
-	perror(strerror(errno));
-	clean_memory(data);
-	exit(EXIT_FAILURE);
-}
-
 int	exec_prompt(const char *prompt, t_data *data)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)
-		return (clean_memory(data), exit(0), 0);
+		return (data_free(data), exit(0), 0);
 	if (ft_strcmp((char*)prompt, "token") == 0)
 		data->print_token ^= 1;
 	if (ft_strcmp((char *)prompt, "env") == 0)
@@ -95,6 +78,6 @@ int	main(int argc, char **argv, char **envp)
 	ft_memset(&data, 0, sizeof(t_data));
 	env_init(&data.env, envp);
 	launch_program(&data);
-	clean_memory(&data);
+	data_free(&data);
 	return (0);
 }

@@ -29,7 +29,7 @@ CFLAGS	=
 VALGRIND =
 
 ifeq ($(MODE), debug)
-	CFLAGS	+= -fsanitize=address -gdwarf-4 -g
+	CFLAGS	+= -fsanitize=address -gdwarf-4 -g -D DEBUG=true
 else ifeq ($(MODE), valgrind)
 	VALGRIND += valgrind --leak-check=full --show-leak-kinds=all --suppressions=leaks.supp
 endif 
@@ -51,7 +51,9 @@ SRC		= 	main.c \
 			builtins/echo.c \
 			builtins/exit.c \
 			builtins/cd.c \
+			exec/debug.c \
 			exec/exec.c \
+			exec/expander.c \
 			misc/signal.c \
 			misc/error.c \
 			misc/expander.c \
