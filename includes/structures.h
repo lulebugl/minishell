@@ -92,8 +92,6 @@ typedef struct s_exec
 	pid_t					pid;
 	pid_t					*child_pids;
 	int						pipe[2];
-	int pipe_read;  // Read end of current pipe
-	int pipe_write; // Write end of current pipe
 }							t_exec;
 
 typedef struct s_data

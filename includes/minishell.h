@@ -23,6 +23,7 @@
 
 # include "debug.h"
 # include "structures.h"
+# include "exec.h"
 
 /* standard */
 # include <errno.h>

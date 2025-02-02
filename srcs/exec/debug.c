@@ -28,16 +28,16 @@ void	debug_cmd(t_data *data, t_command *cmd)
 		exit(0);
 	if (ft_strcmp(cmd->args[0], "ast") == 0)
 		data->print_ast ^= 1;
-	if (ft_strcmp(cmd->args[0], "ast") == 0)
+	if (ft_strcmp(cmd->args[0], "debug") == 0)
 		data->exec_debug ^= 1;
 	if (ft_strcmp(cmd->args[0], "env") == 0)
 		ft_env(data->env);
-	// if (DEBUG)
-	// {
-	while (++i < cmd->arg_count)
-		printf(" [%s]", cmd->args[i]);
-	printf("\n");
-	//	}
+	if (data->exec_debug)
+	{
+		while (++i < cmd->arg_count)
+			printf(" [%s]", cmd->args[i]);
+		printf("\n");
+	}
 }
 
 static void	execute_waitlist_debug(t_list **waitlist)
@@ -67,7 +67,8 @@ void	execute_ast_debug(t_data *data, t_tree_node *root,
 		return ;
 	execute_ast_debug(data, root->left, root, waitlist);
 	// Print current state
-	printf("\nCurrent node: ");
+	if (data->exec_debug)
+		printf("\nCurrent node: ");
 	if (root->type == NODE_COMMAND && root->cmd)
 	{
 		printf("COMMAND: ");
