@@ -21,16 +21,6 @@ int	exec_prompt(const char *prompt, t_data *data)
 {
 	t_token	*token_head;
 
-	if (ft_strncmp(prompt, "exit", 5) == 0)
-		// return (data_free(data), exit(0), 0); 
-			// segfault with this version when exiting after a command
-		return (exit(0), 0);
-	if (ft_strcmp((char *)prompt, "token") == 0)
-		data->print_token ^= 1;
-	if (ft_strcmp((char *)prompt, "ast") == 0)
-		data->print_ast ^= 1;
-	if (ft_strcmp((char *)prompt, "env") == 0)
-		ft_env(data->env);
 	if (tokenize_input(prompt, &data->tokens, data))
 		return (clear_tokens(&data->tokens), 1);
 	data->status = validate_prompt(data, data->tokens);
@@ -49,9 +39,7 @@ int	exec_prompt(const char *prompt, t_data *data)
 	data->status = exec(data);
 	if (data->status)
 		return (clear_tokens(&data->tokens), free_tree(data->ast), 1);
-	clear_tokens(&data->tokens);
-	free_tree(data->ast);
-	return (0);
+	return (reset_data(data), 0);
 }
 
 int	launch_program(t_data *data)
@@ -76,6 +64,7 @@ int	main(int argc, char **argv, char **envp)
 
 	ft_memset(&data, 0, sizeof(t_data));
 	env_init(&data.env, envp);
+	data.envp = envp;
 	launch_program(&data);
 	data_free(&data);
 	return (0);

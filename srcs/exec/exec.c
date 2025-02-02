@@ -10,9 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ast.h"
 #include "exec.h"
 #include "minishell.h"
+
+int		expander_new(t_data *data, char **argv, int ac);
 
 void	wait_child(t_data *data, pid_t *child_pids, int child_count)
 {
@@ -35,25 +36,48 @@ void	init_exec(t_data *data, t_exec *exec, int child_count)
 	exec->child_pids = malloc(sizeof(pid_t) * child_count);
 	if (!exec->child_pids)
 		err_and_exit(data);
+	exec->pipe[0] = -1;
+	exec->pipe[1] = -1;
 }
 
-int		expander_new(t_data *data, char **argv, int ac);
-
-int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec)
+void	expand_args(t_data *data, t_command *cmd)
 {
-	int	i;
+	char	**av;
 
-	i = -1;
+	av = cmd->args;
+	if (expander_new(data, av, cmd->arg_count))
+		// probably a lot of leaks,	will need to rewrite it i think
+		err_and_exit(data);
+}
+
+int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, t_list *curr)
+{
+	int	pipe_err[2];
+
 	if (!cmd)
 		return (1);
-	// cmd->args = expander_new(data, cmd->args, cmd->arg_count);
-	// if (!cmd->args)
-	// 	err_and_exit(data);
-	if (expander_new(data, cmd->args, cmd->arg_count))
+	exec->pipe[0] = -1;
+	exec->pipe[1] = -1;
+	// data->envp = t_env_to_envp(data->env);
+	if (!data->envp)
 		err_and_exit(data);
-	while (++i < cmd->arg_count)
-		printf(" [%s]",cmd->args[i]);
-	printf("\n");
+	
+	if (curr->next)
+		if (pipe(exec->pipe) == -1)
+			err_and_exit(data);
+	exec->pid = fork();
+	if (exec->pid == -1)
+		err_and_exit(data);
+	// if (pipe(pipe_err) == -1)
+	// 	err_and_exit(data);
+	// if (exec->pid != 0) // how do we handle ctrl + c in pipes (ie. cat | cat)
+	// 	handle_signal(1);
+	if (exec->pid == 0)
+		child_process(data, cmd, exec);
+	else
+		parent_process(exec);
+	debug_cmd(data, cmd);
+	// ft_free_tab(cmd->envp);
 	return (0);
 }
 
@@ -73,7 +97,8 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	while (current)
 	{
 		cmd = current->content;
-		data->status = exec_cmd(data, cmd, &exec);
+		expand_args(data, cmd);
+		data->status = exec_cmd(data, cmd, &exec, current);
 		current = current->next;
 	}
 	// wait_child(data, exec.child_pids, child_count);

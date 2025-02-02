@@ -10,21 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "ast.h"
-
-/*
- * i need to create function that clears everything without
- * exiting and set the exit status
- * i.e when a syntax error occurs we display the error but give the prompt back
- ** same for exec errors
- */
+#include "minishell.h"
 
 int	exec_prompt(const char *prompt, t_data *data)
 {
 	if (ft_strncmp(prompt, "exit", 5) == 0)
 		return (data_free(data), exit(0), 0);
-	if (ft_strcmp((char*)prompt, "token") == 0)
+	if (ft_strcmp((char *)prompt, "token") == 0)
 		data->print_token ^= 1;
 	if (ft_strcmp((char *)prompt, "env") == 0)
 		ft_env(data->env);
@@ -64,7 +57,7 @@ int	main(int argc, char **argv, char **envp)
 	ft_memset(&data, 0, sizeof(t_data));
 	env_init(&data.env, envp);
 	launch_program(&data);
-	
 	data_free(&data);
 	return (0);
 }
+

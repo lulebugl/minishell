@@ -10,3 +10,5 @@ export TEST=~
 echo "test" | > test.txt
 expr 2 + 2 <>test1.txt
 oefwfe > ||
+cd Documents | ls
+unset pwd // can't do this, which we need to implement and is good before it means env can't be null

@@ -20,34 +20,7 @@
 
 typedef struct s_data	t_data;
 
-typedef enum e_token_type
-{
-	TOKEN_WORD,
-	TOKEN_PIPE,
-	TOKEN_IN,
-	TOKEN_OUT,
-	TOKEN_APPEND,
-	TOKEN_HEREDOC,
-	TOKEN_AND,
-	TOKEN_OR,
-	TOKEN_OPEN_PAR,
-	TOKEN_CLOSE_PAR,
-}						t_token_type;
-
-// typedef struct s_list	t_token;
-
-typedef struct s_token_pos
-{
-	int					start;
-	int					len;
-}						t_token_pos;
-
-typedef struct s_token
-{
-	t_token_type		type;
-	char				*content;
-	struct s_token		*next;
-}						t_token;
+# include "structures.h"
 
 int						tokenize_input(const char *s, t_token **tokens,
 							t_data *data);

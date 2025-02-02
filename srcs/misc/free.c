@@ -30,6 +30,16 @@ void	data_free(t_data *data)
 	}
 }
 
+void	reset_data(t_data *data)
+{
+	if (data)
+	{
+		clear_tokens(&data->tokens);
+		free_tree(data->ast);
+		data->ast = NULL;
+	}
+}
+
 void	clear_tokens(t_token **tokens)
 {
 	if (tokens && *tokens)

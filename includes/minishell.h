@@ -22,6 +22,7 @@
 # endif
 
 # include "debug.h"
+# include "structures.h"
 
 /* standard */
 # include <errno.h>
@@ -33,9 +34,6 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <sys/stat.h>
-# include <sys/types.h>
-# include <sys/wait.h>
 # include <unistd.h>
 
 # define PROMPT "\x1b[38;5;87mminishell > \033[0m"
@@ -53,29 +51,11 @@
 # define SUCCESS 0
 # define ERROR 1
 
-typedef struct s_tree_node	t_tree_node;
-
-typedef struct s_env
-{
-	char					*key;
-	char					*value;
-	struct s_env			*next;
-}							t_env;
-
-typedef struct s_data
-{
-	t_env					*env;
-	t_token					*tokens;
-	t_tree_node				*ast;
-	int						status;
-	bool					print_token;
-	bool					print_ast;
-}							t_data;
-
 // DATA
 
 void						data_init(t_data *data);
 void						data_free(t_data *data);
+void						reset_data(t_data *data);
 
 // SIGNALS
 
@@ -118,3 +98,4 @@ void						msg_custom_err(char *msg, char *details);
 void						err_and_exit(t_data *data);
 
 #endif
+

@@ -10,7 +10,6 @@
 #                                                                              #
 # **************************************************************************** #
 
-# Program file name
 NAME	= minishell
 
 # -----------------------------------Colors------------------------------------
@@ -53,6 +52,8 @@ SRC		= 	main.c \
 			builtins/cd.c \
 			exec/debug.c \
 			exec/exec.c \
+			exec/utils.c \
+			exec/process.c \
 			exec/expander.c \
 			misc/signal.c \
 			misc/error.c \

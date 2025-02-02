@@ -13,22 +13,15 @@
 #ifndef EXEC_H
 # define EXEC_H
 
-#include "minishell.h"
+# include "structures.h"
 
-// Execution context to track state
-typedef struct s_exec
-{
-	int stdin_backup;  // For restoring stdin
-	int stdout_backup; // For restoring stdout
-	int fd_in;
-	int fd_out;
-	pid_t *child_pids;
-	int pipe_read;     // Read end of current pipe
-	int pipe_write;    // Write end of current pipe
-}	t_exec;
+void child_process(t_data *data, t_command *cmd, t_exec *exec);
+void parent_process(t_exec *exec);
+char	**t_env_to_envp(t_env *env);
 
-int	exec(t_data *data);
-int	exec_debug(t_data *data);
 
+int			exec(t_data *data);
+int			exec_debug(t_data *data);
 
 #endif
+

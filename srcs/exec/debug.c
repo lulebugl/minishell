@@ -10,9 +10,35 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "exec.h"
 #include "ast.h"
+#include "exec.h"
+#include "minishell.h"
+
+void	debug_cmd(t_data *data, t_command *cmd)
+{
+	int	i;
+
+	i = -1;
+	if (!cmd || !cmd->args || cmd->arg_count == 0)
+		return ;
+	if (ft_strcmp(cmd->args[0], "token") == 0)
+		data->print_token ^= 1;
+	if (ft_strncmp(cmd->args[0], "exit", 5) == 0)
+		// this segfaul `return (data_free(data), exit(0), 0);`
+		exit(0);
+	if (ft_strcmp(cmd->args[0], "ast") == 0)
+		data->print_ast ^= 1;
+	if (ft_strcmp(cmd->args[0], "ast") == 0)
+		data->exec_debug ^= 1;
+	if (ft_strcmp(cmd->args[0], "env") == 0)
+		ft_env(data->env);
+	// if (DEBUG)
+	// {
+	while (++i < cmd->arg_count)
+		printf(" [%s]", cmd->args[i]);
+	printf("\n");
+	//	}
+}
 
 static void	execute_waitlist_debug(t_list **waitlist)
 {
@@ -34,8 +60,8 @@ static void	execute_waitlist_debug(t_list **waitlist)
 	*waitlist = NULL; // Important: set to NULL after clearing
 }
 
-void	execute_ast_debug(t_data *data, t_tree_node *root, t_tree_node *previous,
-		t_list **waitlist)
+void	execute_ast_debug(t_data *data, t_tree_node *root,
+		t_tree_node *previous, t_list **waitlist)
 {
 	if (!root)
 		return ;
