@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
+/*   By: llebugle <lucas.lebugle@student.s19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:22:37 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/30 22:32:53 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:15:32 by llebugle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define DEBUG_H
 
 # include <assert.h>
+# include "structures.h"
 
 # define COLOR_RESET "\x1b[0m"
 # define COLOR_WORD "\e[0;35m"        // Light blue
@@ -24,9 +25,6 @@
 # define COLOR_PAR "\e[0;32m"
 # define COLOR_SPECIAL "\x1b[38;5;159m" // Cyan
 
-typedef struct s_data		t_data;
-typedef struct s_token		t_token;
-typedef struct s_command	t_command;
 
 void						test_arg_input(const char *input, t_data *data);
 void						print_tokens_formatted(t_token *tokens);

@@ -53,6 +53,7 @@ SRC		= 	main.c \
 			exec/debug.c \
 			exec/exec.c \
 			exec/utils.c \
+			exec/path.c \
 			exec/process.c \
 			exec/expander.c \
 			misc/signal.c \

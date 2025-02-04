@@ -6,7 +6,7 @@
 /*   By: llebugle <lucas.lebugle@student.s19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:27:57 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/04 16:35:43 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:31:15 by llebugle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,37 +27,38 @@ void	expand_args(t_data *data, t_command *cmd)
 		err_and_exit(data);
 }
 
-int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, t_list *curr)
+int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 {
-	int	pipe_err[2];
-
+	// int	pipe_err[2];
 	if (!cmd)
 		return (1);
 	exec->pipe[0] = -1;
 	exec->pipe[1] = -1;
-	if (!data->envp)
-		err_and_exit(data);
-	if (curr->next)
+	// last ? printf("last = true\n"): printf("last = false\n");
+	if (!last)
 	{
-		if (pipe(exec->pipe) == -1)
+		if (pipe(exec->pipe) < 0)
 			err_and_exit(data);
+		// printf("piped\n");
 		exec->fd_out = exec->pipe[1];
 	}
 	else
-	{
-		// Last command outputs to stdout
 		exec->fd_out = STDOUT_FILENO;
-	}
 	exec->pid = fork();
-	if (exec->pid == -1)
+	if (exec->pid < 0)
+	{
+		close(exec->pipe[0]);
+		close(exec->pipe[1]);
 		err_and_exit(data);
+	}
 	if (exec->pid != 0)
 		init_signals();
 	if (exec->pid == 0)
-		child_process(data, cmd, exec);
+		child_process(data, cmd, exec, last);
 	else
 		parent_process(exec);
 	debug_cmd(data, cmd);
+	// close fds
 	return (0);
 }
 
@@ -67,6 +68,7 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	t_command	*cmd;
 	int			child_count;
 	t_exec		exec;
+	bool		last;
 	int			i;
 
 	if (!waitlist || !*waitlist)
@@ -81,7 +83,7 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	{
 		cmd = current->content;
 		expand_args(data, cmd);
-		data->status = exec_cmd(data, cmd, &exec, current);
+		data->status = exec_cmd(data, cmd, &exec, (current->next));
 		exec.child_pids[i++] = exec.pid;
 		current = current->next;
 	}
@@ -147,7 +149,7 @@ void	execute_ast(t_data *data, t_tree_node *root, t_tree_node *previous,
 }
 
 void	execute_ast_debug(t_data *data, t_tree_node *root,
-		t_tree_node *previous, t_list **waitlist);
+			t_tree_node *previous, t_list **waitlist);
 
 int	exec(t_data *data)
 {
@@ -156,9 +158,8 @@ int	exec(t_data *data)
 
 	root = data->ast;
 	waitlist = NULL;
-	execute_ast(data, data->ast, NULL, &waitlist);	
+	execute_ast(data, data->ast, NULL, &waitlist);
 	if (waitlist)
 		execute_waitlist(&waitlist, data);
 	return (0);
 }
-

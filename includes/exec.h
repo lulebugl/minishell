@@ -15,13 +15,15 @@
 
 # include "structures.h"
 
-void child_process(t_data *data, t_command *cmd, t_exec *exec);
+void child_process(t_data *data, t_command *cmd, t_exec *exec, bool last);
 void parent_process(t_exec *exec);
 char	**t_env_to_envp(t_env *env);
 
 
 int			exec(t_data *data);
 int			exec_debug(t_data *data);
+
+char	*get_path(char *str, t_env *env);
 
 #endif
 
