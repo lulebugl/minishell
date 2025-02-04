@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   structures.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: llebugle <lucas.lebugle@student.s19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 17:02:44 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/02 17:02:45 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/02/04 21:51:52 by llebugle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTURES_H
 # define STRUCTURES_H
 
+# include "libft.h"
 # include <stdbool.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include "libft.h"
 
 typedef struct s_env
 {
@@ -92,6 +92,7 @@ typedef struct s_exec
 	int						fd_out;
 	pid_t					pid;
 	pid_t					*child_pids;
+	int						id;
 	int						pipe[2];
 }							t_exec;
 
@@ -108,4 +109,3 @@ typedef struct s_data
 }							t_data;
 
 #endif
-

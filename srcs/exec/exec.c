@@ -6,7 +6,7 @@
 /*   By: llebugle <lucas.lebugle@student.s19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:27:57 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/04 19:31:15 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/02/04 21:17:48 by llebugle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,51 +16,17 @@
 int		expander_new(t_data *data, char **argv, int ac);
 void	wait_child(t_data *data, pid_t *child_pids, int child_count);
 void	init_exec(t_data *data, t_exec *exec, int child_count);
+int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last);
 
-void	expand_args(t_data *data, t_command *cmd)
-{
-	char	**av;
+// void	expand_args(t_data *data, t_command *cmd)
+// {
+// 	char	**av;
 
-	av = cmd->args;
-	if (expander_new(data, av, cmd->arg_count))
-		// probably a lot of leaks,	will need to rewrite it i think
-		err_and_exit(data);
-}
-
-int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
-{
-	// int	pipe_err[2];
-	if (!cmd)
-		return (1);
-	exec->pipe[0] = -1;
-	exec->pipe[1] = -1;
-	// last ? printf("last = true\n"): printf("last = false\n");
-	if (!last)
-	{
-		if (pipe(exec->pipe) < 0)
-			err_and_exit(data);
-		// printf("piped\n");
-		exec->fd_out = exec->pipe[1];
-	}
-	else
-		exec->fd_out = STDOUT_FILENO;
-	exec->pid = fork();
-	if (exec->pid < 0)
-	{
-		close(exec->pipe[0]);
-		close(exec->pipe[1]);
-		err_and_exit(data);
-	}
-	if (exec->pid != 0)
-		init_signals();
-	if (exec->pid == 0)
-		child_process(data, cmd, exec, last);
-	else
-		parent_process(exec);
-	debug_cmd(data, cmd);
-	// close fds
-	return (0);
-}
+// 	av = cmd->arg_lst;
+// 	if (expander_new(data, av, cmd->arg_count))
+// 		// probably a lot of leaks,	will need to rewrite it i think
+// 		err_and_exit(data);
+// }
 
 void	execute_waitlist(t_list **waitlist, t_data *data)
 {
@@ -82,8 +48,8 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	while (current)
 	{
 		cmd = current->content;
-		expand_args(data, cmd);
-		data->status = exec_cmd(data, cmd, &exec, (current->next));
+		//expand_args(data, cmd);
+		data->status = exec_cmd(data, cmd, &exec, !(current->next));
 		exec.child_pids[i++] = exec.pid;
 		current = current->next;
 	}
@@ -107,9 +73,9 @@ void	execute_ast(t_data *data, t_tree_node *root, t_tree_node *previous,
 	{
 		if (data->exec_debug)
 			printf("COMMAND: ");
-		if (data->exec_debug)
-			for (int i = 0; i < root->cmd->arg_count; i++)
-				printf("%s ", root->cmd->args[i]);
+		// if (data->exec_debug)
+		// 	for (int i = 0; i < root->cmd->arg_count; i++)
+		// 		printf("%s ", root->cmd->args[i]);
 		if (data->exec_debug)
 			printf("\n");
 	}

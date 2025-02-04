@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: llebugle <lucas.lebugle@student.s19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 18:31:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/01 18:31:42 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/02/04 21:56:26 by llebugle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,31 @@ void	debug_cmd(t_data *data, t_command *cmd)
 	int	i;
 
 	i = -1;
-	if (!cmd || !cmd->args || cmd->arg_count == 0)
+	if (!cmd || !cmd->arg_lst || cmd->arg_count == 0)
 		return ;
-	if (ft_strcmp(cmd->args[0], "token") == 0)
+	if (ft_strcmp(cmd->arg_lst->content, "token") == 0)
 		data->print_token ^= 1;
-	if (ft_strncmp(cmd->args[0], "exit", 5) == 0)
+	if (ft_strncmp(cmd->arg_lst->content, "exit", 5) == 0)
 		// this segfaul `return (data_free(data), exit(0), 0);`
 		exit(0);
-	if (ft_strcmp(cmd->args[0], "ast") == 0)
+	if (ft_strcmp(cmd->arg_lst->content, "ast") == 0)
 		data->print_ast ^= 1;
-	if (ft_strcmp(cmd->args[0], "debug") == 0)
+	if (ft_strcmp(cmd->arg_lst->content, "debug") == 0)
 		data->exec_debug ^= 1;
-	if (ft_strcmp(cmd->args[0], "env") == 0)
-		ft_env(data->env);
+	// if (ft_strcmp(cmd->arg_lst->content, "env") == 0)
+	// 	ft_env(data->env);
 	if (data->exec_debug)
 	{
-		while (++i < cmd->arg_count)
-			printf(" [%s]", cmd->args[i]);
+		for (int i = 0; i < cmd->arg_count; i++)
+		{
+			t_list *tmp;
+			tmp = cmd->arg_lst;
+			while (tmp)
+			{
+				printf("%s ", (char *)tmp->content);
+				tmp = tmp->next;
+			}
+		}
 		printf("\n");
 	}
 }
@@ -52,7 +60,15 @@ static void	execute_waitlist_debug(t_list **waitlist)
 		cmd = current->content;
 		printf("Would execute: ");
 		for (int i = 0; i < cmd->arg_count; i++)
-			printf("%s ", cmd->args[i]);
+		{
+			t_list *tmp;
+			tmp = cmd->arg_lst;
+			while (tmp)
+			{
+				printf("%s ", (char *)tmp->content);
+				tmp = tmp->next;
+			}
+		}
 		printf("\n");
 		current = current->next;
 	}
@@ -73,7 +89,15 @@ void	execute_ast_debug(t_data *data, t_tree_node *root,
 	{
 		printf("COMMAND: ");
 		for (int i = 0; i < root->cmd->arg_count; i++)
-			printf("%s ", root->cmd->args[i]);
+		{
+			t_list *tmp;
+			tmp = root->cmd->arg_lst;
+			while (tmp)
+			{
+				printf("%s ", (char *)tmp->content);
+				tmp = tmp->next;
+			}
+		}
 		printf("\n");
 	}
 	else if (root->type == NODE_AND)

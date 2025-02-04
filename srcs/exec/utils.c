@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: llebugle <lucas.lebugle@student.s19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 17:58:43 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/02 17:58:46 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/02/04 21:52:02 by llebugle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,13 @@ void	init_exec(t_data *data, t_exec *exec, int child_count)
 		err_and_exit(data);
 	exec->fd_in = STDIN_FILENO;
     exec->fd_out = STDOUT_FILENO;
+    exec->id = 0;
     exec->pipe[0] = -1;
     exec->pipe[1] = -1;
     
     // Save original stdin/stdout
-    exec->stdin_backup = dup(STDIN_FILENO);
-    exec->stdout_backup = dup(STDOUT_FILENO);
+    // exec->stdin_backup = dup(STDIN_FILENO);
+    // exec->stdout_backup = dup(STDOUT_FILENO);
 }
 
 void	wait_child(t_data *data, pid_t *child_pids, int child_count)
