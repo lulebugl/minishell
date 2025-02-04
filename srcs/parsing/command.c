@@ -6,80 +6,93 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:41:55 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/31 17:33:49 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:36:54 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "ast.h"
 
-static int	count_args(t_token *start)
+char	**get_cmd_args_arr(t_command *cmd)
 {
-	int	count;
-
-	count = 0;
-	while (start && start->type == TOKEN_WORD)
-	{
-		count++;
-		start = start->next;
-	}
-	return (count);
-}
-
-static char	**get_args(t_token **start, int arg_count)
-{
-	char	**args;
+	char	**arr;
+	t_list	*head;
 	int		i;
 
-	i = 0;
-	args = malloc(sizeof(char *) * (arg_count + 1));
-	if (!args)
+	arr = malloc(sizeof(char *) * (cmd->arg_count + 1));
+	if (!arr)
 		return (NULL);
-	ft_bzero(args, (sizeof(char *) * (arg_count + 1)));
 	i = 0;
-	while ((*start) && i < arg_count)
+	head = cmd->arg_lst;
+	while (head && i < cmd->arg_count)
 	{
-		args[i] = ft_strdup((*start)->content);
-		if (!args[i])
+		arr[i] = ft_strdup(head->content);
+		if (!arr[i])
 		{
-			free_str_arr(args);
+			i--;
+			while (i > 0)
+				free(arr[i--]);
+			free(arr);
 			return (NULL);
 		}
-		*start = (*start)->next;
 		i++;
+		head = head->next;
 	}
-	args[i] = NULL;
-	return (args);
+	arr[i] = NULL;
+	return (arr);
 }
 
 void	free_command(t_command *cmd)
 {
 	if (!cmd)
 		return ;
-	if (cmd->args)
-		free_str_arr(cmd->args);
+	if (cmd->arg_lst)
+		ft_lstclear(&(cmd->arg_lst), &free);
 	if (cmd->redirections)
 		free_redirections(cmd->redirections);
 	free(cmd);
 }
 
+int	token_is_part_of_command(t_token_type token_type)
+{
+	if (token_type == TOKEN_WORD)
+		return (1);
+	if (token_type == TOKEN_IN)
+		return (1);
+	if (token_type == TOKEN_OUT)
+		return (1);
+	if (token_type == TOKEN_APPEND)
+		return (1);
+	if (token_type == TOKEN_HEREDOC)
+		return (1);
+	return (0);
+}
+
 t_command	*get_command(t_token **token)
 {
-	t_token		*head;
-	t_command	*cmd;
+	t_command		*cmd;
+	t_token_type	type;
 
 	if (!token || !*token)
 		return (NULL);
-	head = *token;
 	cmd = malloc(sizeof(t_command));
 	if (!cmd)
 		return (NULL);
 	ft_bzero(cmd, sizeof(t_command));
-	cmd->arg_count = count_args(*token);
-	cmd->args = get_args(token, cmd->arg_count);
-	if (!cmd->args)
-		return (free_command(cmd), NULL);
-	cmd->redirections = get_redirections(&(*token));
-	cmd->redir_count = count_redirections(cmd->redirections);
+	while (*token && token_is_part_of_command((*token)->type))
+	{
+		if ((*token)->type == TOKEN_WORD)
+			ft_lstadd_back(&(cmd->arg_lst),
+				ft_lstnew(ft_strdup((*token)->content)));
+		else
+		{
+			type = (*token)->type;
+			*token = (*token)->next;
+			add_redirection(&(cmd->redirections),
+				new_redirection(type, (*token)->content));
+		}
+		*token = (*token)->next;
+	}
+	cmd->arg_count = ft_lstsize(cmd->arg_lst);
 	return (cmd);
 }

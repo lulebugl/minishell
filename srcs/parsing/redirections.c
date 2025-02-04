@@ -26,20 +26,7 @@ void	free_redirections(t_redirection *root)
 	free(root);
 }
 
-int	count_redirections(t_redirection *root)
-{
-	int	i;
-
-	i = 0;
-	while (root)
-	{
-		i++;
-		root = root->next;
-	}
-	return (i);
-}
-
-static t_redirection	*new_redirection(t_token_type type, char *filename)
+t_redirection	*new_redirection(t_token_type type, char *filename)
 {
 	t_redirection	*elem;
 
@@ -57,7 +44,7 @@ static t_redirection	*new_redirection(t_token_type type, char *filename)
 	return (elem);
 }
 
-static void	add_redirection(t_redirection **root, t_redirection *new)
+void	add_redirection(t_redirection **root, t_redirection *new)
 {
 	t_redirection	*head;
 
@@ -70,31 +57,4 @@ static void	add_redirection(t_redirection **root, t_redirection *new)
 	while (head->next)
 		head = head->next;
 	head->next = new;
-}
-
-t_redirection	*get_redirections(t_token **token)
-{
-	t_token_type	type;
-	t_redirection	*root_redir;
-	t_redirection	*elem_redir;
-
-	root_redir = NULL;
-	if (!*token || !token_is_redir(*token))
-		return (NULL);
-	while (*token && token_is_redir(*token))
-	{
-		type = (*token)->type;
-		*token = (*token)->next;
-		if (!*token)
-			return (NULL);
-		elem_redir = new_redirection(type, (*token)->content);
-		if (!elem_redir)
-		{
-			free_redirections(root_redir);
-			return (NULL);
-		}
-		add_redirection(&root_redir, elem_redir);
-		*token = (*token)->next;
-	}
-	return (root_redir);
 }
