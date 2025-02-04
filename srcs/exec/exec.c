@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: llebugle <lucas.lebugle@student.s19.be>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:27:57 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/31 17:27:58 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/02/04 16:35:43 by llebugle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, t_list *curr)
 	exec->pid = fork();
 	if (exec->pid == -1)
 		err_and_exit(data);
+	if (exec->pid != 0)
+		init_signals();
 	if (exec->pid == 0)
 		child_process(data, cmd, exec);
 	else
@@ -144,6 +146,9 @@ void	execute_ast(t_data *data, t_tree_node *root, t_tree_node *previous,
 	execute_ast(data, root->right, root, waitlist);
 }
 
+void	execute_ast_debug(t_data *data, t_tree_node *root,
+		t_tree_node *previous, t_list **waitlist);
+
 int	exec(t_data *data)
 {
 	t_tree_node	*root;
@@ -151,7 +156,7 @@ int	exec(t_data *data)
 
 	root = data->ast;
 	waitlist = NULL;
-	execute_ast(data, data->ast, NULL, &waitlist);
+	execute_ast(data, data->ast, NULL, &waitlist);	
 	if (waitlist)
 		execute_waitlist(&waitlist, data);
 	return (0);
