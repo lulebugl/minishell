@@ -23,62 +23,68 @@ void padding ( char ch, int n )
 
 void  print_command(t_command *cmd)
 {
-      t_redirection *head;
+      t_redirection *head_redir;
+      t_list        *head_args;
+      
       printf(COLOR_WORD);
-      for (int i = 0; cmd->args[i]; i++)
-        printf("%s ", cmd->args[i]);
-      printf(COLOR_REDIR);
-      head = cmd->redirections;
-      for (int i = 0; i < cmd->redir_count; i++)
+      head_redir = cmd->redirections;
+      head_args = cmd->arg_lst;
+      while (head_args)
       {
-        printf("%s ", head->filename);
-        head = head->next;
+        printf("%s ", (char *)head_args->content);
+        head_args = head_args->next;
+      }
+      printf(COLOR_REDIR);
+      while (head_redir)
+      {
+        printf("%s ", head_redir->filename);
+        head_redir = head_redir->next;
       }
       printf(COLOR_RESET);
 }
 
-static void print_command_lucas(t_command *cmd, int level)
-{
-    for (int i = 0; i < level; i++)
-        printf("  ");
-    printf("CMD: ");
-    for (int i = 0; i < cmd->arg_count; i++)
-    {
-        printf("%s", cmd->args[i]);
-        if (i < cmd->arg_count - 1)
-            printf(" ");
-    }
-    printf("\n");
-}
+// static void print_command_lucas(t_command *cmd, int level)
+// {
+//     for (int i = 0; i < level; i++)
+//         printf("  ");
+//     printf("CMD: ");
+//     for (int i = 0; i < cmd->arg_count; i++)
+//     {
+//         printf("%s", cmd->args[i]);
+//         if (i < cmd->arg_count - 1)
+//             printf(" ");
+//     }
+//     printf("\n");
+// }
 
-void print_ast_lucas(t_tree_node *node, int level)
-{
-    if (!node)
-        return;
+// void print_ast_lucas(t_tree_node *node, int level)
+// {
+//     if (!node)
+//         return;
 
-    for (int i = 0; i < level; i++)
-        printf("  ");
+//     for (int i = 0; i < level; i++)
+//         printf("  ");
 
-    switch (node->type)
-    {
-        case NODE_COMMAND:
-            print_command_lucas(node->cmd, 0);
-            break;
-        case NODE_PIPE:
-            printf("PIPE:\n");
-            break;
-        case NODE_AND:
-            printf("AND\n");
-            print_ast_lucas(node->left, level + 1);
-            print_ast_lucas(node->right, level + 1);
-            break;
-        case NODE_OR:
-            printf("OR\n");
-            print_ast_lucas(node->left, level + 1);
-            print_ast_lucas(node->right, level + 1);
-            break;
-    }
-}
+//     switch (node->type)
+//     {
+//         case NODE_COMMAND:
+//             print_command_lucas(node->cmd, 0);
+//             break;
+//         case NODE_PIPE:
+//             printf("PIPE:\n");
+//             break;
+//         case NODE_AND:
+//             printf("AND\n");
+//             print_ast_lucas(node->left, level + 1);
+//             print_ast_lucas(node->right, level + 1);
+//             break;
+//         case NODE_OR:
+//             printf("OR\n");
+//             print_ast_lucas(node->left, level + 1);
+//             print_ast_lucas(node->right, level + 1);
+//             break;
+//     }
+// }
 
 void print_ast (t_tree_node *root, int level)
 {

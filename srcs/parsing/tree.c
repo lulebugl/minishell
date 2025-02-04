@@ -53,8 +53,15 @@ static t_node_type	get_node_type(t_token_type token_type)
 		return (NODE_PIPE);
 	if (token_type == TOKEN_WORD)
 		return (NODE_COMMAND);
-	else 
-		return (-1); // to prevent destroying my pc
+	if (token_type == TOKEN_IN)
+		return (NODE_COMMAND);
+	if (token_type == TOKEN_OUT)
+		return (NODE_COMMAND);
+	if (token_type == TOKEN_APPEND)
+		return (NODE_COMMAND);
+	if (token_type == TOKEN_HEREDOC)
+		return (NODE_COMMAND);
+	return (-1); // to prevent destroying my pc
 }
 
 t_tree_node	*new_tree(t_data *data, t_token **token)
@@ -75,9 +82,9 @@ t_tree_node	*new_tree(t_data *data, t_token **token)
 		}
 		else if ((*token)->type == TOKEN_CLOSE_PAR)
 			return (root);
-		else if ((*token)->type == TOKEN_WORD)
+		else if (token_is_part_of_command((*token)->type))
 		{
-			tmp_node = new_node(get_node_type((*token)->type));
+			tmp_node = new_node(NODE_COMMAND);
 			//rajouter protect
 			tmp_node->cmd = get_command(token);
 		}

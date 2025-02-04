@@ -17,6 +17,7 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include "libft.h"
 
 typedef struct s_env
 {
@@ -69,7 +70,7 @@ typedef struct s_redirection
 
 typedef struct s_command
 {
-	char					**args;
+	t_list					*arg_lst;
 	int						arg_count;
 	t_redirection			*redirections;
 	int						redir_count;
