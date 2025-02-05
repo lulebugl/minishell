@@ -6,11 +6,30 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:49:25 by maxweert          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/02/18 19:07:02 by maxweert         ###   ########.fr       */
+=======
+/*   Updated: 2025/02/05 17:41:21 by maxweert         ###   ########.fr       */
+>>>>>>> 32c87f5 (modifs)
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int		count_redirections(t_redirection *root)
+{
+	t_redirection	*head;
+	int				ret;
+
+	ret = 0;
+	head = root;
+	while (head)
+	{
+		ret++;
+		head = head->next;
+	}
+	return (ret);
+}
 
 void	free_redirections(t_redirection *root)
 {

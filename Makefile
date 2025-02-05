@@ -6,7 +6,11 @@
 #    By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 18:54:13 by llebugle          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2025/02/18 17:39:54 by maxweert         ###   ########.fr        #
+=======
+#    Updated: 2025/02/05 17:40:13 by maxweert         ###   ########.fr        #
+>>>>>>> 32c87f5 (modifs)
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +67,7 @@ SRC		= 	main.c \
 			builtins/echo.c \
 			builtins/exit.c \
 			builtins/cd.c \
+<<<<<<< HEAD
 			exec/debug.c \
 			exec/exec.c \
 			exec/utils.c \
@@ -70,6 +75,8 @@ SRC		= 	main.c \
 			exec/process.c \
 			exec/expander.c \
 			exec/expander_utils.c \
+=======
+>>>>>>> 32c87f5 (modifs)
 			misc/signal.c \
 			misc/error.c \
 			misc/env_utils.c \
@@ -79,13 +86,23 @@ SRC		= 	main.c \
 			parsing/ast_debug.c \
 			parsing/command.c \
 			parsing/redirections.c \
+<<<<<<< HEAD
 			parsing/tree.c \
 			parsing/heredoc.c #\
+=======
+			parsing/wildcards.c \
+			parsing/tree.c #\
+>>>>>>> 32c87f5 (modifs)
 			parsing/ast.c \
 			parsing/parser.c	\
 			parsing/ast_utils.c	\
 			parsing/create_commands.c	\
 			parsing/tree.c \
+			exec/debug.c \
+			exec/exec.c \
+			exec/utils.c \
+			exec/process.c \
+			exec/expander.c 
 		 
 
 OBJ		= $(SRC:.c=.o)

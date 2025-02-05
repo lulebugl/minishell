@@ -6,7 +6,11 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:41:55 by maxweert          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/02/18 19:06:56 by maxweert         ###   ########.fr       */
+=======
+/*   Updated: 2025/02/05 17:52:30 by maxweert         ###   ########.fr       */
+>>>>>>> 32c87f5 (modifs)
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +97,6 @@ t_command	*get_command(t_token **token)
 		*token = (*token)->next;
 	}
 	cmd->arg_count = ft_lstsize(cmd->arg_lst);
+	cmd->redir_count = count_redirections(cmd->redirections);
 	return (cmd);
 }

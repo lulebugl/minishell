@@ -6,7 +6,11 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/02/18 17:58:55 by maxweert         ###   ########.fr       */
+=======
+/*   Updated: 2025/02/05 16:33:35 by maxweert         ###   ########.fr       */
+>>>>>>> 32c87f5 (modifs)
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +42,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <dirent.h>
 
 # define PROMPT "\x1b[38;5;87mminishell > \033[0m"
 
