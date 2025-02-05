@@ -7,10 +7,14 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:41:55 by maxweert          #+#    #+#             */
 <<<<<<< HEAD
+<<<<<<< HEAD
 /*   Updated: 2025/02/18 19:06:56 by maxweert         ###   ########.fr       */
 =======
 /*   Updated: 2025/02/05 17:52:30 by maxweert         ###   ########.fr       */
 >>>>>>> 32c87f5 (modifs)
+=======
+/*   Updated: 2025/02/05 23:51:22 by maxweert         ###   ########.fr       */
+>>>>>>> 00847d1 (modif for leaving when error + free correctly)
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +75,26 @@ int	token_is_part_of_command(t_token_type token_type)
 	return (0);
 }
 
+static int	set_command(t_token **token, t_command *cmd)
+{
+	t_token_type	type;
+	
+	if ((*token)->type == TOKEN_WORD)
+		ft_lstadd_back(&(cmd->arg_lst),
+			ft_lstnew(ft_strdup((*token)->content)));
+	else
+	{
+		type = (*token)->type;
+		*token = (*token)->next;
+		if (ft_strchr((*token)->content, '*'))
+			return (printf("minishell: wildcard in redirection not implemented.\n"), 0);
+		add_redirection(&(cmd->redirections),
+			new_redirection(type, (*token)->content));
+	}
+	*token = (*token)->next;
+	return (1);
+}
+
 t_command	*get_command(t_token **token)
 {
 	t_command		*cmd;
@@ -83,19 +107,8 @@ t_command	*get_command(t_token **token)
 		return (NULL);
 	ft_bzero(cmd, sizeof(t_command));
 	while (*token && token_is_part_of_command((*token)->type))
-	{
-		if ((*token)->type == TOKEN_WORD)
-			ft_lstadd_back(&(cmd->arg_lst),
-				ft_lstnew(ft_strdup((*token)->content)));
-		else
-		{
-			type = (*token)->type;
-			*token = (*token)->next;
-			add_redirection(&(cmd->redirections),
-				new_redirection(type, (*token)->content));
-		}
-		*token = (*token)->next;
-	}
+		if (!set_command(token, cmd))
+			return (free_command(cmd), NULL);
 	cmd->arg_count = ft_lstsize(cmd->arg_lst);
 	cmd->redir_count = count_redirections(cmd->redirections);
 	return (cmd);
