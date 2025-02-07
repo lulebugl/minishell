@@ -28,7 +28,7 @@ void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
         if (dup2(exec->pipe[1], STDOUT_FILENO) == -1)
             err_and_exit(data);
     }
-
+    // implementer redirections
     if (exec->pipe[0] != -1)
         close(exec->pipe[0]);
     if (exec->pipe[1] != -1)
