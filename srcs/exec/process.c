@@ -17,29 +17,22 @@ void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
 	char	*cmd_path;
 	char	**envp;
 
-	// Close all unused pipe ends first
     if (exec->fd_in != STDIN_FILENO)
     {
         if (dup2(exec->fd_in, STDIN_FILENO) == -1)
             err_and_exit(data);
         close(exec->fd_in);
     }
-
-    // Set up output redirection to next pipe
     if (!last && exec->pipe[1] != STDOUT_FILENO)
     {
         if (dup2(exec->pipe[1], STDOUT_FILENO) == -1)
             err_and_exit(data);
     }
 
-    // Close all pipe fds in child
     if (exec->pipe[0] != -1)
         close(exec->pipe[0]);
     if (exec->pipe[1] != -1)
         close(exec->pipe[1]);
-	// dprintf(2, "cmd = %s\n", (char *)cmd->arg_lst->content);
-	// dprintf(2, "fd_in = %d\n", exec->pipe[0]);
-	// dprintf(2, "fd_out = %d\n", exec->pipe[1]);
 	cmd_path = get_path(cmd->arg_lst->content, data->env);
 	if (!cmd_path)
 	{
@@ -80,21 +73,14 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
     if (!cmd)
         return (1);
 
-    // Create new pipe if not last command
     if (!last)
-    {
         if (pipe(exec->pipe) == -1)
             err_and_exit(data);
-    }
-
     exec->pid = fork();
     if (exec->pid < 0)
         err_and_exit(data);
-
     if (exec->pid == 0)
-    {
         child_process(data, cmd, exec, last);
-    }
     else
     {
         // Parent process
@@ -103,13 +89,12 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 
         if (!last)
         {
-            close(exec->pipe[1]);  // Close write end
+            close(exec->pipe[1]);
             exec->fd_in = exec->pipe[0];  // Save read end for next command
         }
-
         exec->child_pids[exec->id++] = exec->pid;
     }
 	debug_cmd(data, cmd);
-	// close fds
+	// remember to close fds
 	return (0);
 }

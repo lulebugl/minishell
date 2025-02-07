@@ -27,6 +27,20 @@ CC		= cc
 CFLAGS	=
 VALGRIND =
 
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+    # macOS
+    READLINE_LIB := -L/usr/local/opt/readline/lib
+    READLINE_INC := -I/usr/local/opt/readline/include
+    CFLAGS	:= -I/usr/local/opt/readline/include
+    
+else
+    READLINE_LIB := -lreadline
+    READLINE_INC :=
+    CFLAGS	:=
+    
+endif
+
 ifeq ($(MODE), debug)
 	CFLAGS	+= -fsanitize=address -gdwarf-4 -g -D DEBUG=true
 else ifeq ($(MODE), valgrind)
@@ -104,7 +118,8 @@ $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 
 # Project file rule
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $@ $(INC) $(LIBFT) -l readline
+# $(CC) $(CFLAGS) $(OBJS) -o $@ $(INC) $(LIBFT) -l readline
+	$(CC) $(CFLAGS) $(OBJS) -o $@ $(INC) $(LIBFT) $(READLINE_LIB) $(READLINE_INC) -l readline
 
 # Libft rule
 $(LIBFT):
@@ -157,7 +172,7 @@ exec: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
 	mkdir -p $(TESTER_DIR)
 	mkdir -p $(OBJ_PATH)/testing
 	$(CC) $(CFLAGS) -c srcs/tests/test_exec.c -o $(OBJ_PATH)testing/test_exec.o $(INC)
-	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_exec.o -o $(TESTER_DIR)/exec $(INC) $(LIBFT) -l readline
+	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_exec.o -o $(TESTER_DIR)/exec $(INC) $(LIBFT) $(READLINE_LIB) $(READLINE_INC) -l readline
 	@echo "$(BLUE)exec program compiled successfully!$(RESET)"
 	$(if $(VALGRIND), $(VALGRIND)) $(TESTER_DIR)/exec
 
