@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 00:52:38 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/07 00:56:42 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/11 17:27:05 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,76 +17,49 @@
 #include <string.h>
 #include <sys/stat.h>
 
-void		find_matching_paths(const char *base_path, const char *pattern);
-
-static int	match(const char *str_wildcard, const char *to_check)
+static int	match_rec(char *pattern, char *to_check)
 {
-	if (*str_wildcard == '\0' && *to_check == '\0')
+	if (*pattern == '\0' && *to_check == '\0')
 		return (1);
-	if (*str_wildcard == '*')
+	if (*pattern == '*')
 	{
-		while (*(str_wildcard + 1) == '*')
-			str_wildcard++;
+		while (*(pattern + 1) == '*')
+			pattern++;
 	}
-	if (*str_wildcard == '*' && *(str_wildcard + 1) != '\0'
+	if (*pattern == '*' && *(pattern + 1) != '\0'
 		&& *to_check == '\0')
 		return (0);
-	if (*str_wildcard == *to_check)
-		return (match(str_wildcard + 1, to_check + 1));
-	if (*str_wildcard == '*')
-		return (match(str_wildcard + 1, to_check) || match(str_wildcard,
+	if (*pattern == *to_check)
+		return (match_rec(pattern + 1, to_check + 1));
+	if (*pattern == '*')
+		return (match_rec(pattern + 1, to_check) || match_rec(pattern,
 				to_check + 1));
 	return (0);
 }
 
-static void	process_entry(const char *base_path, const char *entry_name,
-		const char *pattern, const char *remaining_pattern)
+int match_wildcard(char *pattern, char *to_check)
 {
-	char		full_path[1024];
-	struct stat	statbuf;
-
-	memset(full_path, 0, 1024);
-	strcat(full_path, base_path);
-	strcat(full_path, "/");
-	strcat(full_path, entry_name);
-	if (match(pattern, entry_name))
-	{
-		if (remaining_pattern == NULL)
-			printf("%s\n", full_path);
-		else if (stat(full_path, &statbuf) == 0 && S_ISDIR(statbuf.st_mode))
-			find_matching_paths(full_path, remaining_pattern);
-	}
+	if (*to_check == '.' && *pattern != '.')
+		return (0);
+	return (match_rec(pattern, to_check));
 }
 
-void	find_matching_paths(const char *base_path, const char *pattern)
+void	find_matchs(char *pattern)
 {
 	DIR				*dir;
 	struct dirent	*entry;
-	char			segment[1024];
-	const char		*slash;
-
-	slash = strchr(pattern, '/');
-	dir = opendir(base_path);
+	
+	dir = opendir(".");
 	if (!dir)
 	{
-		perror("opendir");
+		perror("minishell: opendir");
 		return ;
 	}
-	if (slash)
-	{
-		strncpy(segment, pattern, slash - pattern);
-		segment[slash - pattern] = '\0';
-		pattern = slash + 1;
-	}
-	else
-	{
-		strcpy(segment, pattern);
-		pattern = NULL;
-	}
 	entry = readdir(dir);
-	while (entry != NULL)
+	while (entry)
 	{
-		process_entry(base_path, entry->d_name, segment, pattern);
+		if (match_wildcard(pattern, entry->d_name))
+			printf("%s\n", entry->d_name);
 		entry = readdir(dir);
 	}
 	closedir(dir);
@@ -99,6 +72,6 @@ int	main(int argc, char *argv[])
 		fprintf(stderr, "Usage: %s <pattern>\n", argv[0]);
 		return (EXIT_FAILURE);
 	}
-	find_matching_paths(".", argv[1]);
+	find_matchs(argv[1]);
 	return (EXIT_SUCCESS);
 }
