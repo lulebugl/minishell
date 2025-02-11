@@ -7,10 +7,14 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
 <<<<<<< HEAD
+<<<<<<< HEAD
 /*   Updated: 2025/02/18 17:59:16 by maxweert         ###   ########.fr       */
 =======
 /*   Updated: 2025/02/05 16:48:07 by maxweert         ###   ########.fr       */
 >>>>>>> 32c87f5 (modifs)
+=======
+/*   Updated: 2025/02/11 17:55:24 by maxweert         ###   ########.fr       */
+>>>>>>> 8354aa8 (wildcards should be ok, added ft_lstsort in libft in order to sort matched wildcards)
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +59,26 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 
+<<<<<<< HEAD
 	(void)argc;
 	(void)argv;
 	ft_memset(&data, 0, sizeof(t_data));
 	env_init(&data.env, envp);
 	launch_program(&data);
 	data_free(&data);
+=======
+	// ft_memset(&data, 0, sizeof(t_data));
+	// env_init(&data.env, envp);
+	// launch_program(&data);
+	// data_free(&data);
+	t_list *test;
+	test = find_matchs(argv[1]);
+	while (test)
+	{
+		printf("%s\n", (char*)test->content);
+		test = test->next;
+	}
+>>>>>>> 8354aa8 (wildcards should be ok, added ft_lstsort in libft in order to sort matched wildcards)
 	return (0);
 }
 

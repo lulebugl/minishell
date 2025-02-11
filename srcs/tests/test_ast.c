@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:01:18 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/30 22:30:51 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/11 18:09:17 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ int	exec_prompt(const char *prompt, t_data *data)
     if (!ast)
     {
         printf("Error: Parsing failed\n");
-        err_and_exit(data);
+		data_free(data);
+		return (0);
     }
     printf("AST Structure:\n");
     print_ast(ast, 0);

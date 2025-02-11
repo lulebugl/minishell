@@ -6,7 +6,7 @@
 #    By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/22 16:13:09 by llebugle          #+#    #+#              #
-#    Updated: 2025/01/22 14:24:57 by maxweert         ###   ########.fr        #
+#    Updated: 2025/02/11 17:52:09 by maxweert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,6 +58,7 @@ SRCS	= 	ft_isalpha.c		\
 			ft_lstadd_front.c	\
 			ft_lstsize.c		\
 			ft_lstlast.c		\
+			ft_lstsort.c		\
 			get_next_line.c		\
 			ft_printf.c			\
 			ft_printf_fd.c		\

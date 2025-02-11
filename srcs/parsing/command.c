@@ -8,6 +8,7 @@
 /*   Created: 2025/01/30 15:41:55 by maxweert          #+#    #+#             */
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /*   Updated: 2025/02/18 19:06:56 by maxweert         ###   ########.fr       */
 =======
 /*   Updated: 2025/02/05 17:52:30 by maxweert         ###   ########.fr       */
@@ -15,6 +16,9 @@
 =======
 /*   Updated: 2025/02/05 23:51:22 by maxweert         ###   ########.fr       */
 >>>>>>> 00847d1 (modif for leaving when error + free correctly)
+=======
+/*   Updated: 2025/02/11 18:20:40 by maxweert         ###   ########.fr       */
+>>>>>>> 8354aa8 (wildcards should be ok, added ft_lstsort in libft in order to sort matched wildcards)
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,16 +82,27 @@ int	token_is_part_of_command(t_token_type token_type)
 static int	set_command(t_token **token, t_command *cmd)
 {
 	t_token_type	type;
-	
+
 	if ((*token)->type == TOKEN_WORD)
-		ft_lstadd_back(&(cmd->arg_lst),
-			ft_lstnew(ft_strdup((*token)->content)));
+	{
+		if (ft_strchr((*token)->content, '*'))
+		{
+			if (ft_strchr((*token)->content, '/'))
+				return (printf("minishell: wildcard in another \
+					directory not implemented.\n"), 0);
+			ft_lstadd_back(&cmd->arg_lst, find_matchs((*token)->content));
+		}
+		else
+			ft_lstadd_back(&(cmd->arg_lst),
+				ft_lstnew(ft_strdup((*token)->content)));
+	}
 	else
 	{
 		type = (*token)->type;
 		*token = (*token)->next;
 		if (ft_strchr((*token)->content, '*'))
-			return (printf("minishell: wildcard in redirection not implemented.\n"), 0);
+			return (printf("minishell: wildcard in \
+				redirection not implemented.\n"), 0);
 		add_redirection(&(cmd->redirections),
 			new_redirection(type, (*token)->content));
 	}
