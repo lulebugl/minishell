@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:41:15 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/13 18:04:06 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/13 19:08:30 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	ft_exit(t_data *data, char **args)
 		else
 			ret = ft_atoi(args[1]);
 	}
-	if (args[1] && args[2])
+	if (args && args[1] && args[2])
 	{
 		ft_printf_fd(2, "exit\nminishell: exit: too many arguments\n");
 		if (ret == 0)
