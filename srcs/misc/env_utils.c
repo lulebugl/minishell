@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 22:23:44 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/31 17:35:26 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/13 21:27:11 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,16 @@ void	env_free(t_env *env)
 void	env_init(t_env **env, char **env_arr)
 {
 	int		i;
+	char	curr[PATH_MAX];
 
 	if (!env_arr || !env_arr[0])
+	{
+		*env = env_create_elem(ft_strdup("SHLVL"), ft_strdup("1"));
+		if (!env)
+			return ;
+		(*env)->next = env_create_elem("PWD", ft_strdup(getcwd(curr, PATH_MAX)));
 		return ;
+	}
 	i = 0;
 	while (env_arr[i])
 	{

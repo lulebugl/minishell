@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 16:31:25 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/13 17:54:42 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/13 20:53:47 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	ft_cd(t_env *env, char **args)
 	char	*path;
 	char	curr[PATH_MAX];
 
-	if (!env || !args)
+	if (!args)
 		return (ERROR);
 	getcwd(curr, PATH_MAX);
 	if (!curr)
