@@ -84,9 +84,6 @@ void	execute_ast(t_data *data, t_tree_node *root, t_tree_node *previous,
 	execute_ast(data, root->right, root, waitlist);
 }
 
-void	execute_ast_debug(t_data *data, t_tree_node *root,
-			t_tree_node *previous, t_list **waitlist);
-
 int	exec(t_data *data)
 {
 	t_tree_node	*root;
