@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 18:37:55 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/24 00:04:47 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:28:45 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,10 @@ int	ft_echo(char **args)
 	int		nb_args;
 	bool	newline;
 
-	i = 0;
-	nb_args = count_args(args);
+	if (!args)
+		return (ERROR);
+	i = 1;
+	nb_args = count_args(&args[1]);
 	newline = true;
 	while (args[i])
 	{
