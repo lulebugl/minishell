@@ -28,6 +28,8 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last);
 // 		err_and_exit(data);
 // }
 
+int	is_builtin(t_data *data, t_command *cmd, t_exec *exec);
+
 void	execute_waitlist(t_list **waitlist, t_data *data)
 {
 	t_list		*current;
@@ -48,6 +50,8 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	while (current)
 	{
 		cmd = current->content;
+		if (!current->next && is_builtin(data, cmd, &exec))
+			break;
 		//expand_args(data, cmd);
 		data->status = exec_cmd(data, cmd, &exec, !(current->next));
 		exec.child_pids[i++] = exec.pid;
@@ -55,6 +59,7 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	}
 	wait_child(data, exec.child_pids, child_count);
 	ft_lstclear(waitlist, NULL);
+	// ft_lstclear(waitlist, free);
 	*waitlist = NULL;
 	if (data->exec_debug)
 		printf("-- done executing --\n");
@@ -79,25 +84,17 @@ void	execute_ast(t_data *data, t_tree_node *root, t_tree_node *previous,
 		if (data->exec_debug)
 			printf("\n");
 	}
-	else if (root->type == NODE_AND)
-	{
-		if (data->exec_debug)
-			printf("AND\n");
-	}
-	else if (root->type == NODE_OR)
-		if (data->exec_debug)
-			printf("OR\n");
 	if (previous)
 	{
 		if (previous->type == NODE_AND && data->status != 0)
 		{
 			printf("AND condition failed, clearing waitlist\n");
-			ft_lstclear(waitlist, NULL);
+			ft_lstclear(waitlist, &free);
 		}
 		else if (previous->type == NODE_OR && data->status == 0)
 		{
 			printf("OR condition succeeded, clearing waitlist\n");
-			ft_lstclear(waitlist, NULL);
+			ft_lstclear(waitlist, &free);
 		}
 	}
 	if (root->type == NODE_COMMAND)
@@ -109,7 +106,8 @@ void	execute_ast(t_data *data, t_tree_node *root, t_tree_node *previous,
 	else if (root->type == NODE_AND || root->type == NODE_OR)
 	{
 		printf("Logical operator found, executing current waitlist\n");
-		execute_waitlist(waitlist, data);
+			execute_waitlist(waitlist, data);
+		printf("last status -> %d\n", data->status);
 	}
 	execute_ast(data, root->right, root, waitlist);
 }
