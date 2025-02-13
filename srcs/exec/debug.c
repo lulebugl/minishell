@@ -23,9 +23,9 @@ void	debug_cmd(t_data *data, t_command *cmd)
 		return ;
 	if (ft_strcmp(cmd->arg_lst->content, "token") == 0)
 		data->print_token ^= 1;
-	if (ft_strncmp(cmd->arg_lst->content, "exit", 5) == 0)
-		// this segfaul `return (data_free(data), exit(0), 0);`
-		exit(0);
+	// if (ft_strncmp(cmd->arg_lst->content, "exit", 5) == 0)
+	// 	// this segfaul `return (data_free(data), exit(0), 0);`
+	// 	exit(0);
 	if (ft_strcmp(cmd->arg_lst->content, "ast") == 0)
 		data->print_ast ^= 1;
 	if (ft_strcmp(cmd->arg_lst->content, "debug") == 0)

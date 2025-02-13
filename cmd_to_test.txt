@@ -13,3 +13,5 @@ expr 2 + 2 <>test1.txt
 oefwfe > ||
 cd Documents | ls
 SHLVL
+env ls
+env test
