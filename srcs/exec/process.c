@@ -108,7 +108,7 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 		}
 		exec->child_pids[exec->id++] = exec->pid;
 	}
-	debug_cmd(data, cmd);
+	debug_cmd(data, cmd); // remove at the end
 	// remember to close fds
 	return (0);
 }

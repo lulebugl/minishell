@@ -19,14 +19,10 @@ void	init_exec(t_data *data, t_exec *exec, int child_count)
 	if (!exec->child_pids)
 		err_and_exit(data);
 	exec->fd_in = STDIN_FILENO;
-    exec->fd_out = STDOUT_FILENO;
-    exec->id = 0;
-    exec->pipe[0] = -1;
-    exec->pipe[1] = -1;
-    
-    // Save original stdin/stdout
-    // exec->stdin_backup = dup(STDIN_FILENO);
-    // exec->stdout_backup = dup(STDOUT_FILENO);
+	exec->fd_out = STDOUT_FILENO;
+	exec->id = 0;
+	exec->pipe[0] = -1;
+	exec->pipe[1] = -1;
 }
 
 void	wait_child(t_data *data, pid_t *child_pids, int child_count)
@@ -51,6 +47,23 @@ void	wait_child(t_data *data, pid_t *child_pids, int child_count)
 		printf("All children have terminated\n");
 }
 
+int	get_env_size(t_env *env)
+{
+	int		size;
+	t_env	*curr;
+
+	if (!env)
+		return (0);
+	curr = env;
+	size = 0;
+	while (curr)
+	{
+		curr = curr->next;
+		size++;
+	}
+	return (size);
+}
+
 /*
  * Function: t_env_to_envp
  * ----------------------------
@@ -62,15 +75,7 @@ char	**t_env_to_envp(t_env *env)
 	int		i;
 	t_env	*curr;
 
-	curr = env;
-	i = 1;
-	while (curr)
-	{
-		curr = curr->next;
-		i++;
-	}
-	envp = (char **)malloc(sizeof(char *) * i);
-	// ft_bzero(envp, (sizeof(char *) * i));
+	envp = (char **)malloc(sizeof(char *) * (get_env_size(env) + 1));
 	if (!envp)
 		return (NULL);
 	curr = env;
@@ -81,7 +86,6 @@ char	**t_env_to_envp(t_env *env)
 		if (!envp[i])
 			return (ft_free_tab(envp), NULL);
 		envp[i] = ft_strjoin_n_free(envp[i], curr->value);
-		// printf("%s\n", envp[i]);
 		if (!envp[i])
 			return (ft_free_tab(envp), NULL);
 		curr = curr->next;

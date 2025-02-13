@@ -13,22 +13,16 @@
 #include "exec.h"
 #include "minishell.h"
 
-int		expander_new(t_data *data, char **argv, int ac);
-void	wait_child(t_data *data, pid_t *child_pids, int child_count);
-void	init_exec(t_data *data, t_exec *exec, int child_count);
-int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last);
-
-// void	expand_args(t_data *data, t_command *cmd)
-// {
-// 	char	**av;
-
-// 	av = cmd->arg_lst;
-// 	if (expander_new(data, av, cmd->arg_count))
-// 		// probably a lot of leaks,	will need to rewrite it i think
-// 		err_and_exit(data);
-// }
-
-int	is_builtin(t_data *data, t_command *cmd, t_exec *exec);
+static void clear_waitlist(t_list **waitlist)
+{
+	if (waitlist && *waitlist)
+	{
+		if ((*waitlist)->next)
+			clear_waitlist(&(*waitlist)->next);
+		free(*waitlist);
+		*waitlist = NULL;
+	}
+}
 
 void	execute_waitlist(t_list **waitlist, t_data *data)
 {
@@ -36,13 +30,10 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	t_command	*cmd;
 	int			child_count;
 	t_exec		exec;
-	bool		last;
 	int			i;
 
 	if (!waitlist || !*waitlist)
 		return ;
-	if (data->exec_debug)
-		printf("-- starting executing waitlist --\n");
 	child_count = ft_lstsize(*waitlist);
 	init_exec(data, &exec, child_count);
 	current = *waitlist;
@@ -51,18 +42,15 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	{
 		cmd = current->content;
 		if (!current->next && is_builtin(data, cmd, &exec))
-			break;
-		//expand_args(data, cmd);
+			break ;
+		// expand_args(data, cmd);
 		data->status = exec_cmd(data, cmd, &exec, !(current->next));
 		exec.child_pids[i++] = exec.pid;
 		current = current->next;
 	}
 	wait_child(data, exec.child_pids, child_count);
-	ft_lstclear(waitlist, NULL);
-	// ft_lstclear(waitlist, free);
-	*waitlist = NULL;
-	if (data->exec_debug)
-		printf("-- done executing --\n");
+	free(exec.child_pids);
+	clear_waitlist(waitlist);
 }
 
 void	execute_ast(t_data *data, t_tree_node *root, t_tree_node *previous,
