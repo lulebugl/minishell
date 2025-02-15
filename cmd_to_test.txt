@@ -11,7 +11,6 @@ export TEST=~
 echo "test" | > test.txt
 expr 2 + 2 <>test1.txt
 oefwfe > ||
-cd Documents | ls
 SHLVL
 env ls
 env test
@@ -20,4 +19,4 @@ export TEST="ls -la"
 echo "'aa""aa'"
 echo "'aa" "aa'"
 ./t
-ls $test (non existent var)
+export test=-la
