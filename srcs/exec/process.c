@@ -12,11 +12,32 @@
 
 #include "minishell.h"
 
-static void	cmd_not_found(char *cmd)
+int	is_builtin(t_data *data, t_command *cmd)
 {
-	if (cmd)
-		ft_printf_fd(STDERR_FILENO, "minishell: %s: command not found\n", cmd);
-	exit(127);
+	char **argv;
+	
+	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content)
+		return (0);
+	argv = get_cmd_args_arr(cmd);
+	if (!argv)
+		return (0);
+	if (ft_strcmp(cmd->arg_lst->content, "exit") == 0)
+		data->status = ft_exit(data, argv);
+	else if (ft_strcmp(cmd->arg_lst->content, "pwd") == 0)
+		data->status = ft_pwd();
+	else if (ft_strcmp(cmd->arg_lst->content, "cd") == 0)
+		data->status = ft_cd(data->env, argv);
+	else if (ft_strcmp(cmd->arg_lst->content, "env") == 0)
+		data->status = ft_env(data->env);
+	else if (ft_strcmp(cmd->arg_lst->content, "echo") == 0)
+		data->status = ft_echo(argv);
+	else if (ft_strcmp(cmd->arg_lst->content, "export") == 0)
+		data->status = ft_export(data->env, argv);
+	else if (ft_strcmp(cmd->arg_lst->content, "unset") == 0)
+		data->status = ft_unset(data->env, argv);
+	else
+		return (ft_free_tab(argv), 0);
+	return (ft_free_tab(argv), 1);
 }
 
 void	dup_fds(t_data *data, t_exec *exec, bool last)
@@ -27,34 +48,12 @@ void	dup_fds(t_data *data, t_exec *exec, bool last)
 			err_and_exit(data);
 		close(exec->fd_in);
 	}
-	if (!last && exec->pipe[1] != STDOUT_FILENO)
+	if (!last) // Remove the exec->pipe[1] != STDOUT_FILENO check
 	{
 		if (dup2(exec->pipe[1], STDOUT_FILENO) == -1)
 			err_and_exit(data);
+		close(exec->pipe[1]); // Add this to close the pipe after duplication
 	}
-}
-
-int	is_builtin(t_data *data, t_command *cmd)
-{
-	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content)
-		return (-1);
-	if (ft_strcmp(cmd->arg_lst->content, "exit") == 0)
-		data->status = ft_exit(data, get_cmd_args_arr(cmd));
-	else if (ft_strcmp(cmd->arg_lst->content, "pwd") == 0)
-		data->status = ft_pwd();
-	else if (ft_strcmp(cmd->arg_lst->content, "cd") == 0)
-		data->status = ft_cd(data->env, get_cmd_args_arr(cmd));
-	else if (ft_strcmp(cmd->arg_lst->content, "env") == 0)
-		data->status = ft_env(data->env);
-	else if (ft_strcmp(cmd->arg_lst->content, "echo") == 0)
-		data->status = ft_echo(get_cmd_args_arr(cmd));
-	else if (ft_strcmp(cmd->arg_lst->content, "export") == 0)
-		data->status = ft_export(data->env, get_cmd_args_arr(cmd));
-	else if (ft_strcmp(cmd->arg_lst->content, "unset") == 0)
-		data->status = ft_unset(data->env, get_cmd_args_arr(cmd));
-	else
-		return (0);
-	return (1);
 }
 
 void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
@@ -70,9 +69,9 @@ void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
 		close(exec->pipe[1]);
 	if (is_builtin(data, cmd))
 		ft_exit(data, NULL);
-	cmd_path = get_path(cmd->arg_lst->content, data->env);
+	cmd_path = get_path(data, cmd->arg_lst->content, data->env);
 	if (!cmd_path)
-		cmd_not_found(cmd->arg_lst->content);
+		cmd_path = try_relative(data, cmd->arg_lst->content);
 	envp = t_env_to_envp(data->env);
 	if (!envp)
 	{
@@ -112,3 +111,4 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 	// remember to close fds
 	return (0);
 }
+

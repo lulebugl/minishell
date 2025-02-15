@@ -12,7 +12,29 @@
 
 #include "minishell.h"
 
-static char	*try_path(char *str, char *env)
+char	*try_relative(t_data *data, char *str)
+{
+	char	*valid_path;
+
+	valid_path = ft_strjoin("./", str);
+	if (!valid_path)
+		return (err_and_exit(data), NULL);
+	if (access(valid_path, F_OK) == -1)
+	{
+		free(valid_path);
+		ft_printf_fd(STDERR_FILENO, "minishell: %s: command not found\n", str);
+		exit(127);
+	}
+	if (access(valid_path, X_OK) == -1)
+	{
+		free(valid_path);
+		ft_printf_fd(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
+		exit(126);
+	}
+	return (valid_path);
+}
+
+static char	*try_path(t_data *data, char *str, char *env)
 {
 	int		i;
 	char	**path;
@@ -23,13 +45,11 @@ static char	*try_path(char *str, char *env)
 	valid_path = NULL;
 	path = ft_split(env, ':');
 	if (!path)
-		return (NULL);
+		return (err_and_exit(data), NULL);
 	while (path[++i])
 	{
 		tmp = ft_strjoin(path[i], "/");
 		valid_path = ft_strjoin_n_free(tmp, str);
-		if (!valid_path)
-			return (ft_free_tab(path), NULL);
 		if (access(valid_path, F_OK) == 0)
 			break ;
 		free(valid_path);
@@ -39,7 +59,7 @@ static char	*try_path(char *str, char *env)
 	return (valid_path);
 }
 
-char	*get_path(char *str, t_env *env)
+char	*get_path(t_data *data, char *str, t_env *env)
 {
 	int		i;
 	t_env	*curr;
@@ -51,8 +71,9 @@ char	*get_path(char *str, t_env *env)
 	while (curr)
 	{
 		if (curr->key && ft_strncmp(curr->key, "PATH", 4) == 0)
-			return (try_path(str, curr->value));
+			return (try_path(data, str, curr->value));
 		curr = curr->next;
 	}
 	return (NULL);
 }
+

@@ -29,6 +29,7 @@ void	test_arg_input(const char *input, t_data *data);
 void	print_tokens_formatted(t_token *tokens);
 void	debug_cmd(t_data *data, t_command *cmd);
 int		debug_expander(t_command *cmd);
+int		exec_debug(t_data *data);
 
 #endif
 

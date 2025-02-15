@@ -15,6 +15,9 @@ cd Documents | ls
 SHLVL
 env ls
 env test
-./minishell in minishell
 exit display "exit" when exiting
 export TEST="ls -la"
+echo "'aa""aa'"
+echo "'aa" "aa'"
+./t
+ls $test (non existent var)

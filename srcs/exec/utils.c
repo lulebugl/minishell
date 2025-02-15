@@ -18,6 +18,7 @@ void	init_exec(t_data *data, t_exec *exec, int child_count)
 	exec->child_pids = malloc(sizeof(pid_t) * child_count);
 	if (!exec->child_pids)
 		err_and_exit(data);
+	ft_memset(exec->child_pids, 0, sizeof(int) * child_count);
 	exec->fd_in = STDIN_FILENO;
 	exec->fd_out = STDOUT_FILENO;
 	exec->id = 0;
@@ -29,21 +30,24 @@ int	wait_child(pid_t *child_pids, int child_count)
 {
 	int	i;
 	int	status;
-
+	int last_status;
+	
 	i = 0;
+	last_status = 0;
 	while (i < child_count)
 	{
 		if (child_pids[i] > 0)
 		{
 			waitpid(child_pids[i], &status, 0);
 			if (WIFEXITED(status))
-				return (WEXITSTATUS(status));
+				last_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
-				return (128 + WTERMSIG(status));
+				last_status = 128 + WTERMSIG(status);
 		}
 		i++;
 	}
-	return (0);
+	free(child_pids);
+	return (last_status);
 }
 
 int	get_env_size(t_env *env)

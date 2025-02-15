@@ -49,7 +49,6 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 		current = current->next;
 	}
 	data->exit_code = wait_child(exec.child_pids, child_count);
-	free(exec.child_pids);
 	clear_waitlist(waitlist);
 }
 

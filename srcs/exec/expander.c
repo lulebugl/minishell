@@ -96,27 +96,50 @@ int	expand_arg_recursive(t_data *data, t_list *args, bool expand)
 	return (0);
 }
 
+void    del_empty_args(t_list **head)
+{
+    t_list  **curr;
+    t_list  *tmp;
+
+    curr = head;
+    while (*curr)
+    {
+        if (((char *)(*curr)->content)[0] == '\0')
+        {
+            tmp = *curr;
+            *curr = (*curr)->next;
+            free(tmp->content);
+            free(tmp);
+        }
+        else
+            curr = &(*curr)->next;
+    }
+}
+
 int	expand_args(t_data *data, t_command *cmd)
 {
 	bool	expand;
-	t_list	*arg;
-
-	arg = cmd->arg_lst;
-	while (arg)
+	t_list	*args;
+	char	*arg;
+	
+	args = cmd->arg_lst;
+	while (args)
 	{
-		if (arg->content)
+		arg = args->content;
+		if (args->content)
 		{
 			expand = true;
-			arg->content = remove_quotes((char *)arg->content, &expand);
-			if (!arg->content)
+			args->content = remove_quotes(arg, &expand);
+			if (!args->content)
 				return (1);
-			if (expand_tilde(data, arg, expand))
+			if (expand_tilde(data, args, expand))
 				return (1);
-			if (expand_arg_recursive(data, arg, expand))
+			if (expand_arg_recursive(data, args, expand))
 				return (1);
 		}
-		arg = arg->next;
+		args = args->next;
 	}
-	debug_expander(cmd);
+	del_empty_args(&cmd->arg_lst);
+	//debug_expander(cmd);
 	return (0);
 }

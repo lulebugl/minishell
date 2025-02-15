@@ -16,6 +16,9 @@
 
 int	exec_prompt(const char *prompt, t_data *data)
 {
+    t_tree_node *ast;
+	t_token		*token_head;
+	
 	if (ft_strncmp(prompt, "exit", 5) == 0)
 		return (data_free(data), exit(0), 0);
 	if (ft_strcmp((char*)prompt, "token") == 0)
@@ -27,10 +30,6 @@ int	exec_prompt(const char *prompt, t_data *data)
 	data->status = validate_prompt(data->tokens);
 	if (data->status)
 		return (clear_tokens(&data->tokens), 1);
-
-	/* Parse tokens into AST */
-    t_tree_node *ast;
-	t_token		*token_head;
 
 	token_head = data->tokens;
 	if (!data->tokens)
@@ -44,10 +43,6 @@ int	exec_prompt(const char *prompt, t_data *data)
     printf("AST Structure:\n");
     print_ast(ast, 0);
 	printf("\n");
-    /* end */
-
-  //   if (expander(data))
-		// err_and_exit(data);
 	if (data->print_token)
 		print_tokens_formatted(data->tokens);
 	clear_tokens(&data->tokens);
