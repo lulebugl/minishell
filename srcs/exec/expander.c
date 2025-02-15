@@ -12,37 +12,113 @@
 
 #include "minishell.h"
 
-// staticc int	expander(t_data *data)
-// {
-// 	bool	expand;
-// 	t_token	*token;
+static int	handle_exit_status(t_data *data, t_list *arg, int *i)
+{
+	char	*value;
+	int		start;
 
-// 	token = data->tokens;
-// 	while (token)
-// 	{
-// 		if (token->content)
-// 		{
-// 			expand = true;
-// 			token->content = remove_quotes(token->content, &expand);
-// 			if (!token->content)
-// 				return (1);
-// 			if (expand_token_recursive(data, token, expand))
-// 				return (1);
-// 			if (expand_tilde(data, token, expand))
-// 				return (1);
-// 		}
-// 		token = token->next;
-// 	}
-// 	return (0);
-// }
+	start = ++(*i);
+	value = ft_itoa(data->exit_code);
+	if (!value)
+		return (1);
+	arg->content = replace_key((char *)arg->content, value, start, 2);
+	free(value);
+	if (!arg->content)
+		return (1);
+	return (0);
+}
+
+static int	handle_env_value(t_list *arg, char *value, char *key, int start)
+{
+	if (!value)
+	{
+		if (errno)
+			return (1);
+		arg->content = replace_key((char*)arg->content, "", start, ft_strlen(key));
+		if (!arg->content)
+			return (1);
+		return (0);
+	}
+	arg->content = replace_key((char*)arg->content, value, start, ft_strlen(key));
+	if (!arg->content)
+		return (1);
+	return (0);
+}
+
+static int	handle_env_var(t_list *arg_node, t_env *env, int *i)
+{
+	char	*key;
+	char	*value;
+	int		start;
+	char 	*arg;
+
+	start = ++(*i);
+	arg = (char *)arg_node->content;
+	while ((ft_isalnum((int)arg[*i]) || arg[*i] == '_')
+		&& arg[*i] != '\"')
+		(*i)++;
+	key = ft_strndup(arg_node->content + start, *i - start);
+	if (!key)
+		return (1);
+	value = env_get_value(env, key);
+	if (handle_env_value(arg_node, value, key, start))
+		return (free(key), 1);
+	free(key);
+	return (0);
+}
+
+int	expand_arg_recursive(t_data *data, t_list *args, bool expand)
+{
+	int	i;
+	char *arg;
+	
+	arg = (char *)args->content;
+	i = 0;
+	if (!arg)
+		return (1);
+	while (arg[i] && arg[i] != '$')
+		i++;
+	if (arg[i] == '$' && arg[i + 1] && arg[i
+			+ 1] == '?' && expand)
+	{
+		if (handle_exit_status(data, args, &i))
+			return (1);
+		return (expand_arg_recursive(data, args, expand));
+	}
+	else if (arg[i] && arg[i + 1] && arg[i] == '$' && expand)
+	{
+		if (handle_env_var(args, data->env, &i))
+			return (1);
+		return (expand_arg_recursive(data, args, expand));
+	}
+	if (arg[i] && arg[i + 1] != '\0' && expand)
+		return (expand_arg_recursive(data, args, expand));
+	return (0);
+}
 
 
-// void	expand_args(t_data *data, t_command *cmd)
-// {
-// 	t_list	*tmp;
+int	expand_args(t_data *data, t_command *cmd)
+{
+	bool	expand;
+	t_list	*arg;
 
-// 	tmp = cmd->arg_lst;
-// 	if (expander_new(data, tmp, cmd->arg_count))
-// 		// probably a lot of leaks,	will need to rewrite it i think
-// 		err_and_exit(data);
-// }
+	arg = cmd->arg_lst;
+	while (arg)
+	{
+		if (arg->content)
+		{
+			expand = true;
+			arg->content = remove_quotes((char *)arg->content, &expand);
+			if (!arg->content)
+				return (1);
+			if (expand_tilde(data, arg, expand))
+				return (1);
+			if (expand_arg_recursive(data, arg, expand))
+				return (1);
+		}
+		arg = arg->next;
+	}
+	debug_expander(cmd);
+	return (0);
+}
+

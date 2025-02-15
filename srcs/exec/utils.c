@@ -25,7 +25,7 @@ void	init_exec(t_data *data, t_exec *exec, int child_count)
 	exec->pipe[1] = -1;
 }
 
-void	wait_child(t_data *data, pid_t *child_pids, int child_count)
+int	wait_child(t_data *data, pid_t *child_pids, int child_count)
 {
 	int	i;
 	int	status;
@@ -37,14 +37,13 @@ void	wait_child(t_data *data, pid_t *child_pids, int child_count)
 		{
 			waitpid(child_pids[i], &status, 0);
 			if (WIFEXITED(status))
-				data->status = WEXITSTATUS(status);
+				return (WEXITSTATUS(status));
 			else if (WIFSIGNALED(status))
-				data->status = 128 + WTERMSIG(status);
+				return (128 + WTERMSIG(status));
 		}
 		i++;
 	}
-	if (data->exec_debug)
-		printf("All children have terminated\n");
+	return (0);
 }
 
 int	get_env_size(t_env *env)

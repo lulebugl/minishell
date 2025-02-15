@@ -13,8 +13,8 @@
 #ifndef DEBUG_H
 # define DEBUG_H
 
-# include <assert.h>
 # include "structures.h"
+# include <assert.h>
 
 # define COLOR_RESET "\x1b[0m"
 # define COLOR_WORD "\e[0;35m"        // Light blue
@@ -25,10 +25,10 @@
 # define COLOR_PAR "\e[0;32m"
 # define COLOR_SPECIAL "\x1b[38;5;159m" // Cyan
 
-
-void						test_arg_input(const char *input, t_data *data);
-void						print_tokens_formatted(t_token *tokens);
-void						debug_cmd(t_data *data, t_command *cmd);
+void	test_arg_input(const char *input, t_data *data);
+void	print_tokens_formatted(t_token *tokens);
+void	debug_cmd(t_data *data, t_command *cmd);
+int		debug_expander(t_command *cmd);
 
 #endif
 

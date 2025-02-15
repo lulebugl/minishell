@@ -88,12 +88,6 @@ void						env_update_key(t_env *env, char *key, char *value);
 char						*env_key_from_str(char *str);
 char						*env_value_from_str(char *str);
 
-// EXPANDER
-
-int							expander(t_data *data);
-int							expand_tilde(t_data *data, t_token *token,
-								bool expand);
-
 // ERROR
 
 void						msg_unexpected_token(char *str);

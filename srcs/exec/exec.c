@@ -24,6 +24,8 @@ static void clear_waitlist(t_list **waitlist)
 	}
 }
 
+int	expand_args(t_data *data, t_command *cmd);
+
 void	execute_waitlist(t_list **waitlist, t_data *data)
 {
 	t_list		*current;
@@ -41,14 +43,14 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	while (current)
 	{
 		cmd = current->content;
+		expand_args(data, cmd);
 		if (!current->next && is_builtin(data, cmd, &exec))
 			break ;
-		// expand_args(data, cmd);
 		data->status = exec_cmd(data, cmd, &exec, !(current->next));
 		exec.child_pids[i++] = exec.pid;
 		current = current->next;
 	}
-	wait_child(data, exec.child_pids, child_count);
+	data->exit_code = wait_child(data, exec.child_pids, child_count);
 	free(exec.child_pids);
 	clear_waitlist(waitlist);
 }

@@ -14,6 +14,21 @@
 #include "exec.h"
 #include "minishell.h"
 
+int	debug_expander(t_command *cmd)
+{
+	t_list	*arg;
+
+	arg = cmd->arg_lst;
+	printf("-- After expander --\n");
+	while (arg)
+	{
+		printf(" [%s] ", (char *)arg->content);
+		arg = arg->next;
+	}
+	printf("\n---------------\n");
+	return (0);
+}
+
 void	debug_cmd(t_data *data, t_command *cmd)
 {
 	int	i;

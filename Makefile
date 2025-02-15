@@ -70,10 +70,9 @@ SRC		= 	main.c \
 			exec/path.c \
 			exec/process.c \
 			exec/expander.c \
+			exec/expander_utils.c \
 			misc/signal.c \
 			misc/error.c \
-			misc/expander.c \
-			misc/expander_utils.c \
 			misc/env_utils.c \
 			misc/env_utils2.c \
 			misc/free.c \

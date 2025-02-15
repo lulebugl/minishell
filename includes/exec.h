@@ -23,11 +23,17 @@ int		exec_debug(t_data *data);
 int		is_builtin(t_data *data, t_command *cmd, t_exec *exec);
 
 int		expander_new(t_data *data, char **argv, int ac);
-void	wait_child(t_data *data, pid_t *child_pids, int child_count);
+int		wait_child(t_data *data, pid_t *child_pids, int child_count);
 void	init_exec(t_data *data, t_exec *exec, int child_count);
 int		exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last);
-
+int		expand_args(t_data *data, t_command *cmd);
 char	*get_path(char *str, t_env *env);
+
+/* expander utils */
+
+char	*replace_key(char *str, char *replace, int start, int key_len);
+char	*remove_quotes(char *str, bool *expand);
+int		expand_tilde(t_data *data, t_list *arg, bool expand);
 
 #endif
 

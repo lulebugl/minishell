@@ -102,6 +102,7 @@ typedef struct s_data
 	t_token					*tokens;
 	t_tree_node				*ast;
 	int						status;
+	int						exit_code;
 	bool					print_token;
 	bool					print_ast;
 	bool					exec_debug;

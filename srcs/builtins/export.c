@@ -124,8 +124,8 @@ int	ft_export(t_env *env, char **args)
 		else if (!env_var_is_valid(args[i]))
 		{
 			err = 1;
-			ft_printf_fd(2, "\
-			minishell: export: \'%s\' : not a valid identifier\n", args[i]);
+			ft_printf_fd(2, 
+				"minishell: export: \'%s\' : not a valid identifier\n", args[i]);
 		}
 		i++;
 	}
