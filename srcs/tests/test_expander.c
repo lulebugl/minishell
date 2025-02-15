@@ -28,8 +28,8 @@ int	exec_prompt(const char *prompt, t_data *data)
 	data->status = validate_prompt(data, data->tokens);
 	if (data->status)
 		return (clear_tokens(&data->tokens), 1);
-	if (expander(data))
-		err_and_exit(data);
+	// if (expander(data))
+	// 	err_and_exit(data);
 	if (data->print_token)
 		print_tokens_formatted(data->tokens);
 	clear_tokens(&data->tokens);

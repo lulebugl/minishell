@@ -46,8 +46,8 @@ int	exec_prompt(const char *prompt, t_data *data)
 	printf("\n");
     /* end */
 
-    if (expander(data))
-		err_and_exit(data);
+  //   if (expander(data))
+		// err_and_exit(data);
 	if (data->print_token)
 		print_tokens_formatted(data->tokens);
 	clear_tokens(&data->tokens);

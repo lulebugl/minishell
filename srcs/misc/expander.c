@@ -96,26 +96,26 @@ int	expand_token_recursive(t_data *data, t_token *token, bool expand)
 	return (0);
 }
 
-int	expander(t_data *data)
-{
-	bool	expand;
-	t_token	*token;
+// int	expander(t_data *data)
+// {
+// 	bool	expand;
+// 	t_token	*token;
 
-	token = data->tokens;
-	while (token)
-	{
-		if (token->content)
-		{
-			expand = true;
-			token->content = remove_quotes(token->content, &expand);
-			if (!token->content)
-				return (1);
-			if (expand_token_recursive(data, token, expand))
-				return (1);
-			if (expand_tilde(data, token, expand))
-				return (1);
-		}
-		token = token->next;
-	}
-	return (0);
-}
+// 	token = data->tokens;
+// 	while (token)
+// 	{
+// 		if (token->content)
+// 		{
+// 			expand = true;
+// 			token->content = remove_quotes(token->content, &expand);
+// 			if (!token->content)
+// 				return (1);
+// 			if (expand_token_recursive(data, token, expand))
+// 				return (1);
+// 			if (expand_tilde(data, token, expand))
+// 				return (1);
+// 		}
+// 		token = token->next;
+// 	}
+// 	return (0);
+// }
