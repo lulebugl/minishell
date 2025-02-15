@@ -34,12 +34,14 @@ static int	handle_env_value(t_list *arg, char *value, char *key, int start)
 	{
 		if (errno)
 			return (1);
-		arg->content = replace_key((char*)arg->content, "", start, ft_strlen(key));
+		arg->content = replace_key((char *)arg->content, "", start,
+				ft_strlen(key));
 		if (!arg->content)
 			return (1);
 		return (0);
 	}
-	arg->content = replace_key((char*)arg->content, value, start, ft_strlen(key));
+	arg->content = replace_key((char *)arg->content, value, start,
+			ft_strlen(key));
 	if (!arg->content)
 		return (1);
 	return (0);
@@ -50,12 +52,11 @@ static int	handle_env_var(t_list *arg_node, t_env *env, int *i)
 	char	*key;
 	char	*value;
 	int		start;
-	char 	*arg;
+	char	*arg;
 
 	start = ++(*i);
 	arg = (char *)arg_node->content;
-	while ((ft_isalnum((int)arg[*i]) || arg[*i] == '_')
-		&& arg[*i] != '\"')
+	while ((ft_isalnum((int)arg[*i]) || arg[*i] == '_') && arg[*i] != '\"')
 		(*i)++;
 	key = ft_strndup(arg_node->content + start, *i - start);
 	if (!key)
@@ -69,17 +70,16 @@ static int	handle_env_var(t_list *arg_node, t_env *env, int *i)
 
 int	expand_arg_recursive(t_data *data, t_list *args, bool expand)
 {
-	int	i;
-	char *arg;
-	
+	int		i;
+	char	*arg;
+
 	arg = (char *)args->content;
 	i = 0;
 	if (!arg)
 		return (1);
 	while (arg[i] && arg[i] != '$')
 		i++;
-	if (arg[i] == '$' && arg[i + 1] && arg[i
-			+ 1] == '?' && expand)
+	if (arg[i] == '$' && arg[i + 1] && arg[i + 1] == '?' && expand)
 	{
 		if (handle_exit_status(data, args, &i))
 			return (1);
@@ -95,7 +95,6 @@ int	expand_arg_recursive(t_data *data, t_list *args, bool expand)
 		return (expand_arg_recursive(data, args, expand));
 	return (0);
 }
-
 
 int	expand_args(t_data *data, t_command *cmd)
 {
@@ -121,4 +120,3 @@ int	expand_args(t_data *data, t_command *cmd)
 	debug_expander(cmd);
 	return (0);
 }
-

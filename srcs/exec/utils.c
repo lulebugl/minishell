@@ -93,4 +93,3 @@ char	**t_env_to_envp(t_env *env)
 	envp[i] = NULL;
 	return (envp);
 }
-

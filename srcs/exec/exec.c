@@ -13,7 +13,7 @@
 #include "exec.h"
 #include "minishell.h"
 
-static void clear_waitlist(t_list **waitlist)
+static void	clear_waitlist(t_list **waitlist)
 {
 	if (waitlist && *waitlist)
 	{
@@ -53,8 +53,7 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	clear_waitlist(waitlist);
 }
 
-void	execute_ast(t_data *data, t_tree_node *root,
-		t_list **waitlist)
+void	execute_ast(t_data *data, t_tree_node *root, t_list **waitlist)
 {
 	if (!root)
 		return ;

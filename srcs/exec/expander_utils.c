@@ -16,19 +16,19 @@
  * Function: expand_tilde
  * ----------------------------
  *	if the token's first character is a tilde ('~') and is the only character or
- *	the next character is '/', replace the tilde with the $HOME variable. 
+ *	the next character is '/', replace the tilde with the $HOME variable.
  *	returns 0 if successful or conditions not met, and 1 on error
  */
 int	expand_tilde(t_data *data, t_list *arg, bool expand)
 {
 	char	*value;
 	char	*content;
-	
+
 	content = (char *)arg->content;
 	if (!expand || !arg || !content || !content[0])
 		return (0);
-	if (content[0] != '~' || (content[0] == '~'
-			&& content[1] && content[1] != '/'))
+	if (content[0] != '~' || (content[0] == '~' && content[1]
+			&& content[1] != '/'))
 		return (0);
 	value = env_get_value(data->env, "HOME");
 	if (!value)
@@ -105,5 +105,4 @@ char	*replace_key(char *str, char *replace, int start, int key_len)
 	free(end);
 	free(str);
 	return (expanded);
-	
 }

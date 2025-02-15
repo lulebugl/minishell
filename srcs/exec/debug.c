@@ -32,6 +32,7 @@ int	debug_expander(t_command *cmd)
 void	debug_cmd(t_data *data, t_command *cmd)
 {
 	int	i;
+	t_list *tmp;
 
 	i = -1;
 	if (!cmd || !cmd->arg_lst || cmd->arg_count == 0)
@@ -46,7 +47,6 @@ void	debug_cmd(t_data *data, t_command *cmd)
 	{
 		for (int i = 0; i < cmd->arg_count; i++)
 		{
-			t_list *tmp;
 			tmp = cmd->arg_lst;
 			while (tmp)
 			{
@@ -57,3 +57,4 @@ void	debug_cmd(t_data *data, t_command *cmd)
 		printf("\n");
 	}
 }
+

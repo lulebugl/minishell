@@ -112,4 +112,3 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 	// remember to close fds
 	return (0);
 }
-
