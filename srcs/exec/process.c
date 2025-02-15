@@ -34,7 +34,7 @@ void	dup_fds(t_data *data, t_exec *exec, bool last)
 	}
 }
 
-int	is_builtin(t_data *data, t_command *cmd, t_exec *exec)
+int	is_builtin(t_data *data, t_command *cmd)
 {
 	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content)
 		return (-1);
@@ -68,7 +68,7 @@ void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
 		close(exec->pipe[0]);
 	if (exec->pipe[1] != -1)
 		close(exec->pipe[1]);
-	if (is_builtin(data, cmd, exec))
+	if (is_builtin(data, cmd))
 		ft_exit(data, NULL);
 	cmd_path = get_path(cmd->arg_lst->content, data->env);
 	if (!cmd_path)

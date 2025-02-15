@@ -24,7 +24,7 @@ RESET	=\033[0m
 # Compiler and compilation flags
 CC		= cc
 # CFLAGS	= -Werror -Wextra -Wall -gdwarf-4 -g
-CFLAGS	=
+CFLAGS	= -Wextra -Wall -gdwarf-4 -g
 VALGRIND =
 
 UNAME_S := $(shell uname -s)
@@ -32,12 +32,11 @@ ifeq ($(UNAME_S),Darwin)
     # macOS
     READLINE_LIB := -L/usr/local/opt/readline/lib
     READLINE_INC := -I/usr/local/opt/readline/include
-    CFLAGS	:= -I/usr/local/opt/readline/include
+    CFLAGS	+= -I/usr/local/opt/readline/include
     
 else
     READLINE_LIB := -lreadline
     READLINE_INC :=
-    CFLAGS	:=
     
 endif
 

@@ -281,6 +281,8 @@ int	main(int argc, char **argv, char **envp)
 	t_data	data;
 	t_token	*tokens;
 
+	(void)argc;
+	(void)argv;
 	ft_memset(&data, 0, sizeof(t_data));
 	if (argv[1] && ft_strcmp(argv[1], "debug") == 0)
 		launch_program(&data);

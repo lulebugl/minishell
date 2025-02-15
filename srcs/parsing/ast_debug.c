@@ -88,8 +88,6 @@ void  print_command(t_command *cmd)
 
 void print_ast (t_tree_node *root, int level)
 {
-  int i;
-
   if ( root == NULL ) {
     padding ( '\t', level );
     puts ( "~" );

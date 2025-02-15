@@ -24,8 +24,6 @@ static void clear_waitlist(t_list **waitlist)
 	}
 }
 
-int	expand_args(t_data *data, t_command *cmd);
-
 void	execute_waitlist(t_list **waitlist, t_data *data)
 {
 	t_list		*current;
@@ -44,23 +42,23 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	{
 		cmd = current->content;
 		expand_args(data, cmd);
-		if (!current->next && is_builtin(data, cmd, &exec))
+		if (!current->next && is_builtin(data, cmd))
 			break ;
 		data->status = exec_cmd(data, cmd, &exec, !(current->next));
 		exec.child_pids[i++] = exec.pid;
 		current = current->next;
 	}
-	data->exit_code = wait_child(data, exec.child_pids, child_count);
+	data->exit_code = wait_child(exec.child_pids, child_count);
 	free(exec.child_pids);
 	clear_waitlist(waitlist);
 }
 
-void	execute_ast(t_data *data, t_tree_node *root, t_tree_node *previous,
+void	execute_ast(t_data *data, t_tree_node *root,
 		t_list **waitlist)
 {
 	if (!root)
 		return ;
-	execute_ast(data, root->left, root, waitlist);
+	execute_ast(data, root->left, waitlist);
 	if (root->type == NODE_COMMAND)
 		ft_lstadd_back(waitlist, ft_lstnew(root->cmd));
 	else if (root->type == NODE_AND || root->type == NODE_OR)
@@ -71,7 +69,7 @@ void	execute_ast(t_data *data, t_tree_node *root, t_tree_node *previous,
 		if (root->type == NODE_OR && data->status == 0)
 			return ;
 	}
-	execute_ast(data, root->right, root, waitlist);
+	execute_ast(data, root->right, waitlist);
 }
 
 int	exec(t_data *data)
@@ -81,7 +79,7 @@ int	exec(t_data *data)
 
 	root = data->ast;
 	waitlist = NULL;
-	execute_ast(data, data->ast, NULL, &waitlist);
+	execute_ast(data, data->ast, &waitlist);
 	if (waitlist)
 		execute_waitlist(&waitlist, data);
 	return (0);

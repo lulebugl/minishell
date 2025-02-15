@@ -25,7 +25,7 @@ void	init_exec(t_data *data, t_exec *exec, int child_count)
 	exec->pipe[1] = -1;
 }
 
-int	wait_child(t_data *data, pid_t *child_pids, int child_count)
+int	wait_child(pid_t *child_pids, int child_count)
 {
 	int	i;
 	int	status;

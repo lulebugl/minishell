@@ -15,8 +15,6 @@
 
 void	free_redirections(t_redirection *root)
 {
-	t_redirection	*tmp;
-
 	if (!root)
 		return ;
 	if (root->next)

@@ -16,3 +16,5 @@ SHLVL
 env ls
 env test
 ./minishell in minishell
+exit display "exit" when exiting
+export TEST="ls -la"

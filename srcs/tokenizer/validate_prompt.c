@@ -42,7 +42,7 @@ bool	has_balanced_parentheses(t_token *tokens)
 	return (count == -1);
 }
 
-int	validate_prompt(t_data *data, t_token *token)
+int	validate_prompt(t_token *token)
 {
 	t_token	*curr;
 

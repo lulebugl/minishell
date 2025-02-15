@@ -23,8 +23,7 @@ int	ft_pwd(void)
 {
 	char	curr[PATH_MAX];
 
-	getcwd(curr, PATH_MAX);
-	if (!curr)
+	if (!getcwd(curr, PATH_MAX))
 		return (ERROR);
 	printf("%s\n", curr);
 	return (SUCCESS);

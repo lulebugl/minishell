@@ -49,8 +49,6 @@ int	handle_word(const char *s, int *pos, t_token **tokens)
 int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 {
 	int		i;
-	int		pos;
-	char	*word;
 
 	i = 0;
 	while (s[i])
@@ -62,7 +60,7 @@ int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 		if (s[i] == '\'' || s[i] == '\"')
 			data->status = handle_quotes(s, &i, s[i], tokens);
 		else if (s[i] && (s[i] == '<' || s[i] == '>'))
-			data->status = handle_io(s, &i, s[i], tokens);
+			data->status = handle_io(s, &i, tokens);
 		else if (s[i] && (s[i] == '(' || s[i] == ')'))
 			data->status = handle_parenthesis(s, &i, tokens);
 		else if (s[i] && s[i + 1] && (s[i] == '&') && (s[i + 1] == '&'))

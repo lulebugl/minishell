@@ -27,7 +27,7 @@ int						tokenize_input(const char *s, t_token **tokens,
 void					msg_custom_err(char *msg, char *details);
 int						handle_quotes(const char *s, int *pos, char type,
 							t_token **tokens);
-int						handle_io(const char *s, int *pos, char type,
+int						handle_io(const char *s, int *pos,
 							t_token **tokens);
 int						handle_pipes(const char *s, int *pos, t_token **tokens,
 							t_data *data);
@@ -36,7 +36,7 @@ int						handle_parenthesis(const char *s, int *pos,
 int						handle_logical_and(const char *s, int *pos,
 							t_token **tokens);
 
-int						validate_prompt(t_data *data, t_token *token);
+int						validate_prompt(t_token *token);
 
 /* utils */
 int						add_token(t_token **tokens, const char *prompt,

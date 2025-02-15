@@ -21,23 +21,22 @@
  * 
  * 	Returns 1 if variable name is correct, otherwise 0.
  */
+// static int	env_var_key_is_valid(char *var)
+// {
+// 	int	i;
 
-static int	env_var_key_is_valid(char *var)
-{
-	int	i;
-
-	i = 0;
-	if (!ft_isalpha(var[i]) && var[i] != '_')
-		return (0);
-	i++;
-	while (var[i])
-	{
-		if (!ft_isalnum(var[i]) && var[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
-}
+// 	i = 0;
+// 	if (!ft_isalpha(var[i]) && var[i] != '_')
+// 		return (0);
+// 	i++;
+// 	while (var[i])
+// 	{
+// 		if (!ft_isalnum(var[i]) && var[i] != '_')
+// 			return (0);
+// 		i++;
+// 	}
+// 	return (1);
+// }
 
 /*
  * Function: remove_env_elem
