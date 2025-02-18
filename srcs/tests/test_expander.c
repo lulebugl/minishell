@@ -15,7 +15,7 @@
 int	exec_prompt(const char *prompt, t_data *data)
 {
 	t_token	*token_head;
-	
+
 	if (tokenize_input(prompt, &data->tokens, data))
 		return (clear_tokens(&data->tokens), 1);
 	data->status = validate_prompt(data->tokens);
@@ -41,9 +41,9 @@ int	launch_program(t_data *data)
 {
 	char	*rl;
 
-	init_signals();
 	while (true)
 	{
+		init_signals(0);
 		rl = readline(PROMPT);
 		if (!rl)
 			exit(1);
@@ -65,7 +65,6 @@ int	main(int argc, char **argv, char **envp)
 	data_free(&data);
 	return (0);
 }
-
 
 // typedef struct s_test_case
 // {
