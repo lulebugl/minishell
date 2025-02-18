@@ -94,6 +94,8 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 	exec->pid = fork();
 	if (exec->pid < 0)
 		err_and_exit(data);
+	if (exec->pid != 0)
+		init_signals(1);
 	if (exec->pid == 0)
 		child_process(data, cmd, exec, last);
 	else

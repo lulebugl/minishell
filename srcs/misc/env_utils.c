@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 22:23:44 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/13 21:27:11 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/17 12:18:30 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,23 +73,19 @@ char	*env_value_from_str(char *str)
 	return (ft_strdup(&str[i + 1]));
 }
 
-/*
- * Function: free_env
- * ----------------------------
- *	Free the list pointed by data->env
- */
-
-void	env_free(t_env *env)
+static void	env_update_shlvl(t_env **env)
 {
-	t_env	*tmp;
+	int		tmp;
 
-	while (env)
+	if (!env_key_exists(*env, "SHLVL"))
+		env_add_key(env, "SHLVL", "1");
+	else
 	{
-		tmp = env->next;
-		free(env->key);
-		free(env->value);
-		free(env);
-		env = tmp;
+		tmp = ft_atoi(env_get_value(*env,"SHLVL"));
+		if (tmp < 0)
+			env_update_key(*env, "SHLVL", "0");
+		else
+			env_update_key(*env, "SHLVL", ft_itoa(tmp + 1));
 	}
 }
 
@@ -110,10 +106,11 @@ void	env_init(t_env **env, char **env_arr)
 
 	if (!env_arr || !env_arr[0])
 	{
-		*env = env_create_elem(ft_strdup("SHLVL"), ft_strdup("1"));
+		*env = env_create_elem(ft_strdup("SHLVL"), ft_strdup("0"));
 		if (!env)
 			return ;
-		(*env)->next = env_create_elem("PWD", ft_strdup(getcwd(curr, PATH_MAX)));
+		(*env)->next = env_create_elem("PWD",
+				ft_strdup(getcwd(curr, PATH_MAX)));
 		return ;
 	}
 	i = 0;
@@ -123,4 +120,5 @@ void	env_init(t_env **env, char **env_arr)
 			env_value_from_str(env_arr[i]));
 		i++;
 	}
+	env_update_shlvl(env);
 }

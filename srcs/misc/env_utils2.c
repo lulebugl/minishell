@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:57:10 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/13 21:18:14 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/17 12:16:42 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,4 +101,24 @@ int	env_key_exists(t_env *env, char *key)
 		env = env->next;
 	}
 	return (0);
+}
+
+/*
+ * Function: free_env
+ * ----------------------------
+ *	Free the list pointed by data->env
+ */
+
+void	env_free(t_env *env)
+{
+	t_env	*tmp;
+
+	while (env)
+	{
+		tmp = env->next;
+		free(env->key);
+		free(env->value);
+		free(env);
+		env = tmp;
+	}
 }

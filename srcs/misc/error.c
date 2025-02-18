@@ -6,12 +6,11 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 20:56:06 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/30 22:39:59 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/17 12:17:50 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 void	err_and_exit(t_data *data)
 {
@@ -40,4 +39,3 @@ void	msg_custom_err(char *msg, char *details)
 	if (msg)
 		ft_printf_fd(STDERR_FILENO, msg);
 }
-

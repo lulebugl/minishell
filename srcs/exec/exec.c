@@ -6,7 +6,11 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:27:57 by llebugle          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/02/13 19:17:25 by maxweert         ###   ########.fr       */
+=======
+/*   Updated: 2025/02/17 12:31:21 by maxweert         ###   ########.fr       */
+>>>>>>> cd7fe61 (handeling signals)
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +54,7 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	}
 	data->exit_code = wait_child(exec.child_pids, child_count);
 	clear_waitlist(waitlist);
+
 }
 
 void	execute_ast(t_data *data, t_tree_node *root, t_list **waitlist)

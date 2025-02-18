@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:01:18 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/13 17:41:57 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/17 12:39:02 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ int	launch_program(t_data *data)
 {
 	char	*rl;
 
-	init_signals();
 	while (true)
 	{
+		init_signals(0);
 		rl = readline(PROMPT);
 		if (!rl)
 			exit(1);

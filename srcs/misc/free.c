@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:49:45 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/31 17:34:55 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/17 12:17:33 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,3 @@ void	free_str_arr(char **strs)
 	}
 	free(strs);
 }
-
