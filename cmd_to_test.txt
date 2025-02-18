@@ -20,3 +20,4 @@ echo "'aa""aa'"
 echo "'aa" "aa'"
 ./t
 export test=-la
+ls (wc -l)
