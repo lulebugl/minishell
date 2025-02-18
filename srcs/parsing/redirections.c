@@ -6,12 +6,11 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:49:25 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/31 17:34:34 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/18 19:07:02 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "ast.h"
 
 void	free_redirections(t_redirection *root)
 {
