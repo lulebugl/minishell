@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/18 16:40:22 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:58:55 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 # include "debug.h"
 # include "structures.h"
-# include "ast.h"
+# include "parser.h"
 # include "tokenizer.h"
 # include "exec.h"
 

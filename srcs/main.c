@@ -6,11 +6,10 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/17 12:41:55 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:59:16 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ast.h"
 #include "minishell.h"
 
 int	exec_prompt(const char *prompt, t_data *data)
@@ -36,7 +35,7 @@ int	launch_program(t_data *data)
 {
 	char	*rl;
 
-	init_signals(0);
+	init_signals();
 	while (true)
 	{
 		rl = readline(PROMPT);
