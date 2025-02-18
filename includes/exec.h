@@ -15,6 +15,9 @@
 
 # include "structures.h"
 
+# define  DOUBLE_QUOTE 34
+# define  SINGLE_QUOTE 39
+
 void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last);
 char	**t_env_to_envp(t_env *env);
 
@@ -36,10 +39,10 @@ int		expand_args(t_data *data, t_command *cmd);
 /* expander utils */
 
 char	*replace_key(char *str, char *replace, int start, int key_len);
-char	*remove_quotes(char *str, bool *expand);
+char	*remove_quotes(char *str, bool *expand, int *quoted);
 int		expand_tilde(t_data *data, t_list *arg, bool expand);
-void    del_empty_args(t_list **head, t_list *node_to_delete);
-int 	only_empty_arg(t_list *arg_node, t_env *env);
+int    del_empty_args(t_list **head, t_list *node_to_delete);
+int 	only_empty_arg(char *arg);
 
 #endif
 

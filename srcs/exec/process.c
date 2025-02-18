@@ -86,7 +86,7 @@ void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
 
 int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 {
-	if (!cmd)
+	if (!cmd || !cmd->arg_lst)
 		return (1);
 	if (!last)
 		if (pipe(exec->pipe) == -1)
