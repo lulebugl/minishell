@@ -47,7 +47,7 @@ static int	handle_env_value(t_list *arg, char *value, char *key, int start)
 	return (0);
 }
 
-static int	handle_env_var(t_list *arg_node, t_env *env, int *i)
+int	handle_env_var(t_list *arg_node, t_env *env, int *i)
 {
 	char	*key;
 	char	*value;
@@ -96,50 +96,39 @@ int	expand_arg_recursive(t_data *data, t_list *args, bool expand)
 	return (0);
 }
 
-void    del_empty_args(t_list **head)
-{
-    t_list  **curr;
-    t_list  *tmp;
-
-    curr = head;
-    while (*curr)
-    {
-        if (((char *)(*curr)->content)[0] == '\0')
-        {
-            tmp = *curr;
-            *curr = (*curr)->next;
-            free(tmp->content);
-            free(tmp);
-        }
-        else
-            curr = &(*curr)->next;
-    }
-}
-
 int	expand_args(t_data *data, t_command *cmd)
 {
 	bool	expand;
 	t_list	*args;
 	char	*arg;
-	
+
 	args = cmd->arg_lst;
 	while (args)
 	{
 		arg = args->content;
-		if (args->content)
+		if (arg)
 		{
 			expand = true;
+			if (only_empty_arg(args, data->env))
+			{
+				args = args->next;
+				continue ;
+			}
 			args->content = remove_quotes(arg, &expand);
-			if (!args->content)
+			// if (arg[0] && arg[0] == '\'')
+			// expand = false;
+			if (!arg)
 				return (1);
 			if (expand_tilde(data, args, expand))
 				return (1);
 			if (expand_arg_recursive(data, args, expand))
 				return (1);
+			del_empty_args(&cmd->arg_lst, args);
 		}
 		args = args->next;
 	}
-	del_empty_args(&cmd->arg_lst);
-	//debug_expander(cmd);
+	// del_empty_args(&cmd->arg_lst);
+	// debug_expander(cmd);
 	return (0);
 }
+

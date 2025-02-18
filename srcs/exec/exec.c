@@ -50,7 +50,6 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	}
 	data->exit_code = wait_child(exec.child_pids, child_count);
 	clear_waitlist(waitlist);
-
 }
 
 void	execute_ast(t_data *data, t_tree_node *root, t_list **waitlist)

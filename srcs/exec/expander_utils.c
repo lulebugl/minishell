@@ -106,3 +106,65 @@ char	*replace_key(char *str, char *replace, int start, int key_len)
 	free(str);
 	return (expanded);
 }
+
+int only_empty_arg(t_list *arg_node, t_env *env)
+{
+	// int i;
+	// char *s;
+	
+	// s = (char *)arg_node->content;
+	// i = 0;
+	// if (!s)
+	// 	return (0);
+	// if (s[i] == '$')
+	// {
+	// 	if (handle_env_var(arg_node, env, &i))
+	// 		return (1);
+	// }
+	// if ((char *)arg_node->content)
+	if (arg_node->content && (ft_strcmp(arg_node->content, "\"\"") == 0 || ft_strcmp(arg_node->content, "\'\'") == 0))
+		return (1);
+	return (0);
+}
+
+// void    del_empty_args(t_list **head)
+// {
+//     t_list  **curr;
+//     t_list  *tmp;
+
+//     curr = head;
+//     while (*curr)
+//     {
+//         if (((char *)(*curr)->content)[0] == '\0')
+//         {
+//             tmp = *curr;
+//             *curr = (*curr)->next;
+//             free(tmp->content);
+//             free(tmp);
+//         }
+//         else
+//             curr = &(*curr)->next;
+//     }
+// }
+
+void    del_empty_args(t_list **head, t_list *node_to_delete)
+{
+    t_list  **curr;
+    t_list  *tmp;
+
+    if (!head || !*head || !node_to_delete)
+        return;
+
+    curr = head;
+    while (*curr && *curr != node_to_delete)
+        curr = &(*curr)->next;
+    
+        // if (*curr && (ft_strcmp(((char *)(*curr)->content), "\"\"") == 0 || ft_strcmp(((char *)(*curr)->content), "\'\'") == 0))
+    if (*curr && (*curr)->content && ((char *)(*curr)->content)[0] == 0)
+    {
+        tmp = *curr;
+        *curr = (*curr)->next;
+        free(tmp->content);
+        free(tmp);
+    }
+}

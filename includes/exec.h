@@ -24,17 +24,22 @@ int		is_builtin(t_data *data, t_command *cmd);
 int		wait_child(pid_t *child_pids, int child_count);
 void	init_exec(t_data *data, t_exec *exec, int child_count);
 int		exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last);
-int		expand_args(t_data *data, t_command *cmd);
 char	*get_path(t_data *data, char *str, t_env *env);
 
 /* path */
-char *try_relative(t_data *data, char *str);
+char	*try_relative(t_data *data, char *str);
+
+/* expander */
+int		handle_env_var(t_list *arg_node, t_env *env, int *i);
+int		expand_args(t_data *data, t_command *cmd);
 
 /* expander utils */
 
 char	*replace_key(char *str, char *replace, int start, int key_len);
 char	*remove_quotes(char *str, bool *expand);
 int		expand_tilde(t_data *data, t_list *arg, bool expand);
+void    del_empty_args(t_list **head, t_list *node_to_delete);
+int 	only_empty_arg(t_list *arg_node, t_env *env);
 
 #endif
 
