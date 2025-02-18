@@ -57,13 +57,7 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 		exec.child_pids[i++] = exec.pid;
 		current = current->next;
 	}
-	//ignore_signals();
 	wait_child(data, exec.child_pids, child_count);
-	ft_lstclear(waitlist, NULL);
-	// ft_lstclear(waitlist, free);
-	*waitlist = NULL;
-	if (data->exec_debug)
-		printf("-- done executing --\n");
 }
 
 void	execute_ast(t_data *data, t_tree_node *root, t_tree_node *previous,
