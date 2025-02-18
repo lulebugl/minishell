@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <lucas.lebugle@student.s19.be>    +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/17 12:40:08 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:40:22 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void						reset_data(t_data *data);
 
 // SIGNALS
 
-void						init_signals(int pid);
+void						init_signals(void);
 
 // BUILTINS
 
