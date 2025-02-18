@@ -131,7 +131,7 @@ int	update_args(t_data *data, t_list *args)
 			new->next = next;
 			args = new;
 		}
-		if (arg[i] == ' ') // Only increment if we found a space
+		if (arg[i] == ' ')
 			i++;
 	}
 	free(arg);
@@ -181,3 +181,4 @@ int	expand_args(t_data *data, t_command *cmd)
 	cmd->arg_count = ft_lstsize(cmd->arg_lst);
 	return (0);
 }
+
