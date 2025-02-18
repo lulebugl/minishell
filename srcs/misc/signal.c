@@ -6,34 +6,44 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 19:19:54 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/16 17:22:51 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/18 14:50:41 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <termios.h>
 #include "minishell.h"
 
-void	sigint_handler(int signum)
+void	sigint_prompt_handler(int signum)
 {
 	(void)signum;
-	printf("\n");
-	rl_on_new_line();
+	write(1, "\n", 1);
 	rl_replace_line("", 0);
+	rl_on_new_line();
 	rl_redisplay();
 }
 
-static void	sigint_handler_process(int signum)
+void	sig_newline(int signum)
 {
 	(void)signum;
 	write(1, "\n", 1);
 }
 
-void	ignore_signals(void)
+void	init_signals(int pid)
 {
 	struct sigaction	act;
-
+	
 	ft_bzero(&act, sizeof(act));
-	act.sa_handler = &sigint_handler_process;
-	sigaction(SIGINT, &act, NULL);
-	act.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &act, NULL);
+	if (pid == 0)
+	{
+		act.sa_handler = &sigint_prompt_handler;
+		sigaction(SIGINT, &act, NULL);
+		act.sa_handler = SIG_IGN;
+		sigaction(SIGQUIT, &act, NULL);
+	}
+	if (pid == 1)
+	{
+		act.sa_handler = sig_newline;
+		sigaction(SIGINT, &act, NULL);
+		sigaction(SIGQUIT, &act, NULL);
+	}
 }

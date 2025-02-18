@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:27:57 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/16 16:21:17 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/17 12:31:21 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,13 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 		exec.child_pids[i++] = exec.pid;
 		current = current->next;
 	}
-	ignore_signals();
+	//ignore_signals();
 	wait_child(data, exec.child_pids, child_count);
 	ft_lstclear(waitlist, NULL);
 	// ft_lstclear(waitlist, free);
 	*waitlist = NULL;
 	if (data->exec_debug)
 		printf("-- done executing --\n");
-	init_signals();
 }
 
 void	execute_ast(t_data *data, t_tree_node *root, t_tree_node *previous,

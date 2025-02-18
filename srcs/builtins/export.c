@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 03:32:02 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/13 17:55:17 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/18 14:35:43 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static int	env_var_is_valid(char *var)
 	if (!ft_isalpha(var[i]) && var[i] != '_')
 		return (0);
 	i++;
-	while (var[i])
+	while (var[i] && var[i] != '=')
 	{
 		if (!ft_isalnum(var[i]) && var[i] != '_' && var[i] != '=')
 			return (0);
@@ -125,7 +125,7 @@ int	ft_export(t_env *env, char **args)
 		{
 			err = 1;
 			ft_printf_fd(2, "\
-			minishell: export: \'%s\' : not a valid identifier\n", args[i]);
+minishell: export: \'%s\' : not a valid identifier\n", args[i]);
 		}
 		i++;
 	}

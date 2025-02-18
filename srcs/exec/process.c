@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 16:42:48 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/16 16:19:49 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/17 12:39:41 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 	exec->pid = fork();
 	if (exec->pid < 0)
 		err_and_exit(data);
+	if (exec->pid != 0)
+		init_signals(1);
 	if (exec->pid == 0)
 		child_process(data, cmd, exec, last);
 	else
