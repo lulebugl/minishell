@@ -82,6 +82,7 @@ SRC		= 	main.c \
 			exec/process.c \
 			exec/expander.c \
 			exec/expander_utils.c \
+			exec/redirect.c \
 			exec/path.c
 		 
 

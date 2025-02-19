@@ -118,7 +118,10 @@ int	update_args(t_data *data, t_list *args)
 			i++;
 		new = ft_lstnew(ft_substr(arg, start, i - start));
 		if (!new)
+		{
+			free(arg);
 			err_and_exit(data);
+		}
 		if (start == 0)
 		{
 			free(args->content);
@@ -166,14 +169,12 @@ int	expand_args(t_data *data, t_command *cmd)
 				return (1);
 			if (expand_arg_recursive(data, args, expand))
 				return (1);
-			// printf("after expansion [%s]\n", (char *)args->content);
 			if (!del_empty_args(&cmd->arg_lst, args))
 			{
-				// readding_quote();
+				// reading_quote();
 			}
 			if (!quoted)
 				update_args(data, args);
-			// printf("after deletion [%p]\n", args);
 		}
 		args = next;
 	}
