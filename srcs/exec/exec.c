@@ -10,8 +10,34 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
 #include "minishell.h"
+
+int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
+{
+	if (!cmd || !cmd->arg_lst)
+		return (1);
+	if (!last)
+		if (pipe(exec->pipe) == -1)
+			err_and_exit(data);
+	exec->pid = fork();
+	if (exec->pid < 0)
+		err_and_exit(data);
+	if (exec->pid == 0)
+		child_process(data, cmd, exec, last);
+	else
+	{
+		if (exec->fd_in != STDIN_FILENO)
+			close(exec->fd_in);
+		if (!last)
+		{
+			close(exec->pipe[1]);
+			exec->fd_in = exec->pipe[0];
+		}
+		exec->child_pids[exec->id++] = exec->pid;
+	}
+	debug_cmd(data, cmd); // remove at the end
+	return (0);
+}
 
 static void	clear_waitlist(t_list **waitlist)
 {
