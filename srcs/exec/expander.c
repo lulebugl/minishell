@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 21:07:07 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/13 21:07:08 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/02/19 18:39:16 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,8 @@ int	expand_args(t_data *data, t_command *cmd)
 			}
 			if (!quoted)
 				update_args(data, args);
+			if (expand_wildcards(&args))
+				return (1);
 		}
 		args = next;
 	}

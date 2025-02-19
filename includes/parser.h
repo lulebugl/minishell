@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 19:57:44 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/19 16:19:32 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/19 18:39:08 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@ int							token_is_part_of_command(t_token_type token_type);
 char						**get_cmd_args_arr(t_command *cmd);
 int							get_heredoc(char *eof);
 t_list						*find_matchs(char *pattern);
+int							expand_wildcards(t_list **current);
 
 #endif

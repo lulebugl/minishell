@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 18:31:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/18 19:06:36 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:54:38 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	debug_expander(t_command *cmd)
 {
 	t_list	*arg;
 
+	if (!cmd || !cmd->arg_lst)
+		return (0);
 	arg = cmd->arg_lst;
 	printf("-- After expander --\n");
 	while (arg)
