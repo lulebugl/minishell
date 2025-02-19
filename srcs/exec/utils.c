@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <lucas.lebugle@student.s19.be>    +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 17:58:43 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/04 21:52:02 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/02/19 15:49:54 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	init_exec(t_data *data, t_exec *exec, int child_count)
 	exec->id = 0;
 	exec->pipe[0] = -1;
 	exec->pipe[1] = -1;
+	reset_sigquit();
 }
 
 int	wait_child(pid_t *child_pids, int child_count)

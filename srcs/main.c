@@ -6,15 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-<<<<<<< HEAD
-<<<<<<< HEAD
-/*   Updated: 2025/02/18 17:59:16 by maxweert         ###   ########.fr       */
-=======
-/*   Updated: 2025/02/05 16:48:07 by maxweert         ###   ########.fr       */
->>>>>>> 32c87f5 (modifs)
-=======
-/*   Updated: 2025/02/11 17:55:24 by maxweert         ###   ########.fr       */
->>>>>>> 8354aa8 (wildcards should be ok, added ft_lstsort in libft in order to sort matched wildcards)
+/*   Updated: 2025/02/19 16:13:06 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +35,10 @@ int	launch_program(t_data *data)
 {
 	char	*rl;
 
-	init_signals();
 	while (true)
 	{
 		rl = readline(PROMPT);
+		init_signals();
 		if (!rl)
 			exit(1);
 		add_history(rl);
