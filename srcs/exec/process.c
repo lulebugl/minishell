@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 16:42:48 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/18 16:41:25 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/19 01:41:28 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 		if (pipe(exec->pipe) == -1)
 			err_and_exit(data);
 	exec->pid = fork();
+	reset_sigquit();
 	if (exec->pid < 0)
 		err_and_exit(data);
 	if (exec->pid == 0)
@@ -109,6 +110,7 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 	}
 	debug_cmd(data, cmd); // remove at the end
 	// remember to close fds
+	init_signals();
 	return (0);
 }
 
