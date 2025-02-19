@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 17:55:01 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/22 14:25:07 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/19 12:52:23 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 						void (*del)(void *));
+void				ft_lstsort(t_list **begin_list, int (*cmp)());
 char				*get_next_line(int fd);
 int					ft_printf(const char *format, ...);
 int					ft_printf_fd(int fd, const char *format, ...);
