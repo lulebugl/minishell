@@ -5,20 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/30 15:41:55 by maxweert          #+#    #+#             */
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-/*   Updated: 2025/02/18 19:06:56 by maxweert         ###   ########.fr       */
-=======
-/*   Updated: 2025/02/05 17:52:30 by maxweert         ###   ########.fr       */
->>>>>>> 32c87f5 (modifs)
-=======
-/*   Updated: 2025/02/05 23:51:22 by maxweert         ###   ########.fr       */
->>>>>>> 00847d1 (modif for leaving when error + free correctly)
-=======
-/*   Updated: 2025/02/11 18:20:40 by maxweert         ###   ########.fr       */
->>>>>>> 8354aa8 (wildcards should be ok, added ft_lstsort in libft in order to sort matched wildcards)
+/*   Created: 2025/02/19 16:17:54 by maxweert          #+#    #+#             */
+/*   Updated: 2025/02/19 16:17:56 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

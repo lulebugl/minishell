@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/19 16:13:06 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:17:44 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,26 +51,12 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 
-<<<<<<< HEAD
 	(void)argc;
 	(void)argv;
 	ft_memset(&data, 0, sizeof(t_data));
 	env_init(&data.env, envp);
 	launch_program(&data);
 	data_free(&data);
-=======
-	// ft_memset(&data, 0, sizeof(t_data));
-	// env_init(&data.env, envp);
-	// launch_program(&data);
-	// data_free(&data);
-	t_list *test;
-	test = find_matchs(argv[1]);
-	while (test)
-	{
-		printf("%s\n", (char*)test->content);
-		test = test->next;
-	}
->>>>>>> 8354aa8 (wildcards should be ok, added ft_lstsort in libft in order to sort matched wildcards)
 	return (0);
 }
 

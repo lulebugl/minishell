@@ -6,11 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 20:31:11 by maxweert          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/02/18 19:07:08 by maxweert         ###   ########.fr       */
-=======
-/*   Updated: 2025/02/05 23:53:12 by maxweert         ###   ########.fr       */
->>>>>>> 00847d1 (modif for leaving when error + free correctly)
+/*   Updated: 2025/02/19 16:18:09 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
