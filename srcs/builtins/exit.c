@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:41:15 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/13 19:08:30 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:48:25 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	ft_exit(t_data *data, char **args)
 {
 	int	ret;
 
-	ret = data->status;
+	ret = data->exit_code;
 	if (args && args[1])
 	{
 		if (!check_arg(args[1]))
@@ -55,7 +55,6 @@ int	ft_exit(t_data *data, char **args)
 					numeric argument required\n", args[1]);
 			data_free(data);
 			exit(2);
-			return (2);
 		}
 		else
 			ret = ft_atoi(args[1]);
@@ -68,6 +67,7 @@ int	ft_exit(t_data *data, char **args)
 		return (ret);
 	}
 	data_free(data);
+	printf("exit\n");
 	exit(ret);
 	return (ret);
 }

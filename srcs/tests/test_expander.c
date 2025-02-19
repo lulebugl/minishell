@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   test_expander.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/22 16:10:03 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:06:38 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,12 @@ int	launch_program(t_data *data)
 
 	while (true)
 	{
-		init_signals(0);
+		init_signals();
 		rl = readline(PROMPT);
 		if (!rl)
 		{
 			// ctrl-D
-			printf("what?");
-			if (errno == 0)
+			if (data->exit_code == 0)
 				return (1);
 			// ctrl-C
 			else

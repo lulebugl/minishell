@@ -3,15 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <lucas.lebugle@student.s19.be>    +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 18:31:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/04 21:56:26 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/02/18 19:06:36 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ast.h"
-#include "exec.h"
 #include "minishell.h"
 
 int	debug_expander(t_command *cmd)

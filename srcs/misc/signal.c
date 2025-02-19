@@ -6,43 +6,56 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 19:19:54 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/18 14:50:41 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:02:29 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	sigint_prompt_handler(int signum)
+static void	sigint_handler(int sig)
 {
-	(void)signum;
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
+	pid_t	pid;
+	int		status;
+
+	(void)sig;
+	pid = waitpid(-1, &status, 0);
+	if (pid > 0 && (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT))
+		write(2, "\n", 1);
+	else
+	{
+		write(2, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
-void	sig_newline(int signum)
+static void	sigquit_handler(int sig)
 {
-	(void)signum;
-	write(1, "\n", 1);
+	(void)sig;
+	write(2, "Quit\n", 5);
 }
 
-void	init_signals(int pid)
+void	reset_sigquit(void)
 {
 	struct sigaction	act;
-	
+
 	ft_bzero(&act, sizeof(act));
-	if (pid == 0)
-	{
-		act.sa_handler = &sigint_prompt_handler;
-		sigaction(SIGINT, &act, NULL);
-		act.sa_handler = SIG_IGN;
-		sigaction(SIGQUIT, &act, NULL);
-	}
-	if (pid == 1)
-	{
-		act.sa_handler = sig_newline;
-		sigaction(SIGINT, &act, NULL);
-		sigaction(SIGQUIT, &act, NULL);
-	}
+	act.sa_flags = SA_RESTART;
+	sigemptyset(&(act).sa_mask);
+	act.sa_handler = &sigquit_handler;
+	sigaction(SIGQUIT, &act, NULL);
+}
+
+void	init_signals(void)
+{
+	struct sigaction	act;
+
+	ft_bzero(&act, sizeof(act));
+	act.sa_flags = SA_RESTART;
+	sigemptyset(&(act).sa_mask);
+	act.sa_handler = &sigint_handler;
+	sigaction(SIGINT, &act, NULL);
+	act.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &act, NULL);
 }

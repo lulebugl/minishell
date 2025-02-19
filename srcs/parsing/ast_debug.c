@@ -6,12 +6,11 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 19:03:30 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/30 23:45:50 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/18 19:06:51 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "ast.h"
 
 void padding ( char ch, int n )
 {

@@ -6,12 +6,11 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 20:31:11 by maxweert          #+#    #+#             */
-/*   Updated: 2025/01/31 00:09:25 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:18:09 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "ast.h"
 
 void	free_tree(t_tree_node *root)
 {
@@ -79,6 +78,8 @@ t_tree_node	*new_tree(t_data *data, t_token **token)
 		{
 			*token = (*token)->next;
 			tmp_node = new_tree(data, token);
+			if (!tmp_node)
+				return (free_tree(root), NULL);
 		}
 		else if ((*token)->type == TOKEN_CLOSE_PAR)
 			return (root);
@@ -87,6 +88,8 @@ t_tree_node	*new_tree(t_data *data, t_token **token)
 			tmp_node = new_node(NODE_COMMAND);
 			//rajouter protect
 			tmp_node->cmd = get_command(token);
+			if (!tmp_node->cmd)
+				return (free(tmp_node), free_tree(root), NULL);
 		}
 		else
 			tmp_node = new_node(get_node_type((*token)->type));

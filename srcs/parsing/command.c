@@ -5,13 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/30 15:41:55 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/04 19:36:54 by maxweert         ###   ########.fr       */
+/*   Created: 2025/02/19 16:17:54 by maxweert          #+#    #+#             */
+/*   Updated: 2025/02/19 16:17:56 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "ast.h"
 
 char	**get_cmd_args_arr(t_command *cmd)
 {
@@ -68,6 +67,37 @@ int	token_is_part_of_command(t_token_type token_type)
 	return (0);
 }
 
+static int	set_command(t_token **token, t_command *cmd)
+{
+	t_token_type	type;
+
+	if ((*token)->type == TOKEN_WORD)
+	{
+		if (ft_strchr((*token)->content, '*'))
+		{
+			if (ft_strchr((*token)->content, '/'))
+				return (printf("minishell: wildcard in another \
+					directory not implemented.\n"), 0);
+			ft_lstadd_back(&cmd->arg_lst, find_matchs((*token)->content));
+		}
+		else
+			ft_lstadd_back(&(cmd->arg_lst),
+				ft_lstnew(ft_strdup((*token)->content)));
+	}
+	else
+	{
+		type = (*token)->type;
+		*token = (*token)->next;
+		if (ft_strchr((*token)->content, '*'))
+			return (printf("minishell: wildcard in \
+				redirection not implemented.\n"), 0);
+		add_redirection(&(cmd->redirections),
+			new_redirection(type, (*token)->content));
+	}
+	*token = (*token)->next;
+	return (1);
+}
+
 t_command	*get_command(t_token **token)
 {
 	t_command		*cmd;
@@ -80,19 +110,9 @@ t_command	*get_command(t_token **token)
 		return (NULL);
 	ft_bzero(cmd, sizeof(t_command));
 	while (*token && token_is_part_of_command((*token)->type))
-	{
-		if ((*token)->type == TOKEN_WORD)
-			ft_lstadd_back(&(cmd->arg_lst),
-				ft_lstnew(ft_strdup((*token)->content)));
-		else
-		{
-			type = (*token)->type;
-			*token = (*token)->next;
-			add_redirection(&(cmd->redirections),
-				new_redirection(type, (*token)->content));
-		}
-		*token = (*token)->next;
-	}
+		if (!set_command(token, cmd))
+			return (free_command(cmd), NULL);
 	cmd->arg_count = ft_lstsize(cmd->arg_lst);
+	cmd->redir_count = count_redirections(cmd->redirections);
 	return (cmd);
 }
