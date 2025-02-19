@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander.c                                         :+:      :+:    :+:   */
+/*   expand_recursive.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/13 21:07:07 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/13 21:07:08 by llebugle         ###   ########.fr       */
+/*   Created: 2025/02/19 20:24:55 by llebugle          #+#    #+#             */
+/*   Updated: 2025/02/19 20:24:56 by llebugle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,95 +95,3 @@ int	expand_arg_recursive(t_data *data, t_list *args, bool expand)
 		return (expand_arg_recursive(data, args, expand));
 	return (0);
 }
-
-int	update_args(t_data *data, t_list *args)
-{
-	char	*arg;
-	int		i;
-	int		start;
-	t_list	*next;
-	t_list	*new;
-
-	i = 0;
-	if (!args)
-		return (0);
-	next = args->next;
-	arg = ft_strdup((char *)args->content);
-	if (!arg)
-		err_and_exit(data);
-	while (arg[i])
-	{
-		start = i;
-		while (arg[i] && arg[i] != ' ')
-			i++;
-		new = ft_lstnew(ft_substr(arg, start, i - start));
-		if (!new)
-		{
-			free(arg);
-			err_and_exit(data);
-		}
-		if (start == 0)
-		{
-			free(args->content);
-			args->content = new->content;
-			free(new);
-		}
-		else
-		{
-			args->next = new;
-			new->next = next;
-			args = new;
-		}
-		if (arg[i] == ' ')
-			i++;
-	}
-	free(arg);
-	return (0);
-}
-
-int	expand_args(t_data *data, t_command *cmd)
-{
-	bool	expand;
-	int		quoted;
-	t_list	*args;
-	char	*arg;
-	t_list	*next;
-
-	args = cmd->arg_lst;
-	while (args)
-	{
-		next = args->next;
-		arg = args->content;
-		if (arg)
-		{
-			expand = true;
-			if (ft_strcmp(arg, "\"\"") == 0 || ft_strcmp(arg, "\'\'") == 0)
-			{
-				free(args->content);
-				args->content = ft_strdup("");
-				if (!args->content)
-					err_and_exit(data);
-				args = args->next;
-				continue ;
-			}
-			args->content = remove_quotes(arg, &expand, &quoted);
-			if (!arg)
-				return (1);
-			if (expand_tilde(data, args, expand))
-				return (1);
-			if (expand_arg_recursive(data, args, expand))
-				return (1);
-			if (!del_empty_args(&cmd->arg_lst, args))
-			{
-				// reading_quote();
-			}
-			if (!quoted)
-				update_args(data, args);
-		}
-		args = next;
-	}
-	debug_expander(cmd);
-	cmd->arg_count = ft_lstsize(cmd->arg_lst);
-	return (0);
-}
-

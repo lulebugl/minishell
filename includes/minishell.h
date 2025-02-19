@@ -26,6 +26,7 @@
 # include "parser.h"
 # include "structures.h"
 # include "tokenizer.h"
+# include "expander.h"
 
 /* standard */
 # include <errno.h>

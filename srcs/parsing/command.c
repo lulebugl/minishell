@@ -78,7 +78,7 @@ static int	set_command(t_token **token, t_command *cmd)
 			if (ft_strchr((*token)->content, '/'))
 				return (printf("minishell: wildcard in another \
 					directory not implemented.\n"), 0);
-			ft_lstadd_back(&cmd->arg_lst, find_matchs((*token)->content));
+			ft_lstadd_back(&cmd->arg_lst, ft_lstnew(ft_strdup((*token)->content)));
 		}
 		else
 			ft_lstadd_back(&(cmd->arg_lst),
@@ -101,7 +101,6 @@ static int	set_command(t_token **token, t_command *cmd)
 t_command	*get_command(t_token **token)
 {
 	t_command		*cmd;
-	t_token_type	type;
 
 	if (!token || !*token)
 		return (NULL);

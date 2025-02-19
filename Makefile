@@ -63,6 +63,10 @@ SRC		= 	main.c \
 			builtins/echo.c \
 			builtins/exit.c \
 			builtins/cd.c \
+			expander/expander.c \
+			expander/expander_utils.c \
+			expander/expander_recursive.c \
+			expander/separate_expanded.c \
 			misc/signal.c \
 			misc/error.c \
 			misc/env_utils.c \
@@ -80,8 +84,6 @@ SRC		= 	main.c \
 			exec/exec.c \
 			exec/utils.c \
 			exec/process.c \
-			exec/expander.c \
-			exec/expander_utils.c \
 			exec/redirect.c \
 			exec/path.c
 		 
@@ -108,6 +110,7 @@ $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)/builtins
 	mkdir -p $(OBJ_PATH)/parsing
 	mkdir -p $(OBJ_PATH)/exec
+	mkdir -p $(OBJ_PATH)/expander
 
 # Objects rule
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c

@@ -56,6 +56,7 @@ void	dup_fds(t_data *data, t_exec *exec, bool last)
 	}
 }
 
+	int	redirect_fd(t_data *data, t_command *cmd);
 void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
 {
 	char	*cmd_path;
@@ -66,7 +67,7 @@ void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
 		close(exec->pipe[0]);
 	if (exec->pipe[1] != -1)
 		close(exec->pipe[1]);
-	// implementer redirections
+	redirect_fd(data, cmd);
 	if (is_builtin(data, cmd))
 		ft_exit(data, NULL);
 	cmd_path = get_path(data, cmd->arg_lst->content, data->env);
