@@ -159,6 +159,10 @@ int	expand_args(t_data *data, t_command *cmd)
 			expand = true;
 			if (ft_strcmp(arg, "\"\"") == 0 || ft_strcmp(arg, "\'\'") == 0)
 			{
+				free(args->content);
+				args->content = ft_strdup("");
+				if (!args->content)
+					err_and_exit(data);
 				args = args->next;
 				continue ;
 			}
