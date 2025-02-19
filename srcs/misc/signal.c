@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 19:19:54 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/19 01:44:29 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:02:29 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	reset_sigquit(void)
 	ft_bzero(&act, sizeof(act));
 	act.sa_flags = SA_RESTART;
 	sigemptyset(&(act).sa_mask);
-	act.sa_handler = sigquit_handler;
+	act.sa_handler = &sigquit_handler;
 	sigaction(SIGQUIT, &act, NULL);
 }
 

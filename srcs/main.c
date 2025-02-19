@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/18 17:59:16 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/19 15:56:11 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ int	launch_program(t_data *data)
 {
 	char	*rl;
 
-	init_signals();
 	while (true)
 	{
 		rl = readline(PROMPT);
+		init_signals();
 		if (!rl)
 			exit(1);
 		add_history(rl);

@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/18 16:41:45 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:06:38 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,7 @@ int	launch_program(t_data *data)
 		if (!rl)
 		{
 			// ctrl-D
-			printf("what?");
-			if (errno == 0)
+			if (data->exit_code == 0)
 				return (1);
 			// ctrl-C
 			else
