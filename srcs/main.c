@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/18 17:59:16 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/19 12:49:22 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,20 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 
-	(void)argc;
-	(void)argv;
-	ft_memset(&data, 0, sizeof(t_data));
-	env_init(&data.env, envp);
-	launch_program(&data);
-	data_free(&data);
+	// (void)argc;
+	// (void)argv;
+	// ft_memset(&data, 0, sizeof(t_data));
+	// env_init(&data.env, envp);
+	// launch_program(&data);
+	// data_free(&data);
+
+	t_list *test;
+	test = find_matchs(argv[1]);
+	while (test)
+	{
+		printf("%s\n", (char*)test->content);
+		test = test->next;
+	}
 	return (0);
 }
 
