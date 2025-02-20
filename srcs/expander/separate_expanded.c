@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   separate_args.c                                    :+:      :+:    :+:   */
+/*   separate_expanded.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 20:35:26 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/19 20:35:28 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/02/20 20:03:05 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ int	separate_expanded(t_data *data, t_list *args)
 	int		i;
 	int		start;
 
-	printf("%p\n", args);
-	printf("%s\n", (char *)args->content);
 	if (!args || !args->content)
 		return (0);
 	next = args->next;

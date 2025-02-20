@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:06:14 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/20 19:10:48 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 20:28:16 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ delimited by end-of-file (wanted '%s')\n", i, eof);
 		}
 		if (ft_strcmp(buff, eof) == 0)
 			break ;
+		buff = replace_key(buff, )
 		write(fd, buff, ft_strlen(buff));
 		write(fd, "\n", 1);
 		free(buff);
@@ -64,8 +65,10 @@ int	parse_heredoc(t_redirection **redir_root)
 	{
 		if (head->type == TOKEN_HEREDOC)
 		{
+			init_signals();
 			if (!get_heredoc(head->filename))
 				return (0);
+			reset_sigquit();
 			free(head->filename);
 			head->filename = NULL;
 			last_hdoc = head;
