@@ -6,11 +6,35 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 19:19:54 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/20 17:16:16 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 20:58:58 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	sigint_handler(int sig)
+{
+	pid_t	pid;
+	int		status;
+	
+	pid = waitpid(-1, &status, 0);
+	if (pid > 0 && (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT))
+		write(2, "\n", 1);
+	else
+	{
+		write(2, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	g_sig = sig;
+}
+
+static void	sigquit_handler(int sig)
+{
+	g_sig = sig;
+	write(2, "Quit\n", 5);
+}
 
 void	reset_sigquit(void)
 {

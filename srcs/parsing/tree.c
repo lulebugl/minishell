@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 20:31:11 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/19 16:18:09 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 22:09:48 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ t_tree_node	*new_tree(t_data *data, t_token **token)
 		{
 			tmp_node = new_node(NODE_COMMAND);
 			//rajouter protect
-			tmp_node->cmd = get_command(token);
+			tmp_node->cmd = get_command(data, token);
 			if (!tmp_node->cmd)
 				return (free(tmp_node), free_tree(root), NULL);
 		}

@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/20 17:06:44 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 20:49:44 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,10 @@
 # define SUCCESS 0
 # define ERROR 1
 
+// GLOBAL VARIABLE
+
+extern int	g_sig;
+
 // DATA
 
 void	data_init(t_data *data);
@@ -66,8 +70,6 @@ void	reset_data(t_data *data);
 
 void	init_signals(void);
 void	reset_sigquit(void);
-void	sigint_handler(int sig);
-void	sigquit_handler(int sig);
 
 // BUILTINS
 

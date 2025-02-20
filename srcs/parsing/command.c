@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 16:17:54 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/20 19:54:29 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 22:09:39 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static int	set_command(t_token **token, t_command *cmd)
 	return (1);
 }
 
-t_command	*get_command(t_token **token)
+t_command	*get_command(t_data *data, t_token **token)
 {
 	t_command		*cmd;
 
@@ -111,7 +111,7 @@ t_command	*get_command(t_token **token)
 			return (free_command(cmd), NULL);
 	cmd->arg_count = ft_lstsize(cmd->arg_lst);
 	cmd->redir_count = count_redirections(cmd->redirections);
-	if (!parse_heredoc(&(cmd->redirections)))
+	if (!parse_heredoc(data, &(cmd->redirections)))
 		return (NULL);
 	return (cmd);
 }

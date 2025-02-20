@@ -6,37 +6,13 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/20 19:57:52 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 20:51:03 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_sig = 0;
-
-void	sigint_handler(int sig)
-{
-	pid_t	pid;
-	int		status;
-	
-	pid = waitpid(-1, &status, 0);
-	if (pid > 0 && (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT))
-		write(2, "\n", 1);
-	else
-	{
-		write(2, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-	g_sig = sig;
-}
-
-void	sigquit_handler(int sig)
-{
-	g_sig = sig;
-	write(2, "Quit\n", 5);
-}
+int	g_sig;
 
 int	exec_prompt(const char *prompt, t_data *data)
 {
@@ -68,12 +44,12 @@ int	launch_program(t_data *data)
 	while (true)
 	{
 		init_signals();
+		rl = readline(PROMPT);
 		if (g_sig)
 		{
 			data->exit_code = g_sig + 128;
 			g_sig = 0;
 		}
-		rl = readline(PROMPT);
 		reset_sigquit();
 		if (!rl)
 		{
@@ -100,7 +76,9 @@ int	launch_program(t_data *data)
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
+	int		g_sig;
 
+	g_sig = 0;
 	(void)argc;
 	(void)argv;
 	ft_memset(&data, 0, sizeof(t_data));
