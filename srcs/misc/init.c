@@ -23,4 +23,6 @@
 void	data_init(t_data *data)
 {
 	data->status = 0;
+	data->saved_stdin = -1;
+	data->saved_stdout = -1;
 }
