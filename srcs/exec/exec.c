@@ -76,10 +76,7 @@ void	exec_single_builtin(t_data *data, t_command *cmd)
 		return ;
 	expand_args(data, cmd);
 	if (redirect_fd(data, cmd) == ERROR)
-	{
-		ft_printf_fd(2, "single builtin no redirect\n");
 		return ;
-	}
 	argv = get_cmd_args_arr(cmd);
 	if (!argv)
 		return ;
@@ -97,9 +94,7 @@ void	exec_single_builtin(t_data *data, t_command *cmd)
 		data->exit_code = ft_export(data->env, argv);
 	else if (ft_strcmp(cmd->arg_lst->content, "unset") == 0)
 		data->exit_code = ft_unset(data->env, argv);
-	else
-		return (ft_free_tab(argv));
-	
+	restore_fd(data);
 	return (ft_free_tab(argv));
 }
 

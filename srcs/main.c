@@ -104,6 +104,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	ft_memset(&data, 0, sizeof(t_data));
+	data_init(&data);
 	env_init(&data.env, envp);
 	launch_program(&data);
 	data_free(&data);

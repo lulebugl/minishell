@@ -31,7 +31,6 @@ delimited by end-of-file (wanted '%s')\n", i, eof);
 		}
 		if (ft_strcmp(buff, eof) == 0)
 			break ;
-		buff = replace_key(buff, )
 		write(fd, buff, ft_strlen(buff));
 		write(fd, "\n", 1);
 		free(buff);
