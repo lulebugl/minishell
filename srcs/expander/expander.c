@@ -62,7 +62,7 @@ int	expand_args(t_data *data, t_command *cmd)
 		}
 		args = next;
 	}
-	debug_expander(cmd);
+//	debug_expander(cmd);
 	cmd->arg_count = ft_lstsize(cmd->arg_lst);
 	return (0);
 }

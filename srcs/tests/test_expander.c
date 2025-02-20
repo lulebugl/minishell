@@ -32,8 +32,6 @@ int	exec_prompt(const char *prompt, t_data *data)
 	if (data->print_ast)
 		print_ast(data->ast, 0);
 	exec(data);
-	// if (data->status)
-	// 	return (clear_tokens(&data->tokens), free_tree(data->ast), 1);
 	return (reset_data(data), 0);
 }
 

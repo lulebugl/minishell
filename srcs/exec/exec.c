@@ -50,6 +50,8 @@ static void	clear_waitlist(t_list **waitlist)
 	}
 }
 
+bool	is_single_builtin(t_data *data, t_command *cmd);
+
 void	execute_waitlist(t_list **waitlist, t_data *data)
 {
 	t_list		*current;
@@ -68,8 +70,13 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	{
 		cmd = current->content;
 		expand_args(data, cmd);
-		if (!current->next && is_builtin(data, cmd))
+		if (!current->next && is_single_builtin(data, cmd))
+		{
+			if (redirect_fd(data, cmd) == ERROR)
+				break ;
+			exec_builtin(data, cmd);
 			break ;
+		}
 		data->status = exec_cmd(data, cmd, &exec, !(current->next));
 		exec.child_pids[i++] = exec.pid;
 		current = current->next;
