@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 17:58:43 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/20 16:32:39 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:48:16 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void	init_exec(t_data *data, t_exec *exec, int child_count)
 	exec->id = 0;
 	exec->pipe[0] = -1;
 	exec->pipe[1] = -1;
-	reset_sigquit();
 }
 
 int	wait_child(pid_t *child_pids, int child_count)

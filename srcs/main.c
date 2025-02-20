@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/20 17:14:41 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:57:52 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,9 @@ void	sigint_handler(int sig)
 {
 	pid_t	pid;
 	int		status;
-
 	
 	pid = waitpid(-1, &status, 0);
-	if (WTERMSIG(status) == SIGINT || (pid > 0 && (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)))
+	if (pid > 0 && (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT))
 		write(2, "\n", 1);
 	else
 	{
@@ -75,6 +74,7 @@ int	launch_program(t_data *data)
 			g_sig = 0;
 		}
 		rl = readline(PROMPT);
+		reset_sigquit();
 		if (!rl)
 		{
 			// ctrl-D

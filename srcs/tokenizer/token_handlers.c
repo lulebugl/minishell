@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 16:58:24 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/20 19:16:27 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:58:43 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,9 @@ int	handle_edge_pipe(t_token **tokens, t_data *data)
 
 	while (1)
 	{
+		init_signals();
 		buf = readline("> ");
+		reset_sigquit();
 		if (!buf)
 		{
 			// ctrl-D
