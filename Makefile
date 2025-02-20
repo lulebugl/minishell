@@ -82,6 +82,7 @@ SRC		= 	main.c \
 			parsing/heredoc.c \
 			exec/debug.c \
 			exec/exec.c \
+			exec/exec_builtin.c \
 			exec/utils.c \
 			exec/process.c \
 			exec/redirect.c \

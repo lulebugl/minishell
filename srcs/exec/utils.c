@@ -12,63 +12,15 @@
 
 #include "minishell.h"
 
-int	exec_builtin(t_data *data, t_command *cmd)
+void	init_exec(t_data *data, t_exec *exec, t_list **waitlist)
 {
-	char	**argv;
-
-	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content)
-		return (0);
-	argv = get_cmd_args_arr(cmd);
-	if (!argv)
-		return (0);
-	if (ft_strcmp(cmd->arg_lst->content, "exit") == 0)
-		data->exit_code = ft_exit(data, argv);
-	else if (ft_strcmp(cmd->arg_lst->content, "pwd") == 0)
-		data->exit_code = ft_pwd();
-	else if (ft_strcmp(cmd->arg_lst->content, "cd") == 0)
-		data->exit_code = ft_cd(data->env, argv);
-	else if (ft_strcmp(cmd->arg_lst->content, "env") == 0)
-		data->exit_code = ft_env(data->env);
-	else if (ft_strcmp(cmd->arg_lst->content, "echo") == 0)
-		data->exit_code = ft_echo(argv);
-	else if (ft_strcmp(cmd->arg_lst->content, "export") == 0)
-		data->exit_code = ft_export(data->env, argv);
-	else if (ft_strcmp(cmd->arg_lst->content, "unset") == 0)
-		data->exit_code = ft_unset(data->env, argv);
-	else
-		return (ft_free_tab(argv), 0);
-	return (ft_free_tab(argv), 1);
-}
-
-bool	is_builtin(t_command *cmd)
-{
-	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content)
-		return (0);
-	if (ft_strcmp(cmd->arg_lst->content, "exit") == 0)
-		return (true);
-	else if (ft_strcmp(cmd->arg_lst->content, "pwd") == 0)
-		return (true);
-	else if (ft_strcmp(cmd->arg_lst->content, "cd") == 0)
-		return (true);
-	else if (ft_strcmp(cmd->arg_lst->content, "env") == 0)
-		return (true);
-	else if (ft_strcmp(cmd->arg_lst->content, "echo") == 0)
-		return (true);
-	else if (ft_strcmp(cmd->arg_lst->content, "export") == 0)
-		return (true);
-	else if (ft_strcmp(cmd->arg_lst->content, "unset") == 0)
-		return (true);
-	else
-		return (false);
-}
-
-void	init_exec(t_data *data, t_exec *exec, int child_count)
-{
+	
 	ft_memset(exec, 0, sizeof(t_exec));
-	exec->child_pids = malloc(sizeof(pid_t) * child_count);
+	exec->child_count = ft_lstsize(*waitlist);
+	exec->child_pids = malloc(sizeof(pid_t) * exec->child_count);
 	if (!exec->child_pids)
 		err_and_exit(data);
-	ft_memset(exec->child_pids, 0, sizeof(int) * child_count);
+	ft_memset(exec->child_pids, 0, sizeof(int) * exec->child_count);
 	exec->fd_in = STDIN_FILENO;
 	exec->fd_out = STDOUT_FILENO;
 	exec->id = 0;
@@ -148,3 +100,18 @@ char	**t_env_to_envp(t_env *env)
 	return (envp);
 }
 
+void	restore_fd(t_data *data)
+{
+	if (data->saved_stdin != -1)
+	{
+		dup2(data->saved_stdin, STDIN_FILENO);
+		close(data->saved_stdin);
+		data->saved_stdin = -1;
+	}
+	if (data->saved_stdout != -1)
+	{
+		dup2(data->saved_stdout, STDOUT_FILENO);
+		close(data->saved_stdout);
+		data->saved_stdout = -1;
+	}
+}

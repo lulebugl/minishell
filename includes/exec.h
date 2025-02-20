@@ -21,19 +21,30 @@
 # define TRUNC 2
 
 void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last);
+int		exec(t_data *data);
+int		exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last);
+
+/* utils */
+void	init_exec(t_data *data, t_exec *exec, t_list **wailtist);
+int		wait_child(pid_t *child_pids, int child_count);
 char	**t_env_to_envp(t_env *env);
 
-int		exec(t_data *data);
-int		exec_builtin(t_data *data, t_command *cmd);
-int		redirect_fd(t_data *data, t_command *cmd);
+/* redirect */
 
-int		wait_child(pid_t *child_pids, int child_count);
-void	init_exec(t_data *data, t_exec *exec, int child_count);
-int		exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last);
-bool	is_builtin(t_command *cmd);
+int		redirect_fd(t_data *data, t_command *cmd);
+void	restore_fd(t_data *data);
 
 /* path */
+
 char	*try_relative(t_data *data, char *str);
 char	*get_path(t_data *data, char *str, t_env *env);
 
+/* builtins */
+
+int		exec_builtin(t_data *data, t_command *cmd);
+bool	is_builtin(t_command *cmd);
+void	exec_single_builtin(t_data *data, t_command *cmd);
+int		exec_builtin(t_data *data, t_command *cmd);
+
 #endif
+
