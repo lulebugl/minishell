@@ -120,13 +120,6 @@ char	*replace_key(char *str, char *replace, int start, int key_len)
 	return (expanded);
 }
 
-int	only_empty_arg(char *arg)
-{
-	if (arg && (ft_strcmp(arg, "\"\"") == 0 || ft_strcmp(arg, "\'\'") == 0))
-		return (1);
-	return (0);
-}
-
 int	del_empty_args(t_list **head, t_list *node_to_delete)
 {
 	t_list	**curr;
