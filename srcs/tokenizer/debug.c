@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 19:48:11 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/29 19:48:12 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:16:30 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,3 @@ void	test_arg_input(const char *input, t_data *data)
 	print_tokens_formatted(tokens);
 	clear_tokens(&tokens);
 }
-

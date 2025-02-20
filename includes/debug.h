@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <lucas.lebugle@student.s19.be>    +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:22:37 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/04 18:15:32 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:12:32 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,3 @@ int		debug_expander(t_command *cmd);
 int		exec_debug(t_data *data);
 
 #endif
-

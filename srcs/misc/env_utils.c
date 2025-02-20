@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 22:23:44 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/17 12:18:30 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:16:06 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static void	env_update_shlvl(t_env **env)
 		env_add_key(env, "SHLVL", "1");
 	else
 	{
-		tmp = ft_atoi(env_get_value(*env,"SHLVL"));
+		tmp = ft_atoi(env_get_value(*env, "SHLVL"));
 		if (tmp < 0)
 			env_update_key(*env, "SHLVL", "0");
 		else

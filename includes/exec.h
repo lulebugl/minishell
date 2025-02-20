@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <lucas.lebugle@student.s19.be>    +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 19:59:53 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/04 21:26:03 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:12:23 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,3 @@ char	*try_relative(t_data *data, char *str);
 char	*get_path(t_data *data, char *str, t_env *env);
 
 #endif
-

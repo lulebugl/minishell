@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_prompt.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 20:39:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/24 20:39:43 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:16:19 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,3 @@ int	validate_prompt(t_token *token)
 	}
 	return (0);
 }
-

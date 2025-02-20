@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:06:14 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/18 17:59:58 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:10:48 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,45 @@ delimited by end-of-file (wanted '%s')\n", i, eof);
 	free(buff);
 }
 
-int	get_heredoc(char *eof)
+static int	get_heredoc(char *eof)
 {
 	int	fd;
 
+	if (!eof)
+		return (0);
 	unlink(".minishell.tmp");
 	fd = open(".minishell.tmp", O_CREAT | O_RDWR, 0644);
 	if (!fd)
 		return (0);
 	read_heredoc(fd, eof);
 	close(fd);
+	return (1);
+}
+
+int	parse_heredoc(t_redirection **redir_root)
+{
+	t_redirection	*head;
+	t_redirection	*last_hdoc;
+
+	head = *redir_root;
+	last_hdoc = NULL;
+	while (head)
+	{
+		if (head->type == TOKEN_HEREDOC)
+		{
+			if (!get_heredoc(head->filename))
+				return (0);
+			free(head->filename);
+			head->filename = NULL;
+			last_hdoc = head;
+		}
+		head = head->next;
+	}
+	if (last_hdoc)
+	{
+		last_hdoc->filename = ft_strdup(".minishell.tmp");
+		if (!last_hdoc->filename)
+			return (0);
+	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 01:33:38 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/19 18:38:58 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:14:06 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,18 +74,18 @@ t_list	*find_matchs(char *pattern)
 	return (matchs);
 }
 
-int     expand_wildcards(t_list **current)
+int	expand_wildcards(t_list **current)
 {
-    t_list  *tmp;
-    t_list  *matches;
-    
-    if (!ft_strchr((*current)->content, '*'))
-        return (0);
-    tmp = *current;
-    matches = find_matchs((*current)->content);
-    *current = matches;
-    ft_lstlast(matches)->next = tmp->next;
-    free(tmp->content);
-    free(tmp);
-    return (0);
+	t_list	*tmp;
+	t_list	*matches;
+
+	if (!ft_strchr((*current)->content, '*'))
+		return (0);
+	tmp = *current;
+	matches = find_matchs((*current)->content);
+	*current = matches;
+	ft_lstlast(matches)->next = tmp->next;
+	free(tmp->content);
+	free(tmp);
+	return (0);
 }

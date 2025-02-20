@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 16:17:54 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/20 16:38:54 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:14:30 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,9 @@ static int	set_command(t_token **token, t_command *cmd)
 			if (ft_strchr((*token)->content, '/'))
 				return (printf("minishell: wildcard in another \
 					directory not implemented.\n"), 0);
-			ft_lstadd_back(&cmd->arg_lst, ft_lstnew(ft_strdup((*token)->content)));
+			ft_lstadd_back(&(cmd->arg_lst),
+				ft_lstnew(ft_strdup((*token)->content)));
 		}
-		else
-			ft_lstadd_back(&(cmd->arg_lst), ft_lstnew(ft_strdup((*token)->content)));
 	}
 	else
 	{
@@ -112,5 +111,7 @@ t_command	*get_command(t_token **token)
 			return (free_command(cmd), NULL);
 	cmd->arg_count = ft_lstsize(cmd->arg_lst);
 	cmd->redir_count = count_redirections(cmd->redirections);
+	if (!parse_heredoc(&(cmd->redirections)))
+		return (NULL);
 	return (cmd);
 }

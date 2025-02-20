@@ -6,21 +6,20 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:54:03 by llebugle          #+#    #+#             */
-/*   Updated: 2025/01/30 22:35:07 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:12:51 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 
+# include "structures.h"
+
 # define ERR_MSG_QUOTES "unclosed quotes.\n"
 # define ERR_MSG_SYNTAX "syntax error : "
-
 # define ERR_SYNTAX 2
 
 typedef struct s_data	t_data;
-
-# include "structures.h"
 
 int						tokenize_input(const char *s, t_token **tokens,
 							t_data *data);

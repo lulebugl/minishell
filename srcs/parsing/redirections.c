@@ -6,13 +6,13 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 18:49:25 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/19 16:18:02 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:14:41 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		count_redirections(t_redirection *root)
+int	count_redirections(t_redirection *root)
 {
 	t_redirection	*head;
 	int				ret;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 20:43:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/19 20:43:51 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:12:27 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,3 @@ int		only_empty_arg(char *arg);
 int		expand_wildcards(t_list **current);
 
 #endif
-
