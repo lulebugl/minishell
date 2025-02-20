@@ -1,0 +1,12 @@
+cmd_to_test.txt
+compile_flags.txt
+includes
+leaks.supp
+libft
+Makefile
+minishell
+objs
+README.md
+srcs
+test
+testers
