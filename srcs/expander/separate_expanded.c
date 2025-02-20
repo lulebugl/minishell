@@ -57,6 +57,8 @@ int	separate_expanded(t_data *data, t_list *args)
 	int		i;
 	int		start;
 
+	printf("%p\n", args);
+	printf("%s\n", (char *)args->content);
 	if (!args || !args->content)
 		return (0);
 	next = args->next;

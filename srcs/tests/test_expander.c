@@ -100,8 +100,11 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	ft_memset(&data, 0, sizeof(t_data));
+	data.saved_stdin = -1;
+	data.saved_stdout = -1;
 	env_init(&data.env, envp);
 	launch_program(&data);
 	data_free(&data);
 	return (0);
 }
+

@@ -40,7 +40,7 @@ int	exec_builtin(t_data *data, t_command *cmd)
 	return (ft_free_tab(argv), 1);
 }
 
-bool	is_single_builtin(t_data *data, t_command *cmd)
+bool	is_builtin(t_command *cmd)
 {
 	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content)
 		return (0);

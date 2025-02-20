@@ -137,15 +137,17 @@ int	del_empty_args(t_list **head, t_list *node_to_delete)
 	curr = head;
 	while (*curr && *curr != node_to_delete)
 		curr = &(*curr)->next;
-	// if (*curr && (ft_strcmp(((char *)(*curr)->content), "\"\"") == 0
-	//		|| ft_strcmp(((char *)(*curr)->content), "\'\'") == 0))
 	if (*curr && (*curr)->content && ((char *)(*curr)->content)[0] == '\0')
 	{
 		tmp = *curr;
 		*curr = (*curr)->next;
 		if (tmp->content)
+		{
 			free(tmp->content);
+			tmp->content = NULL;
+		}
 		free(tmp);
+		tmp = NULL;
 		return (1);
 	}
 	return (0);

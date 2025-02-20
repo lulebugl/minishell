@@ -12,10 +12,7 @@
 
 #include "minishell.h"
 
-#define APPEND 1
-#define TRUNC 2
-
-int	process_outfile(t_data *data, char *filename, int type)
+int	process_outfile(char *filename, int type)
 {
 	int	fd;
 	int	flags;
@@ -38,7 +35,7 @@ int	process_outfile(t_data *data, char *filename, int type)
 	return (SUCCESS);
 }
 
-int	process_infile(t_data *data, char *filename)
+int	process_infile(char *filename)
 {
 	int	fd;
 
@@ -61,26 +58,27 @@ int	redirect_fd(t_data *data, t_command *cmd)
 {
 	t_redirection	*curr;
 
+	if (!cmd)
+		return (0);
 	curr = cmd->redirections;
 	while (curr)
 	{
-		if (curr->type == TOKEN_IN)
-		{
-			if (process_infile(data, curr->filename) == ERROR)
-				return (data->exit_code = errno, ERROR);
-		}
-		else if (curr->type == TOKEN_OUT)
-		{
-			if (process_outfile(data, curr->filename, TRUNC) == ERROR)
-				return (data->exit_code = errno, ERROR);
-		}
-		else if (curr->type == TOKEN_APPEND)
-		{
-			if (process_outfile(data, curr->filename, APPEND) == ERROR)
-				return (data->exit_code = errno, ERROR);
-		}
-		else
+		printf("test\n");
+		if (curr->type != TOKEN_IN && curr->type != TOKEN_OUT
+			&& curr->type != TOKEN_APPEND && curr->type != TOKEN_HEREDOC)
 			return (ERROR);
+		if (curr->type == TOKEN_IN)
+			if (process_infile(curr->filename) == ERROR)
+				return (data->exit_code = errno, ERROR);
+		if (curr->type == TOKEN_OUT)
+			if (process_outfile(curr->filename, TRUNC) == ERROR)
+				return (data->exit_code = errno, ERROR);
+		if (curr->type == TOKEN_APPEND)
+			if (process_outfile(curr->filename, APPEND) == ERROR)
+				return (data->exit_code = errno, ERROR);
+		if (curr->type == TOKEN_HEREDOC)
+			if (curr->filename && process_infile(curr->filename) == ERROR)
+				return (data->exit_code = errno, ERROR);
 		curr = curr->next;
 	}
 	return (0);

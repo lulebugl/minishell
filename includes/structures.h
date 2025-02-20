@@ -107,6 +107,9 @@ typedef struct s_data
 	bool					print_ast;
 	bool					exec_debug;
 	char					**envp;
+	int						saved_stdin;
+	int						saved_stdout;
 }							t_data;
 
 #endif
+
