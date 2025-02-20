@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_expander.c                                    :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:56:49 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/20 17:04:37 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:14:41 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_sig = 0;
 
 void	sigint_handler(int sig)
 {
 	pid_t	pid;
 	int		status;
 
-	g_sig = sig;
+	
 	pid = waitpid(-1, &status, 0);
-	if (pid > 0 && (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT))
+	if (WTERMSIG(status) == SIGINT || (pid > 0 && (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)))
 		write(2, "\n", 1);
 	else
 	{
@@ -28,6 +30,7 @@ void	sigint_handler(int sig)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
+	g_sig = sig;
 }
 
 void	sigquit_handler(int sig)
@@ -75,6 +78,7 @@ int	launch_program(t_data *data)
 		if (!rl)
 		{
 			// ctrl-D
+			printf("What\n");
 			if (data->exit_code == 0)
 				return (1);
 			// ctrl-C
@@ -100,11 +104,8 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	ft_memset(&data, 0, sizeof(t_data));
-	data.saved_stdin = -1;
-	data.saved_stdout = -1;
 	env_init(&data.env, envp);
 	launch_program(&data);
 	data_free(&data);
 	return (0);
 }
-
