@@ -17,7 +17,7 @@
 
 int		expand_arg_recursive(t_data *data, t_list *args, bool expand);
 int		handle_env_var(t_list *arg_node, t_env *env, int *i);
-int		expand_args(t_data *data, t_command *cmd);
+int		expander(t_data *data, t_command *cmd);
 int		separate_expanded(t_data *data, t_list *args);
 char	*replace_key(char *str, char *replace, int start, int key_len);
 char	*remove_quotes(char *str, bool *expand, int *quoted);

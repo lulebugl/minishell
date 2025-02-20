@@ -68,7 +68,7 @@ void	exec_single_builtin(t_data *data, t_command *cmd)
 
 	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content)
 		return ;
-	expand_args(data, cmd);
+	expander(data, cmd);
 	if (redirect_fd(data, cmd) == ERROR)
 		return ;
 	argv = get_cmd_args_arr(cmd);

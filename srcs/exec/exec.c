@@ -70,7 +70,7 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	while (current)
 	{
 		cmd = current->content;
-		expand_args(data, cmd);
+		expander(data, cmd);
 		data->status = exec_cmd(data, cmd, &exec, !(current->next));
 		exec.child_pids[i++] = exec.pid;
 		current = current->next;
