@@ -6,7 +6,7 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:58:41 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/19 16:11:58 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 16:35:22 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	reset_data(t_data *data);
 
 void	init_signals(void);
 void	reset_sigquit(void);
+void	sigint_handler(int sig);
+void	sigquit_handler(int sig);
 
 // BUILTINS
 
