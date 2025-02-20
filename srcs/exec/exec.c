@@ -50,7 +50,58 @@ static void	clear_waitlist(t_list **waitlist)
 	}
 }
 
-bool	is_single_builtin(t_data *data, t_command *cmd);
+void	restore_fd(t_data *data)
+{
+	// Restore original stdin if it was saved
+	if (data->saved_stdin != -1)
+	{
+		dup2(data->saved_stdin, STDIN_FILENO);
+		close(data->saved_stdin);
+		data->saved_stdin = -1;
+	}
+	// Restore original stdout if it was saved
+	if (data->saved_stdout != -1)
+	{
+		dup2(data->saved_stdout, STDOUT_FILENO);
+		close(data->saved_stdout);
+		data->saved_stdout = -1;
+	}
+}
+
+void	exec_single_builtin(t_data *data, t_command *cmd)
+{
+	char	**argv;
+
+	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content)
+		return ;
+	expand_args(data, cmd);
+	// printf(cmd)
+	// if (redirect_fd(data, cmd) == ERROR)
+	// {
+	// 	ft_printf_fd(2, "single builtin no redirect\n");
+	// 	return ;
+	// }
+	argv = get_cmd_args_arr(cmd);
+	if (!argv)
+		return ;
+	if (ft_strcmp(cmd->arg_lst->content, "exit") == 0)
+		data->exit_code = ft_exit(data, argv);
+	else if (ft_strcmp(cmd->arg_lst->content, "pwd") == 0)
+		data->exit_code = ft_pwd();
+	else if (ft_strcmp(cmd->arg_lst->content, "cd") == 0)
+		data->exit_code = ft_cd(data->env, argv);
+	else if (ft_strcmp(cmd->arg_lst->content, "env") == 0)
+		data->exit_code = ft_env(data->env);
+	else if (ft_strcmp(cmd->arg_lst->content, "echo") == 0)
+		data->exit_code = ft_echo(argv);
+	else if (ft_strcmp(cmd->arg_lst->content, "export") == 0)
+		data->exit_code = ft_export(data->env, argv);
+	else if (ft_strcmp(cmd->arg_lst->content, "unset") == 0)
+		data->exit_code = ft_unset(data->env, argv);
+	else
+		return (ft_free_tab(argv));
+	return (ft_free_tab(argv));
+}
 
 void	execute_waitlist(t_list **waitlist, t_data *data)
 {
@@ -63,20 +114,31 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	if (!waitlist || !*waitlist)
 		return ;
 	child_count = ft_lstsize(*waitlist);
-	init_exec(data, &exec, child_count);
 	current = *waitlist;
 	i = 0;
+	if (!current->next && is_builtin(current->content))
+	{
+		exec_single_builtin(data, current->content);
+		clear_waitlist(waitlist);
+		return ;
+	}
+	init_exec(data, &exec, child_count);
 	while (current)
 	{
 		cmd = current->content;
 		expand_args(data, cmd);
-		if (!current->next && is_single_builtin(data, cmd))
-		{
-			if (redirect_fd(data, cmd) == ERROR)
-				break ;
-			exec_builtin(data, cmd);
-			break ;
-		}
+		// if (!current->next && is_builtin(cmd))
+		// {
+		// 	if (redirect_fd(data, cmd) == ERROR)
+		// 		{
+		// 			ft_printf_fd(2, "single builtin no redirect\n");
+		// 		return ;
+		// 		}
+		// 	exec_builtin(data, cmd);
+		// 	// ft_printf_fd(2, "single builtin fd\n", );
+		// 	// restore_fd(data);
+		// 	return ;
+		// }
 		data->status = exec_cmd(data, cmd, &exec, !(current->next));
 		exec.child_pids[i++] = exec.pid;
 		current = current->next;
@@ -115,3 +177,4 @@ int	exec(t_data *data)
 		execute_waitlist(&waitlist, data);
 	return (0);
 }
+
