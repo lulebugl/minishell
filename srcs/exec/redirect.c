@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
+/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 17:09:55 by llebugle          #+#    #+#             */
-/*   Updated: 2025/02/19 17:09:57 by llebugle         ###   ########.fr       */
+/*   Updated: 2025/02/20 20:22:08 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ int	redirect_fd(t_data *data, t_command *cmd)
 	curr = cmd->redirections;
 	while (curr)
 	{
-		printf("test\n");
 		if (curr->type != TOKEN_IN && curr->type != TOKEN_OUT
 			&& curr->type != TOKEN_APPEND && curr->type != TOKEN_HEREDOC)
 			return (ERROR);
@@ -77,8 +76,11 @@ int	redirect_fd(t_data *data, t_command *cmd)
 			if (process_outfile(curr->filename, APPEND) == ERROR)
 				return (data->exit_code = errno, ERROR);
 		if (curr->type == TOKEN_HEREDOC)
+		{
 			if (curr->filename && process_infile(curr->filename) == ERROR)
 				return (data->exit_code = errno, ERROR);
+			unlink(".minishell.tmp");
+		}
 		curr = curr->next;
 	}
 	return (0);
