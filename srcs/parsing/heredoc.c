@@ -12,40 +12,47 @@
 
 #include "minishell.h"
 
-static int	expand_heredoc(t_data *data, char **buff)
+static void	write_heredoc(t_data *data, int fd, char *buff)
 {
 	int		i;
-	int		j;
+	int		start;
 	char	*var;
-	char	*start;
-	char	*end;
-	char	*str;
+	char	*value;
 
 	i = 0;
-	j = 0;
-	str = *buff;
-	while (str[i] && str[i] != '$')
-		i++;
-	if (!str[i])
-		return (1);
-	i++;
-	while (str[i + j] && (ft_isalnum(str[i + j]) || str[i + j] == '_'))
-		j++;
-	var = ft_strndup(&(str[i]), j);
-	start = ft_strndup(str, i - 1);
-	end = ft_strdup(&(str[i + j]));
-	if (!var || !start || !end)
-		return (free(var), free(start), free(end), 0);
-	if (!env_key_exists(data->env, var))
-		str = ft_strjoin(start, end);
-	else
+	start = 0;
+	while (buff[i])
 	{
-		str = ft_strjoin(start, env_get_value(data->env, var));
-		str = ft_strjoin_n_free(str, end);
+		if (buff[i] == '$')
+		{
+			write(fd, &buff[start], i - start);
+			i++;
+			if (buff[i] == '?')
+			{
+				var = ft_itoa(data->exit_code);
+				write(fd, var, ft_strlen(var));
+				free(var);
+				i++;
+			}
+			else
+			{
+				start = i;
+				while (buff[i] && (ft_isalnum(buff[i]) || buff[i] == '_'))
+					i++;
+				var = ft_strndup(&buff[start], i - start);
+				if (env_key_exists(data->env, var))
+					value = env_get_value(data->env, var);
+				else
+					value = "";
+				write(fd, value, ft_strlen(value));
+				free(var);
+			}
+			start = i;
+		}
+		else
+			i++;
 	}
-	free(*buff);
-	*buff = str;
-	return (free(var), free(start), free(end), 1);
+	write(fd, &buff[start], i - start);
 }
 
 static void	read_heredoc(t_data *data, int fd, char *eof)
@@ -67,9 +74,7 @@ delimited by end-of-file (wanted '%s')\n", i, eof);
 		}
 		if (ft_strcmp(buff, eof) == 0)
 			break ;
-		while (ft_strchr(buff, '$'))
-			expand_heredoc(data, &buff);
-		write(fd, buff, ft_strlen(buff));
+		write_heredoc(data, fd, buff);
 		write(fd, "\n", 1);
 		free(buff);
 	}
@@ -113,10 +118,8 @@ int	parse_heredoc(t_data *data, t_redirection **redir_root)
 		head = head->next;
 	}
 	if (last_hdoc)
-	{
 		last_hdoc->filename = ft_strdup(".minishell.tmp");
-		if (!last_hdoc->filename)
-			return (0);
-	}
+	if (last_hdoc && !last_hdoc->filename)
+		return (0);
 	return (1);
 }
