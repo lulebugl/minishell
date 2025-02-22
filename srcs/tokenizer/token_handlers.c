@@ -117,37 +117,29 @@ int	handle_pipes(const char *s, int *pos, t_token **tokens, t_data *data)
 
 int	handle_io(const char *s, int *pos, t_token **tokens)
 {
-	int		i;
 	char	next;
 
-	i = *pos;
 	next = 0;
-	if (s[i + 1])
-		next = s[i + 1];
-	if (next && (s[i] == '<' && next == '<'))
+	if (s[*pos + 1])
+		next = s[*pos + 1];
+	if (next && (s[*pos] == '<' && next == '<'))
 	{
-		if (add_token(tokens, s, (t_token_pos){i, 2}, TOKEN_HEREDOC))
+		if (add_token(tokens, s, (t_token_pos){*pos, 2}, TOKEN_HEREDOC))
 			return (ENOSPC);
 		(*pos) += 2;
 	}
-	else if (next && (s[i] == '>' && next == '>'))
+	if (next && (s[*pos] == '>' && next == '>'))
 	{
-		if (add_token(tokens, s, (t_token_pos){i, 2}, TOKEN_APPEND))
+		if (add_token(tokens, s, (t_token_pos){*pos, 2}, TOKEN_APPEND))
 			return (ENOSPC);
 		(*pos) += 2;
 	}
-	else if (s[i] == '<')
-	{
-		if (add_token(tokens, s, (t_token_pos){i, 1}, TOKEN_IN))
+	if (s[*pos] == '<')
+		if (add_token(tokens, s, (t_token_pos){(*pos)++, 1}, TOKEN_IN))
 			return (ENOSPC);
-		(*pos)++;
-	}
-	else if (s[i] == '>')
-	{
-		if (add_token(tokens, s, (t_token_pos){i, 1}, TOKEN_OUT))
+	if (s[*pos] == '>')
+		if (add_token(tokens, s, (t_token_pos){(*pos)++, 1}, TOKEN_OUT))
 			return (ENOSPC);
-		(*pos)++;
-	}
 	return (0);
 }
 

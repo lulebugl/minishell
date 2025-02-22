@@ -22,7 +22,8 @@ echo "'aa" "aa'"
 export test=-la
 ls (wc -l)
 ls srcs/*
-|
+echo """"""''""
+ls &&
 // Heredoc :
 
 cat << eof

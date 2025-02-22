@@ -102,6 +102,7 @@ int	expander(t_data *data, t_command *cmd)
 	while (args)
 		if (expand_args(data, cmd, &args, &prev))
 			return (1);
+	debug_expander(cmd);
 	cmd->arg_count = ft_lstsize(cmd->arg_lst);
 	return (0);
 }
