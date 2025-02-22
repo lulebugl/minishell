@@ -34,8 +34,6 @@ int	expand_tilde(t_data *data, t_list *arg, bool expand)
 	content = (char *)arg->content;
 	if (!expand || !arg || !content || !content[0])
 		return (0);
-	// if (is_quote(content[i]))
-	// 	i++;
 	if (content[i] != '~' || (content[i] == '~' && content[i + 1] && content[i
 			+ 1] != '/'))
 		return (0);
@@ -79,9 +77,10 @@ char	*remove_quotes(t_data *data, char *str, bool *expand, int *quoted)
 			break ;
 		}
 	}
-	if (quoted)
-		trimmed = str_del_all_char(str, *quoted);
-	if (!trimmed && quoted)
+	if (*quoted == 0)
+		return (str);
+	trimmed = str_del_all_char(str, *quoted);
+	if (!trimmed)
 		err_and_exit(data);
 	return (free(str), trimmed);
 }

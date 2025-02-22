@@ -37,8 +37,8 @@ int	handle_word(const char *s, int *pos, t_token **tokens)
 		if (s[*pos] == '\'')
 			while (s[++(*pos)] && s[*pos] != '\'')
 				(*pos)++;
-		else if (s[++(*pos)] == '\"')
-			while (s[*pos] && s[*pos] != '\"')
+		else if (s[(*pos)] == '\"')
+			while (s[++*pos] && s[*pos] != '\"')
 				(*pos)++;
 		else
 			(*pos)++;
