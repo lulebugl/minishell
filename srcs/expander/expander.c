@@ -28,13 +28,15 @@ static int	handle_empty_quotes(t_data *data, t_list *args)
 	return (0);
 }
 
+char	*remove_quotes2(t_data *data, char *str, bool *expand, int *quoted);
+
 static int	process_argument(t_data *data, t_list *args, bool *expand,
 		int *quoted)
 {
 	char	*arg;
 
 	arg = args->content;
-	args->content = remove_quotes(arg, expand, quoted);
+	args->content = remove_quotes(data, arg, expand, quoted);
 	if (!arg)
 		return (1);
 	if (expand_tilde(data, args, *expand))

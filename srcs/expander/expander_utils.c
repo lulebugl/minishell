@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int is_quote(int c)
+int	is_quote(int c)
 {
 	return (c == DOUBLE_QUOTE || c == SINGLE_QUOTE);
 }
@@ -29,15 +29,15 @@ int	expand_tilde(t_data *data, t_list *arg, bool expand)
 	char	*value;
 	char	*content;
 	int		i;
-	
+
 	i = 0;
 	content = (char *)arg->content;
 	if (!expand || !arg || !content || !content[0])
 		return (0);
 	// if (is_quote(content[i]))
 	// 	i++;
-	if (content[i] != '~' || (content[i] == '~' && content[i + 1]
-			&& content[i + 1] != '/'))
+	if (content[i] != '~' || (content[i] == '~' && content[i + 1] && content[i
+			+ 1] != '/'))
 		return (0);
 	value = env_get_value(data->env, "HOME");
 	if (!value)
@@ -55,34 +55,35 @@ int	expand_tilde(t_data *data, t_list *arg, bool expand)
 	return (0);
 }
 
-/*
- * Function: remove_quotes
- * ----------------------------
- *	Remove the quotes at the start and end of the "word"
- *	Free the original string
- * 	Return the new string if no error occured, otherwise NULL
- */
-char	*remove_quotes(char *str, bool *expand, int *quoted)
+char	*remove_quotes(t_data *data, char *str, bool *expand, int *quoted)
 {
 	char	*trimmed;
+	int		i;
 
 	if (!str)
 		return (NULL);
 	*quoted = 0;
-	if (str[0] == '\"')
-		*quoted = DOUBLE_QUOTE;
-	if ((!*str) || (*str && (*str != '\'' && *str != '\"')))
-		return (str);
-	if (*str == '\'')
+	trimmed = NULL;
+	i = -1;
+	while (str[++i])
 	{
-		*expand = false;
-		*quoted = SINGLE_QUOTE;
+		if (str[i] == SINGLE_QUOTE)
+		{
+			*quoted = SINGLE_QUOTE;
+			*expand = false;
+			break ;
+		}
+		if (str[i] == DOUBLE_QUOTE)
+		{
+			*quoted = DOUBLE_QUOTE;
+			break ;
+		}
 	}
-	trimmed = ft_substr(str, 1, ft_strlen(str) - 2);
-	if (!trimmed)
-		return (NULL);
-	free(str);
-	return (trimmed);
+	if (quoted)
+		trimmed = str_del_all_char(str, *quoted);
+	if (!trimmed && quoted)
+		err_and_exit(data);
+	return (free(str), trimmed);
 }
 
 /*
@@ -145,3 +146,4 @@ int	del_empty_args(t_list **head, t_list *node_to_delete)
 	}
 	return (0);
 }
+
