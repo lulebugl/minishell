@@ -50,6 +50,9 @@ int	validate_prompt(t_token *token)
 	if (has_balanced_parentheses(token) == false)
 		return (msg_custom_err("unclosed parentheses.\n", "syntax error : "),
 			ERR_SYNTAX);
+	if (curr && (curr->type == TOKEN_PIPE || curr->type == TOKEN_AND
+		|| curr->type == TOKEN_OR))
+		return (msg_unexpected_token(curr->content), ERR_SYNTAX);
 	while (curr)
 	{
 		if (curr->type == TOKEN_OPEN_PAR && curr->next
@@ -58,6 +61,12 @@ int	validate_prompt(t_token *token)
 			if (!curr->next->next)
 				return (msg_unexpected_token("\n"), ERR_SYNTAX);
 			return (msg_unexpected_token(curr->next->next->content),
+				ERR_SYNTAX);
+		}
+		if (curr->type == TOKEN_WORD && curr->next
+			&& curr->next->type == TOKEN_OPEN_PAR)
+		{
+			return (msg_unexpected_token(curr->next->content),
 				ERR_SYNTAX);
 		}
 		if (is_redirection(curr->type))
@@ -78,3 +87,4 @@ int	validate_prompt(t_token *token)
 	}
 	return (0);
 }
+

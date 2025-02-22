@@ -21,6 +21,8 @@
 #  define DEBUG false
 # endif
 
+extern int g_sig;
+
 # include "debug.h"
 # include "exec.h"
 # include "parser.h"

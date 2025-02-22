@@ -63,7 +63,7 @@ void	print_details(void)
 //     char *short_path;
 //     char *shlvl;
 //     char *git_branch;
-
+//
 //     if (!getcwd(curr, PATH_MAX))
 //         return ;
 //     username = getenv("USER");

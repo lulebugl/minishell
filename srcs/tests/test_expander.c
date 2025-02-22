@@ -19,15 +19,19 @@ void	sigint_handler(int sig)
 	pid_t	pid;
 	int		status;
 
+	// g_sig = sig;
+	pid = waitpid(-1, &status, WNOHANG);
 	pid = waitpid(-1, &status, 0);
 	if (WTERMSIG(status) == SIGINT || (pid > 0 && (WIFSIGNALED(status)
 				&& WTERMSIG(status) == SIGINT)))
 		write(2, "\n", 1);
+
 	else
 	{
 		write(2, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
+		print_details();
 		rl_redisplay();
 	}
 	g_sig = sig;
