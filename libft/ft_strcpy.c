@@ -26,14 +26,3 @@ char	*ft_strcpy(char *dest, char *src)
 	dest[i] = '\0';
 	return (dest);
 }
-
-/*
-int main() 
-{
-	char dest[] = "hello me";
-	char src[] = "wow";
-
-	printf("%s\n", ft_strcpy(dest, src));
-	printf("%s\n", strcpy(dest, src));
-}
-*/

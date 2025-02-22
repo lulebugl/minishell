@@ -28,7 +28,7 @@ static char	*get_shortened_path(const char *path)
 		if (!shortened)
 			return (NULL);
 		shortened[0] = '~';
-		ft_strcpy(shortened + 1, path + home_len);
+		ft_strcpy(shortened + 1, (char *)path + home_len);
 		return (shortened);
 	}
 	return (ft_strdup(path));
@@ -39,7 +39,6 @@ void	print_details(void)
 	char	curr[PATH_MAX];
 	char	*short_path;
 	char	*git_branch;
-	char	*shlvl;
 
 	if (!getcwd(curr, PATH_MAX))
 		return ;

@@ -36,7 +36,6 @@ static char	*find_git_path(void)
 	char	curr[PATH_MAX];
 	char	check_path[PATH_MAX];
 	char	*last_slash;
-	char	*git_path;
 
 	if (!getcwd(curr, PATH_MAX))
 		return (NULL);

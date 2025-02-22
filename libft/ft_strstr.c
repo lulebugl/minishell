@@ -29,14 +29,3 @@ char	*ft_strstr(char *str, char *to_find)
 	}
 	return (0);
 }
-
-/*
-#include <string.h>
-#include <stdio.h>
-
-int	main(int ac, char **av)
-{
-	printf("mine: %s\nreal: %s\n", ft_strstr(av[1], av[2]), strstr(av[1],
-		av[2]));
-}
-*/
