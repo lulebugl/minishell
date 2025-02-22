@@ -68,6 +68,8 @@ SRC		= 	main.c \
 			expander/expander_recursive.c \
 			expander/separate_expanded.c \
 			misc/signal.c \
+			misc/prompt.c \
+			misc/prompt_git.c \
 			misc/error.c \
 			misc/env_utils.c \
 			misc/env_utils2.c \

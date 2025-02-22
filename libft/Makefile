@@ -24,6 +24,7 @@ SRCS	= 	ft_isalpha.c		\
 			ft_memcmp.c 		\
 			ft_memmove.c 		\
 			ft_strchr.c 		\
+			ft_strcpy.c		\
 			ft_strlcpy.c		\
 			ft_strrchr.c		\
 			ft_toupper.c		\
@@ -64,6 +65,7 @@ SRCS	= 	ft_isalpha.c		\
 			ft_printf_fd.c		\
 			ft_is_charset.c		\
 			ft_free_tab.c		\
+			ft_strstr.c			\
 
 OBJS	= $(SRCS:.c=.o)
 

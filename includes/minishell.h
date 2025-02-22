@@ -42,13 +42,19 @@
 # include <dirent.h>
 
 # define PROMPT "\x1b[38;5;87mminishell > \033[0m"
+# define PROMPT2 "\033[34m└─➤ \033[0m"
+# define PROMPT3 "\033[35m> \033[0m"
 
 /* color codes */
-# define PURPLE "\e[0;35m"
-# define CYAN "\e[0;36m"
-# define RED "\e[0;31m"
-# define GREEN "\e[0;32m"
-# define RESET "\033[0m"
+#define BOLD    "\033[1m"
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
+#define YELLOW  "\033[33m"
+#define BLUE    "\033[34m"
+#define MAGENTA "\033[35m"
+#define CYAN    "\033[36m"
+#define DGRAY   "\033[90m"
+#define RESET   "\033[0m"
 
 /* color codes high intensity */
 # define HI_CYAN "\e[1;96m"
@@ -97,5 +103,9 @@ char	*env_value_from_str(char *str);
 void	msg_unexpected_token(char *str);
 void	msg_custom_err(char *msg, char *details);
 void	err_and_exit(t_data *data);
+
+// MISC
+void	print_details(void);
+char	*get_git_branch(void);
 
 #endif

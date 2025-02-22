@@ -1,0 +1,29 @@
+]2;llebugle@shi-r11-p3:~/Documents/minishell]1;..nts/minishell]7;file://shi-r11-p3.s19.be/home/llebugle/Documents/minishell\[?1h=[?25l[?25h[?25l[?25h[?1l>]2;cat test]1;cat]2;llebugle@shi-r11-p3:~/Documents/minishell]1;..nts/minishell]7;file://shi-r11-p3.s19.be/home/llebugle/Documents/minishell\[?1h=[?1l>]2;ls --color=tty]1;lscmd_to_test.txt
+compile_flags.txt
+includes
+leaks.supp
+libft
+Makefile
+objs
+README.md
+srcs
+test
+testers
+]2;llebugle@shi-r11-p3:~/Documents/minishell]1;..nts/minishell]7;file://shi-r11-p3.s19.be/home/llebugle/Documents/minishell\[?1h=[?1l>]2;ls --color=tty -lah]1;ltotal 44K
+drwxr-xr-x  8 llebugle 2024_s19  230 Feb 22 16:15 .
+drwxr-xr-x 12 llebugle 2024_s19  193 Jan 31 17:42 ..
+-rw-r--r--  1 llebugle 2024_s19  362 Jan 22 21:43 .clangd
+-rw-r--r--  1 llebugle 2024_s19  400 Feb 20 20:31 cmd_to_test.txt
+-rw-r--r--  1 llebugle 2024_s19   94 Jan 22 17:03 compile_flags.txt
+drwxr-xr-x  8 llebugle 2024_s19  220 Feb 22 16:15 .git
+-rw-r--r--  1 llebugle 2024_s19  468 Jan 22 18:04 .gitignore
+drwxr-xr-x  2 llebugle 2024_s19  127 Feb 20 20:02 includes
+-rw-r--r--  1 llebugle 2024_s19   85 Jan 24 21:50 leaks.supp
+drwxr-xr-x  2 llebugle 2024_s19 4.0K Feb 22 16:02 libft
+-rw-r--r--  1 llebugle 2024_s19 5.6K Feb 22 15:53 Makefile
+drwxr-xr-x  9 llebugle 2024_s19  123 Feb 22 16:03 objs
+-rw-r--r--  1 llebugle 2024_s19  455 Feb 13 21:28 README.md
+drwxr-xr-x  9 llebugle 2024_s19  121 Feb 20 20:57 srcs
+-rw-r--r--  1 llebugle 2024_s19  635 Feb 22 16:15 test
+drwxr-xr-x  2 llebugle 2024_s19   22 Feb 22 16:14 testers
+]2;llebugle@shi-r11-p3:~/Documents/minishell]1;..nts/minishell]7;file://shi-r11-p3.s19.be/home/llebugle/Documents/minishell\[?1h=[?1l>]2;exit]1;exit

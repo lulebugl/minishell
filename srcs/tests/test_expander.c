@@ -12,16 +12,16 @@
 
 #include "minishell.h"
 
-int	g_sig = 0;
+int		g_sig = 0;
 
 void	sigint_handler(int sig)
 {
 	pid_t	pid;
 	int		status;
 
-	
 	pid = waitpid(-1, &status, 0);
-	if (WTERMSIG(status) == SIGINT || (pid > 0 && (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)))
+	if (WTERMSIG(status) == SIGINT || (pid > 0 && (WIFSIGNALED(status)
+				&& WTERMSIG(status) == SIGINT)))
 		write(2, "\n", 1);
 	else
 	{
@@ -74,7 +74,9 @@ int	launch_program(t_data *data)
 			data->exit_code = g_sig + 128;
 			g_sig = 0;
 		}
-		rl = readline(PROMPT);
+		print_details();
+		rl = readline(PROMPT3);
+		// rl = readline(PROMPT);
 		if (!rl)
 		{
 			// ctrl-D
@@ -110,3 +112,4 @@ int	main(int argc, char **argv, char **envp)
 	data_free(&data);
 	return (0);
 }
+
