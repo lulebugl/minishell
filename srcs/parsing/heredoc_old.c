@@ -6,71 +6,36 @@
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:06:14 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/20 20:28:16 by maxweert         ###   ########.fr       */
+/*   Updated: 2025/02/20 20:30:59 by maxweert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void heredoc_sigint_handler(int sig)
+static void	read_heredoc(int fd, char *eof)
 {
-    (void)sig;
-    write(2, "\n", 1);
-    exit(130);
-}
+	char	*buff;
+	int		i;
 
-static void init_heredoc_signals(void)
-{
-    struct sigaction act;
-    
-    ft_bzero(&act, sizeof(act));
-    act.sa_flags = SA_RESTART;
-    sigemptyset(&act.sa_mask);
-    act.sa_handler = &heredoc_sigint_handler;
-    sigaction(SIGINT, &act, NULL);
-    act.sa_handler = SIG_IGN;
-    sigaction(SIGQUIT, &act, NULL);
-}
-
-static void read_heredoc(int fd, char *eof)
-{
-    char *buff;
-    int i;
-    pid_t pid;
-    int status;
-
-    pid = fork();
-    status = 0;
-    if (pid == 0)
-    {
-        init_heredoc_signals();
-        i = 0;
-        while (true)
-        {
-            buff = readline("> ");
-            i++;
-            if (!buff)
-            {
-                ft_printf_fd(2, "minishell: warning: here-document at line %d \
+	i = 0;
+	while (true)
+	{
+		buff = NULL;
+		buff = readline("> ");
+		i++;
+		if (!buff)
+		{
+			ft_printf_fd(2, "minishell: warning: here-document at line %d \
 delimited by end-of-file (wanted '%s')\n", i, eof);
-                exit(0);
-            }
-            if (ft_strcmp(buff, eof) == 0)
-            {
-                free(buff);
-                exit(0);
-            }
-            write(fd, buff, ft_strlen(buff));
-            write(fd, "\n", 1);
-            free(buff);
-        }
-    }
-    else
-    {
-        waitpid(pid, &status, 0);
-        if (WIFSIGNALED(status) || WEXITSTATUS(status) == 130)
-            g_sig = SIGINT;
-    }
+			break ;
+		}
+		if (ft_strcmp(buff, eof) == 0)
+			break ;
+		write(fd, buff, ft_strlen(buff));
+		write(fd, "\n", 1);
+		free(buff);
+	}
+	free(buff);
 }
 
 static int	get_heredoc(char *eof)

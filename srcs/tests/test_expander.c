@@ -19,13 +19,11 @@ void	sigint_handler(int sig)
 	pid_t	pid;
 	int		status;
 
-	// g_sig = sig;
-	pid = waitpid(-1, &status, WNOHANG);
+	g_sig = sig;
 	pid = waitpid(-1, &status, 0);
 	if (WTERMSIG(status) == SIGINT || (pid > 0 && (WIFSIGNALED(status)
 				&& WTERMSIG(status) == SIGINT)))
 		write(2, "\n", 1);
-
 	else
 	{
 		write(2, "\n", 1);
@@ -77,10 +75,12 @@ int	launch_program(t_data *data)
 		{
 			data->exit_code = g_sig + 128;
 			g_sig = 0;
+			reset_sigquit();
+			continue ;
 		}
 		print_details();
 		rl = readline(PROMPT3);
-		// rl = readline(PROMPT);
+		reset_sigquit();
 		if (!rl)
 		{
 			// ctrl-D
@@ -91,7 +91,6 @@ int	launch_program(t_data *data)
 			else
 				return (1);
 		}
-		// empty line
 		if (rl && rl[0] == '\0')
 		{
 			free(rl);

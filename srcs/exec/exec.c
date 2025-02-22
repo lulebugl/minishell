@@ -21,7 +21,14 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 			err_and_exit(data);
 	exec->pid = fork();
 	if (exec->pid < 0)
+	{
+		if (!last)
+		{
+			close(exec->pipe[0]);
+			close(exec->pipe[1]);
+		}
 		err_and_exit(data);
+	}
 	if (exec->pid == 0)
 		child_process(data, cmd, exec, last);
 	else
@@ -62,15 +69,14 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	current = *waitlist;
 	i = 0;
 	if (!current->next && is_builtin(current->content))
-	{
-		exec_single_builtin(data, current->content);
-		return (clear_waitlist(waitlist));
-	}
+		return (exec_single_builtin(data, current->content),
+			clear_waitlist(waitlist));
 	init_exec(data, &exec, waitlist);
 	while (current)
 	{
 		cmd = current->content;
-		expander(data, cmd);
+		if (expander(data, cmd) == ERROR)
+			return (cleanup_exec(&exec), free(exec.child_pids));
 		data->status = exec_cmd(data, cmd, &exec, !(current->next));
 		exec.child_pids[i++] = exec.pid;
 		current = current->next;

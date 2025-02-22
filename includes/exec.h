@@ -20,14 +20,17 @@
 # define APPEND 1
 # define TRUNC 2
 
-void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last);
 int		exec(t_data *data);
 int		exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last);
 
+/* process */
+int		wait_child(pid_t *child_pids, int child_count);
+void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last);
+
 /* utils */
 void	init_exec(t_data *data, t_exec *exec, t_list **wailtist);
-int		wait_child(pid_t *child_pids, int child_count);
 char	**t_env_to_envp(t_env *env);
+void	cleanup_exec(t_exec *exec);
 
 /* redirect */
 

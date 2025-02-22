@@ -159,18 +159,15 @@ int	handle_edge_pipe(t_token **tokens, t_data *data)
 	while (1)
 	{
 		init_signals();
-		buf = readline("> ");
+		buf = readline("\033[35m> \033[0m");
 		reset_sigquit();
 		if (!buf)
 		{
-			// ctrl-D
 			if (errno == 0)
 				return (1);
-			// ctrl-C
 			else
 				return (1);
 		}
-		// empty line
 		if (buf && buf[0] == '\0')
 		{
 			free(buf);

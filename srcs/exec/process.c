@@ -12,6 +12,31 @@
 
 #include "minishell.h"
 
+int	wait_child(pid_t *child_pids, int child_count)
+{
+	int	i;
+	int	status;
+	int	last_status;
+
+	i = 0;
+	last_status = 0;
+	status = 0;
+	while (i < child_count)
+	{
+		if (child_pids[i] > 0)
+		{
+			waitpid(child_pids[i], &status, 0);
+			if (WIFEXITED(status))
+				last_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				last_status = 128 + WTERMSIG(status);
+		}
+		i++;
+	}
+	free(child_pids);
+	return (last_status);
+}
+
 void	dup_fds(t_data *data, t_exec *exec, bool last)
 {
 	if (exec->fd_in != STDIN_FILENO)
@@ -41,7 +66,7 @@ void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
 	if (redirect_fd(data, cmd) == ERROR)
 		exit(1);
 	if (exec_builtin(data, cmd))
-		ft_exit(data, NULL);
+		return (data_free(data), exit(1));
 	cmd_path = get_path(data, cmd->arg_lst->content, data->env);
 	if (!cmd_path)
 		cmd_path = try_relative(data, cmd->arg_lst->content);

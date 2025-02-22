@@ -12,6 +12,16 @@
 
 #include "minishell.h"
 
+void	cleanup_exec(t_exec *exec)
+{
+	if (exec->fd_in != STDIN_FILENO)
+		close(exec->fd_in);
+	if (exec->pipe[0] != -1)
+		close(exec->pipe[0]);
+	if (exec->pipe[1] != -1)
+		close(exec->pipe[1]);
+}
+
 void	init_exec(t_data *data, t_exec *exec, t_list **waitlist)
 {
 	
@@ -26,30 +36,6 @@ void	init_exec(t_data *data, t_exec *exec, t_list **waitlist)
 	exec->id = 0;
 	exec->pipe[0] = -1;
 	exec->pipe[1] = -1;
-}
-
-int	wait_child(pid_t *child_pids, int child_count)
-{
-	int	i;
-	int	status;
-	int	last_status;
-
-	i = 0;
-	last_status = 0;
-	while (i < child_count)
-	{
-		if (child_pids[i] > 0)
-		{
-			waitpid(child_pids[i], &status, 0);
-			if (WIFEXITED(status))
-				last_status = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
-				last_status = 128 + WTERMSIG(status);
-		}
-		i++;
-	}
-	free(child_pids);
-	return (last_status);
 }
 
 int	get_env_size(t_env *env)

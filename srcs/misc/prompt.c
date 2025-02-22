@@ -43,10 +43,10 @@ void	print_details(void)
 	if (!getcwd(curr, PATH_MAX))
 		return ;
 	short_path = get_shortened_path(curr);
-	git_branch = get_git_branch();
 	if (!short_path)
 		return ;
 	printf("%s%s%s", MAGENTA, short_path, RESET);
+	git_branch = get_git_branch();
 	if (git_branch)
 	{
 		printf(" %s%s%s", DGRAY, git_branch, RESET);
