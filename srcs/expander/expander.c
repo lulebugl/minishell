@@ -28,8 +28,6 @@ static int	handle_empty_quotes(t_data *data, t_list *args)
 	return (0);
 }
 
-char	*remove_quotes2(t_data *data, char *str, bool *expand, int *quoted);
-
 static int	process_argument(t_data *data, t_list *args, bool *expand,
 		int *quoted)
 {

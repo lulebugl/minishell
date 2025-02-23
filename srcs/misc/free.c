@@ -23,6 +23,7 @@ void	data_free(t_data *data)
 	if (data)
 	{
 		env_free(data->env);
+		data->env = NULL;
 		clear_tokens(&data->tokens);
 		free_tree(data->ast);
 		data->ast = NULL;

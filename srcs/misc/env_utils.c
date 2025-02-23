@@ -106,7 +106,7 @@ void	env_init(t_env **env, char **env_arr)
 
 	if (!env_arr || !env_arr[0])
 	{
-		*env = env_create_elem(ft_strdup("SHLVL"), ft_strdup("0"));
+		*env = env_create_elem(ft_strdup("SHLVL"), ft_strdup("1"));
 		if (!env)
 			return ;
 		(*env)->next = env_create_elem("PWD",

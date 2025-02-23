@@ -17,6 +17,17 @@ int	is_quote(int c)
 	return (c == DOUBLE_QUOTE || c == SINGLE_QUOTE);
 }
 
+int	find_first_quote(const char *str)
+{
+	while (*str)
+	{
+		if (*str == SINGLE_QUOTE || *str == DOUBLE_QUOTE)
+			return (*str);
+		str++;
+	}
+	return (0);
+}
+
 /*
  * Function: expand_tilde
  * ----------------------------
@@ -29,11 +40,11 @@ int	expand_tilde(t_data *data, t_list *arg, bool expand)
 	char	*value;
 	char	*content;
 	int		i;
+	int		quoted;
 
 	i = 0;
 	content = (char *)arg->content;
-	if (!expand || !arg || !content || !content[0])
-		return (0);
+	quoted if (!expand || !arg || !content || !content[0]) return (0);
 	if (content[i] != '~' || (content[i] == '~' && content[i + 1] && content[i
 			+ 1] != '/'))
 		return (0);
@@ -145,4 +156,3 @@ int	del_empty_args(t_list **head, t_list *node_to_delete)
 	}
 	return (0);
 }
-

@@ -29,3 +29,5 @@ ls &&
 cat << eof
 > "$test"
 > eof
+
+env -i ./testers/expander puis exit (double free)

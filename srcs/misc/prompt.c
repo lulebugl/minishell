@@ -19,7 +19,7 @@ static char	*get_shortened_path(const char *path)
 	char	*shortened;
 
 	home = getenv("HOME");
-	if (!home || !path)
+	if (!home)
 		return (ft_strdup(path));
 	home_len = ft_strlen(home);
 	if (ft_strncmp(path, home, home_len) == 0)
