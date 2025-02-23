@@ -98,25 +98,9 @@ int expander(t_data *data, t_command *cmd)
     // // 5. Finally remove quotes from all arguments
     if (remove_quotes2(data, cmd->arg_lst) != SUCCESS)
         return (1);
-    debug_expander(cmd);
+    //debug_expander(cmd);
     cmd->arg_count = ft_lstsize(cmd->arg_lst);
     return (SUCCESS);
 }
 
-// int	expander(t_data *data, t_command *cmd)
-// {
-// 	t_list	*args;
-// 	t_list	*prev;
-
-// 	prev = NULL;
-// 	if (!data || !cmd || !cmd->arg_lst)
-// 		return (1);
-// 	args = cmd->arg_lst;
-// 	while (args)
-// 		if (expand_args(data, cmd, &args, &prev))
-// 			return (1);
-// 	debug_expander(cmd);
-// 	cmd->arg_count = ft_lstsize(cmd->arg_lst);
-// 	return (0);
-// }
 
