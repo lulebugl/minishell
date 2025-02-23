@@ -27,6 +27,8 @@ void	data_free(t_data *data)
 		clear_tokens(&data->tokens);
 		free_tree(data->ast);
 		data->ast = NULL;
+		if (data->rl)
+			free(data->rl);
 	}
 }
 
@@ -36,6 +38,9 @@ void	reset_data(t_data *data)
 	{
 		clear_tokens(&data->tokens);
 		free_tree(data->ast);
+		if (data->rl)
+			free(data->rl);
+		data->rl = NULL;
 		data->ast = NULL;
 	}
 }

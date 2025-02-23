@@ -51,7 +51,7 @@ int	exec_prompt(const char *prompt, t_data *data)
 	if (data->status)
 		return (data->exit_code = data->status, clear_tokens(&data->tokens), 1);
 	token_head = data->tokens;
-	if (!data->tokens) // shouldn't be needed
+	if (!data->tokens)
 		return (0);
 	data->ast = new_tree(data, &token_head);
 	if (!data->ast)
@@ -96,6 +96,7 @@ int	launch_program(t_data *data)
 			free(rl);
 			continue ;
 		}
+		data->rl = rl;
 		add_history(rl);
 		exec_prompt(rl, data);
 	}

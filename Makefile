@@ -64,6 +64,8 @@ SRC		= 	main.c \
 			builtins/exit.c \
 			builtins/cd.c \
 			expander/expander.c \
+			expander/expand_tilde.c \
+			expander/expand_var.c \
 			expander/expander_utils.c \
 			expander/expander_recursive.c \
 			expander/separate_expanded.c \

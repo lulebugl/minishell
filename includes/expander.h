@@ -25,5 +25,7 @@ int		expand_tilde(t_data *data, t_list *arg, bool expand);
 int		del_empty_args(t_list **head, t_list *node_to_delete);
 int		only_empty_arg(char *arg);
 int		expand_wildcards(t_list **current);
+char	*replace_substring(char *str, size_t start, size_t len, char *replace);
 
 #endif
+

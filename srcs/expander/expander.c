@@ -88,20 +88,51 @@ static int expand_args(t_data *data, t_command *cmd, t_list **args, t_list **pre
     return (*prev = *args, *args = next, 0);
 }
 
-int	expander(t_data *data, t_command *cmd)
-{
-	t_list	*args;
-	t_list	*prev;
 
-	prev = NULL;
-	if (!data || !cmd || !cmd->arg_lst)
-		return (1);
-	args = cmd->arg_lst;
-	while (args)
-		if (expand_args(data, cmd, &args, &prev))
-			return (1);
-	debug_expander(cmd);
-	cmd->arg_count = ft_lstsize(cmd->arg_lst);
-	return (0);
+int expand_tilde2(t_data *data, t_list *args);
+int expand_vars(t_data *data, t_list *args);
+
+
+int expander(t_data *data, t_command *cmd)
+{
+    if (!data || !cmd || !cmd->arg_lst)
+        return (1);
+    if (expand_tilde2(data, cmd->arg_lst) != SUCCESS)
+        return (1);   
+    // 2. Handle parameter expansion ($VAR, $?) respecting quotes
+    if (expand_vars(data, cmd->arg_lst) != SUCCESS)
+        return (1);
+        
+    // // 3. Handle word splitting (only for unquoted spaces)
+    // if (split_words(data, cmd) != SUCCESS)
+    //     return (1);
+    
+    // // 4. Handle pathname/wildcards expansion (only if unquoted)
+    // if (expand_wildcards(data, cmd) != SUCCESS)
+    //     return (1);
+        
+    // // 5. Finally remove quotes from all arguments
+    // if (remove_quotes(cmd->arg_lst) != SUCCESS)
+    //     return (1);
+    debug_expander(cmd);
+    cmd->arg_count = ft_lstsize(cmd->arg_lst);
+    return (SUCCESS);
 }
+
+// int	expander(t_data *data, t_command *cmd)
+// {
+// 	t_list	*args;
+// 	t_list	*prev;
+
+// 	prev = NULL;
+// 	if (!data || !cmd || !cmd->arg_lst)
+// 		return (1);
+// 	args = cmd->arg_lst;
+// 	while (args)
+// 		if (expand_args(data, cmd, &args, &prev))
+// 			return (1);
+// 	debug_expander(cmd);
+// 	cmd->arg_count = ft_lstsize(cmd->arg_lst);
+// 	return (0);
+// }
 

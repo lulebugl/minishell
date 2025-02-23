@@ -17,12 +17,12 @@ int	is_quote(int c)
 	return (c == DOUBLE_QUOTE || c == SINGLE_QUOTE);
 }
 
-int	find_first_quote(const char *str)
+int find_first_quote(const char *str)
 {
 	while (*str)
 	{
-		if (*str == SINGLE_QUOTE || *str == DOUBLE_QUOTE)
-			return (*str);
+		if (*str == SINGLE_QUOTE || *str == DOUBLE_QUOTE )
+			return *str;
 		str++;
 	}
 	return (0);
@@ -40,11 +40,12 @@ int	expand_tilde(t_data *data, t_list *arg, bool expand)
 	char	*value;
 	char	*content;
 	int		i;
-	int		quoted;
+	int quoted;
 
 	i = 0;
 	content = (char *)arg->content;
-	quoted if (!expand || !arg || !content || !content[0]) return (0);
+	if (!expand || !arg || !content || !content[0])
+		return (0);
 	if (content[i] != '~' || (content[i] == '~' && content[i + 1] && content[i
 			+ 1] != '/'))
 		return (0);
@@ -155,4 +156,26 @@ int	del_empty_args(t_list **head, t_list *node_to_delete)
 		return (1);
 	}
 	return (0);
+}
+
+/*
+ * Function: replace_substring
+ * ----------------------------
+ * Replaces a portion of the original string with a new substring
+ * Returns a new allocated string with the replacement done
+ */
+char	*replace_substring(char *str, size_t start, size_t len, char *replace)
+{
+	size_t	total_len;
+	char	*result;
+
+	total_len = ft_strlen(str) - len + ft_strlen(replace);
+	result = malloc(sizeof(char) * total_len + 1);
+	if (!result)
+		return (NULL);
+	ft_memcpy(result, str, start);
+	ft_strcpy(result + start, replace);
+	ft_strcpy(result + start + ft_strlen(replace), str + start + len);
+	free((char *)str);
+	return (result);
 }

@@ -100,6 +100,7 @@ typedef struct s_data
 	t_env					*env;
 	t_token					*tokens;
 	t_tree_node				*ast;
+	char					*rl;
 	int						status;
 	int						exit_code;
 	bool					print_token;
