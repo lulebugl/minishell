@@ -125,21 +125,21 @@ int	handle_io(const char *s, int *pos, t_token **tokens)
 	if (next && (s[*pos] == '<' && next == '<'))
 	{
 		if (add_token(tokens, s, (t_token_pos){*pos, 2}, TOKEN_HEREDOC))
-			return (ENOSPC);
+			return (ERROR);
 		(*pos) += 2;
 	}
 	if (next && (s[*pos] == '>' && next == '>'))
 	{
 		if (add_token(tokens, s, (t_token_pos){*pos, 2}, TOKEN_APPEND))
-			return (ENOSPC);
+			return (ERROR);
 		(*pos) += 2;
 	}
 	if (s[*pos] == '<')
 		if (add_token(tokens, s, (t_token_pos){(*pos)++, 1}, TOKEN_IN))
-			return (ENOSPC);
+			return (ERROR);
 	if (s[*pos] == '>')
 		if (add_token(tokens, s, (t_token_pos){(*pos)++, 1}, TOKEN_OUT))
-			return (ENOSPC);
+			return (ERROR);
 	return (0);
 }
 
