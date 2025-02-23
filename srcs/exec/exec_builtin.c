@@ -34,7 +34,14 @@ bool	is_builtin(t_command *cmd)
 		return (false);
 }
 
-int	exec_builtin(t_data *data, t_command *cmd)
+void pre_exit(t_data *data, char **argv, t_exec *exec)
+{
+	cleanup_exec(exec);
+	restore_fd(data);
+	data->exit_code = ft_exit(data, argv);
+}
+
+int	exec_builtin(t_data *data, t_command *cmd, t_exec *exec)
 {
 	char	**argv;
 
@@ -44,7 +51,7 @@ int	exec_builtin(t_data *data, t_command *cmd)
 	if (!argv)
 		return (0);
 	if (ft_strcmp(cmd->arg_lst->content, "exit") == 0)
-		data->exit_code = ft_exit(data, argv);
+		pre_exit(data, argv, exec);
 	else if (ft_strcmp(cmd->arg_lst->content, "pwd") == 0)
 		data->exit_code = ft_pwd();
 	else if (ft_strcmp(cmd->arg_lst->content, "cd") == 0)
@@ -62,20 +69,18 @@ int	exec_builtin(t_data *data, t_command *cmd)
 	return (ft_free_tab(argv), 1);
 }
 
-void	exec_single_builtin(t_data *data, t_command *cmd)
+void	exec_single_builtin(t_data *data, t_command *cmd, t_exec *exec)
 {
 	char	**argv;
 
-	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content)
-		return ;
-	expander(data, cmd);
-	if (redirect_fd(data, cmd) == ERROR)
-		return ;
+	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content || expander(data,
+			cmd) == ERROR || redirect_fd(data, cmd) == ERROR)
+		return (cleanup_exec(exec));
 	argv = get_cmd_args_arr(cmd);
 	if (!argv)
 		return ;
 	if (ft_strcmp(cmd->arg_lst->content, "exit") == 0)
-		data->exit_code = ft_exit(data, argv);
+		pre_exit(data, argv, exec);
 	else if (ft_strcmp(cmd->arg_lst->content, "pwd") == 0)
 		data->exit_code = ft_pwd();
 	else if (ft_strcmp(cmd->arg_lst->content, "cd") == 0)
@@ -88,5 +93,6 @@ void	exec_single_builtin(t_data *data, t_command *cmd)
 		data->exit_code = ft_export(data->env, argv);
 	else if (ft_strcmp(cmd->arg_lst->content, "unset") == 0)
 		data->exit_code = ft_unset(data->env, argv);
-	return (restore_fd(data), ft_free_tab(argv));
+	return (cleanup_exec(exec), restore_fd(data), ft_free_tab(argv));
 }
+

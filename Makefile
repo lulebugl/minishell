@@ -73,6 +73,7 @@ SRC		= 	main.c \
 			misc/prompt.c \
 			misc/prompt_git.c \
 			misc/error.c \
+			misc/lst_utils.c \
 			misc/env_utils.c \
 			misc/env_utils2.c \
 			misc/free.c \

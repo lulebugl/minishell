@@ -20,22 +20,27 @@ void	cleanup_exec(t_exec *exec)
 		close(exec->pipe[0]);
 	if (exec->pipe[1] != -1)
 		close(exec->pipe[1]);
+	if (exec->waitlist)
+		clear_waitlist(exec->waitlist);
+	if (exec->child_pids)
+		free(exec->child_pids);
 }
 
 void	init_exec(t_data *data, t_exec *exec, t_list **waitlist)
 {
 	
 	ft_memset(exec, 0, sizeof(t_exec));
-	exec->child_count = ft_lstsize(*waitlist);
-	exec->child_pids = malloc(sizeof(pid_t) * exec->child_count);
+	// exec->child_count = ft_lstsize(*waitlist);
+	exec->child_pids = malloc(sizeof(pid_t) * ft_lstsize(*waitlist));
 	if (!exec->child_pids)
 		err_and_exit(data);
-	ft_memset(exec->child_pids, 0, sizeof(int) * exec->child_count);
+	ft_memset(exec->child_pids, 0, sizeof(int) * ft_lstsize(*waitlist));
 	exec->fd_in = STDIN_FILENO;
 	exec->fd_out = STDOUT_FILENO;
 	exec->id = 0;
 	exec->pipe[0] = -1;
 	exec->pipe[1] = -1;
+	exec->waitlist = waitlist;
 }
 
 int	get_env_size(t_env *env)

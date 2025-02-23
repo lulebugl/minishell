@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	wait_child(pid_t *child_pids, int child_count)
+int	wait_child(t_exec *exec)
 {
 	int	i;
 	int	status;
@@ -21,11 +21,11 @@ int	wait_child(pid_t *child_pids, int child_count)
 	i = 0;
 	last_status = 0;
 	status = 0;
-	while (i < child_count)
+	while (i < exec->child_count)
 	{
-		if (child_pids[i] > 0)
+		if (exec->child_pids[i] > 0)
 		{
-			waitpid(child_pids[i], &status, 0);
+			waitpid(exec->child_pids[i], &status, 0);
 			if (WIFEXITED(status))
 				last_status = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
@@ -33,7 +33,6 @@ int	wait_child(pid_t *child_pids, int child_count)
 		}
 		i++;
 	}
-	free(child_pids);
 	return (last_status);
 }
 
@@ -64,12 +63,12 @@ void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
 	if (exec->pipe[1] != -1)
 		close(exec->pipe[1]);
 	if (redirect_fd(data, cmd) == ERROR)
-		exit(1);
-	if (exec_builtin(data, cmd))
-		return (data_free(data), exit(1));
+		return (cleanup_exec(exec), data_free(data), exit(1));
+	if (exec_builtin(data, cmd, exec))
+		return (cleanup_exec(exec), data_free(data), exit(1));
 	cmd_path = get_path(data, cmd->arg_lst->content, data->env);
 	if (!cmd_path)
-		cmd_path = try_relative(data, cmd->arg_lst->content);
+		cmd_path = try_relative(data, cmd->arg_lst->content, exec);
 	envp = t_env_to_envp(data->env);
 	if (!envp)
 	{

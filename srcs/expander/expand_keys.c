@@ -93,6 +93,7 @@ static char	*expand_str(t_data *data, char *arg)
 int	expand_keys(t_data *data, t_list *args)
 {
 	t_list	*curr;
+	t_list	*prev;
 	char	*arg;
 
 	if (!args)
@@ -108,6 +109,11 @@ int	expand_keys(t_data *data, t_list *args)
 		curr->content = expand_str(data, curr->content);
 		if (!curr->content)
 			return (1);
+		if (ft_strcmp(curr->content, "") == 0)
+		{
+			curr = del_node_and_join(&args, curr);
+			continue ;
+		}
 		curr = curr->next;
 	}
 	return (0);

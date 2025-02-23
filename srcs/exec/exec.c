@@ -18,7 +18,10 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 		return (1);
 	if (!last)
 		if (pipe(exec->pipe) == -1)
+		{
+			cleanup_exec(exec);
 			err_and_exit(data);
+		}
 	exec->pid = fork();
 	if (exec->pid < 0)
 	{
@@ -27,6 +30,7 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 			close(exec->pipe[0]);
 			close(exec->pipe[1]);
 		}
+		cleanup_exec(exec);
 		err_and_exit(data);
 	}
 	if (exec->pid == 0)
@@ -46,7 +50,7 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 	return (0);
 }
 
-static void	clear_waitlist(t_list **waitlist)
+void	clear_waitlist(t_list **waitlist)
 {
 	if (waitlist && *waitlist)
 	{
@@ -68,21 +72,20 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 		return ;
 	current = *waitlist;
 	i = 0;
-	if (!current->next && is_builtin(current->content))
-		return (exec_single_builtin(data, current->content),
-			clear_waitlist(waitlist));
 	init_exec(data, &exec, waitlist);
+	if (!current->next && is_builtin(current->content))
+		return (exec_single_builtin(data, current->content, &exec));
 	while (current)
 	{
 		cmd = current->content;
 		if (expander(data, cmd) == ERROR)
-			return (cleanup_exec(&exec), free(exec.child_pids));
+			return (data->exit_code = wait_child(&exec), cleanup_exec(&exec));
 		data->status = exec_cmd(data, cmd, &exec, !(current->next));
-		exec.child_pids[i++] = exec.pid;
+		exec.child_pids[exec.child_count++] = exec.pid;
 		current = current->next;
 	}
-	data->exit_code = wait_child(exec.child_pids, exec.child_count);
-	clear_waitlist(waitlist);
+	data->exit_code = wait_child(&exec);
+	cleanup_exec(&exec);
 }
 
 void	execute_ast(t_data *data, t_tree_node *root, t_list **waitlist)

@@ -23,6 +23,7 @@ export test=-la
 ls (wc -l)
 ls srcs/*
 echo """"""''""
+echo 123 | wc -c | sleep 1 | echo 568 | cat leaks.supp | exit3 | exit 2 | echo $? | wc -l
 ls &&
 // Heredoc :
 

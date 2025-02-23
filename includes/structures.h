@@ -89,6 +89,7 @@ typedef struct s_exec
 	int						fd_in;
 	int						fd_out;
 	pid_t					pid;
+	t_list					**waitlist;
 	pid_t					*child_pids;
 	int						id;
 	int						child_count;
