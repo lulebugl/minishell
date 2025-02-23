@@ -93,7 +93,6 @@ static char	*expand_str(t_data *data, char *arg)
 int	expand_keys(t_data *data, t_list *args)
 {
 	t_list	*curr;
-	t_list	*prev;
 	char	*arg;
 
 	if (!args)

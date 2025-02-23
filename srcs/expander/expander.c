@@ -89,9 +89,8 @@ int expander(t_data *data, t_command *cmd)
         return (1);
     if (expand_keys(data, cmd->arg_lst) != SUCCESS)
         return (1);
-    if (split_words(data, cmd) != SUCCESS)
-        return (1);
-
+    // if (split_words(data, cmd) != SUCCESS)
+    //     return (1);
     // // 4. Handle pathname/wildcards expansion (only if unquoted)
     // if (expand_wildcards(data, cmd) != SUCCESS)
     //     return (1);
