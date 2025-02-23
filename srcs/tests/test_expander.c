@@ -20,6 +20,7 @@ void	sigint_handler(int sig)
 	int		status;
 
 	g_sig = sig;
+	status = 0;
 	pid = waitpid(-1, &status, 0);
 	if (WTERMSIG(status) == SIGINT || (pid > 0 && (WIFSIGNALED(status)
 				&& WTERMSIG(status) == SIGINT)))

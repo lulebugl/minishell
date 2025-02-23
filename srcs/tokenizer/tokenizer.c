@@ -29,7 +29,7 @@ int	handle_word(const char *s, int *pos, t_token **tokens)
 	int	start;
 
 	start = *pos;
-	if (!s[*pos])
+	if (!s || !s[*pos])
 		return (0);
 	while (s[*pos] && s[*pos] != ' ' && !is_operator(s[*pos])
 		&& !is_logical_and(s + *pos))
@@ -46,7 +46,8 @@ int	handle_word(const char *s, int *pos, t_token **tokens)
 			while (s[*pos] && s[*pos] != '\"')
 				(*pos)++;
 		}
-		(*pos)++;
+		else
+			(*pos)++;
 	}
 	if (add_token(tokens, s, (t_token_pos){start, *pos - start}, TOKEN_WORD))
 		return (1);

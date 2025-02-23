@@ -35,35 +35,35 @@ int find_first_quote(const char *str)
  *	the next character is '/', replace the tilde with the $HOME variable.
  *	returns 0 if successful or conditions not met, and 1 on error
  */
-int	expand_tilde(t_data *data, t_list *arg, bool expand)
-{
-	char	*value;
-	char	*content;
-	int		i;
-	int quoted;
+// int	expand_tilde(t_data *data, t_list *arg, bool expand)
+// {
+// 	char	*value;
+// 	char	*content;
+// 	int		i;
+// 	int quoted;
 
-	i = 0;
-	content = (char *)arg->content;
-	if (!expand || !arg || !content || !content[0])
-		return (0);
-	if (content[i] != '~' || (content[i] == '~' && content[i + 1] && content[i
-			+ 1] != '/'))
-		return (0);
-	value = env_get_value(data->env, "HOME");
-	if (!value)
-	{
-		if (errno)
-			return (1);
-		arg->content = replace_key(content, "", 1, 0);
-		if (!content)
-			return (1);
-		return (0);
-	}
-	arg->content = replace_key(content, value, 1, 0);
-	if (!content)
-		return (1);
-	return (0);
-}
+// 	i = 0;
+// 	content = (char *)arg->content;
+// 	if (!expand || !arg || !content || !content[0])
+// 		return (0);
+// 	if (content[i] != '~' || (content[i] == '~' && content[i + 1] && content[i
+// 			+ 1] != '/'))
+// 		return (0);
+// 	value = env_get_value(data->env, "HOME");
+// 	if (!value)
+// 	{
+// 		if (errno)
+// 			return (1);
+// 		arg->content = replace_key(content, "", 1, 0);
+// 		if (!content)
+// 			return (1);
+// 		return (0);
+// 	}
+// 	arg->content = replace_key(content, value, 1, 0);
+// 	if (!content)
+// 		return (1);
+// 	return (0);
+// }
 
 char	*remove_quotes(t_data *data, char *str, bool *expand, int *quoted)
 {
@@ -169,6 +169,8 @@ char	*replace_substring(char *str, size_t start, size_t len, char *replace)
 	size_t	total_len;
 	char	*result;
 
+	if (!str || len < 0 || !replace)
+		return (NULL);
 	total_len = ft_strlen(str) - len + ft_strlen(replace);
 	result = malloc(sizeof(char) * total_len + 1);
 	if (!result)
@@ -178,4 +180,26 @@ char	*replace_substring(char *str, size_t start, size_t len, char *replace)
 	ft_strcpy(result + start + ft_strlen(replace), str + start + len);
 	free((char *)str);
 	return (result);
+}
+
+/*
+ * Function: skip_in_single_quote
+ * ----------------------------
+ * skip every character inside single quotes
+ * and returns true, else return false
+ */
+bool	skip_in_single_quote(char *str, int *i)
+{
+	if (!str || str[*i] != SINGLE_QUOTE)
+	{
+		if (str && str[*i] == DOUBLE_QUOTE)
+			(*i)++;
+		return (false);
+	}
+	(*i)++;
+	while (str[*i] && str[*i] != SINGLE_QUOTE)
+		(*i)++;
+	if (str[*i] == SINGLE_QUOTE)
+		(*i)++;
+	return (true);
 }

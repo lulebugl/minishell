@@ -29,7 +29,7 @@ static int	replace_home(t_data *data, char *arg, t_list *curr)
 	return (0);
 }
 
-int	expand_tilde2(t_data *data, t_list *args)
+int	expand_tilde(t_data *data, t_list *args)
 {
 	t_list	*curr;
 	char	*arg;

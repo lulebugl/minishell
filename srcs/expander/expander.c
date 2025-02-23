@@ -12,108 +12,93 @@
 
 #include "minishell.h"
 
-static int	handle_empty_quotes(t_data *data, t_list *args)
+int expand_keys(t_data *data, t_list *args);
+int split_words(t_data *data, t_command *cmd);
+
+static char *unquote_arg(t_data *data, char *arg)
 {
+	int i;
+	
+	i = 0;
+	while (arg[i])
+	{
+		if (arg[i] == SINGLE_QUOTE)
+		{
+			arg = str_del_char(arg, &arg[i]);
+			if (!arg)
+				return (NULL);
+			while (arg[i] && arg[i] != SINGLE_QUOTE)
+				i++;
+			arg = str_del_char(arg, &arg[i]);
+			if (!arg)
+				return (NULL);
+			if (!arg[i])
+				return (arg);
+		}
+		else if (arg[i] == DOUBLE_QUOTE)
+		{
+			arg = str_del_char(arg, &arg[i]);
+			if (!arg)
+				return (NULL);
+			while (arg[i] && arg[i] != DOUBLE_QUOTE)
+				i++;
+			arg = str_del_char(arg, &arg[i]);
+			if (!arg)
+				return (NULL);
+			if (!arg[i])
+				return (arg);
+		}
+		else
+			i++;
+	}
+	return (arg);
+}
+
+int remove_quotes2(t_data *data, t_list *args)
+{
+	t_list	*curr;
 	char	*arg;
 
-	arg = args->content;
-	if (ft_strcmp(arg, "\"\"") == 0 || ft_strcmp(arg, "\'\'") == 0)
+	if (!args)
+		return (0);
+	curr = args;
+	while (curr)
 	{
-		free(args->content);
-		args->content = ft_strdup("");
-		if (!args->content)
-			err_and_exit(data);
-		return (1);
+		arg = curr->content;
+		if (!arg)
+		{
+			curr = curr->next;
+			continue ;
+		}
+		curr->content = unquote_arg(data, arg);
+		if (curr->content)
+		{
+			curr = curr->next;
+			continue ;
+		}
+		curr = curr->next;
 	}
 	return (0);
 }
-
-static int	process_argument(t_data *data, t_list *args, bool *expand,
-		int *quoted)
-{
-	char	*arg;
-
-	arg = args->content;
-	args->content = remove_quotes(data, arg, expand, quoted);
-	if (!arg)
-		return (1);
-	if (expand_tilde(data, args, *expand))
-		return (1);
-	if (expand_arg_recursive(data, args, *expand))
-		return (1);
-	return (0);
-}
-
-static int	handle_wildcards(t_list **args, t_list **prev,
-		t_command *cmd)
-{
-	if (!*prev)
-	{
-		if (expand_wildcards(args))
-			return (1);
-		cmd->arg_lst = *args;
-	}
-	else
-	{
-		if (expand_wildcards(args))
-			return (1);
-		(*prev)->next = *args;
-	}
-	return (0);
-}
-
-static int expand_args(t_data *data, t_command *cmd, t_list **args, t_list **prev)
-{
-    t_list *next;
-    bool expand;
-    int quoted;
-
-    next = (*args)->next;
-    if (!(*args)->content)
-        return (*args = next, 0);
-    if (handle_empty_quotes(data, *args))
-    {
-        *args = next;
-        return (0);
-    }
-    expand = true;
-    if (process_argument(data, *args, &expand, &quoted))
-        return (1);
-    //del_empty_args(&cmd->arg_lst, *args);
-    if (!quoted && *args)
-        separate_expanded(data, *args);
-    if (!quoted && (*args)->content && ft_strchr((*args)->content, '*'))
-        if (handle_wildcards(args, prev, cmd))
-            return (1);
-    return (*prev = *args, *args = next, 0);
-}
-
-
-int expand_tilde2(t_data *data, t_list *args);
-int expand_vars(t_data *data, t_list *args);
-
 
 int expander(t_data *data, t_command *cmd)
 {
     if (!data || !cmd || !cmd->arg_lst)
         return (1);
-    if (expand_tilde2(data, cmd->arg_lst) != SUCCESS)
-        return (1);   
-    // 2. Handle parameter expansion ($VAR, $?) respecting quotes
-    if (expand_vars(data, cmd->arg_lst) != SUCCESS)
+    if (expand_tilde(data, cmd->arg_lst) != SUCCESS)
         return (1);
-        
-    // // 3. Handle word splitting (only for unquoted spaces)
-    // if (split_words(data, cmd) != SUCCESS)
-    //     return (1);
-    
+    if (expand_keys(data, cmd->arg_lst) != SUCCESS)
+        return (1);
+    if (split_words(data, cmd) != SUCCESS)
+        return (1);
+
     // // 4. Handle pathname/wildcards expansion (only if unquoted)
     // if (expand_wildcards(data, cmd) != SUCCESS)
     //     return (1);
-        
+
     // // 5. Finally remove quotes from all arguments
-    // if (remove_quotes(cmd->arg_lst) != SUCCESS)
-    //     return (1);
+    if (remove_quotes2(data, cmd->arg_lst) != SUCCESS)
+        return (1);
     debug_expander(cmd);
     cmd->arg_count = ft_lstsize(cmd->arg_lst);
     return (SUCCESS);
