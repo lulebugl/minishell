@@ -41,13 +41,13 @@ void	dup_fds(t_data *data, t_exec *exec, bool last)
 	if (exec->fd_in != STDIN_FILENO)
 	{
 		if (dup2(exec->fd_in, STDIN_FILENO) == -1)
-			err_and_exit(data);
+			return (cleanup_exec(exec), err_and_exit(data));
 		close(exec->fd_in);
 	}
 	if (!last)
 	{
 		if (dup2(exec->pipe[1], STDOUT_FILENO) == -1)
-			err_and_exit(data);
+			return (cleanup_exec(exec), err_and_exit(data));
 		close(exec->pipe[1]);
 	}
 }
@@ -71,15 +71,9 @@ void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
 		cmd_path = try_relative(data, cmd->arg_lst->content, exec);
 	envp = t_env_to_envp(data->env);
 	if (!envp)
-	{
-		free(cmd_path);
-		err_and_exit(data);
-	}
+		return (free(cmd_path), cleanup_exec(exec), err_and_exit(data));
 	execve(cmd_path, get_cmd_args_arr(cmd), envp);
 	ft_free_tab(envp);
-	free(cmd_path);
-	err_and_exit(data);
+	return (free(cmd_path), cleanup_exec(exec), err_and_exit(data));
 }
-
-
 
