@@ -79,7 +79,8 @@ int	process_redirections(t_data *data, t_command *cmd)
 		{
 			if (curr->filename && process_infile(curr->filename) == ERROR)
 				return (data->exit_code = errno, ERROR);
-			unlink(".minishell.tmp");
+			if (curr->filename)
+				unlink(".minishell.tmp");
 		}
 		curr = curr->next;
 	}

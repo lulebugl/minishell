@@ -71,7 +71,9 @@ static void	read_heredoc(t_data *data, int fd, char *eof)
 	while (true)
 	{
 		buff = NULL;
-		buff = readline("> ");
+		heredoc_signals();
+		buff = readline("heredoc> ");
+		reset_sigquit();
 		i++;
 		if (!buff)
 		{
@@ -114,10 +116,8 @@ int	parse_heredoc(t_data *data, t_redirection **redir_root)
 	{
 		if (head->type == TOKEN_HEREDOC)
 		{
-			init_signals();
 			if (!get_heredoc(data, head->filename))
 				return (0);
-			reset_sigquit();
 			free(head->filename);
 			head->filename = NULL;
 			last_hdoc = head;

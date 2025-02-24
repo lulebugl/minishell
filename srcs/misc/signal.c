@@ -21,6 +21,19 @@ void	reset_sigquit(void)
 	sigemptyset(&(act).sa_mask);
 	act.sa_handler = &sigquit_handler;
 	sigaction(SIGQUIT, &act, NULL);
+	act.sa_handler = &sigint_handler;
+	sigaction(SIGINT, &act, NULL);
+}
+
+void	heredoc_signals(void)
+{
+	struct sigaction	act;
+
+	ft_bzero(&act, sizeof(act));
+	act.sa_flags = SA_RESTART;
+	sigemptyset(&(act).sa_mask);
+	act.sa_handler = &sigint_heredoc_handler;
+	sigaction(SIGINT, &act, NULL);
 }
 
 void	init_signals(void)

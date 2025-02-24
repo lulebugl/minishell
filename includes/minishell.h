@@ -76,6 +76,8 @@ void		init_signals(void);
 void		reset_sigquit(void);
 void		sigint_handler(int sig);
 void		sigquit_handler(int sig);
+void		sigint_heredoc_handler(int sig);
+void		heredoc_signals(void);
 
 // BUILTINS
 
