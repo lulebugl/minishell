@@ -48,6 +48,7 @@ void	env_add_key(t_env **env, char *key, char *value)
 	if (env_key_exists(*env, key))
 	{
 		env_update_key(*env, key, value);
+		free(key);
 		return ;
 	}
 	new = env_create_elem(key, value);
