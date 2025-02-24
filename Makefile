@@ -71,6 +71,7 @@ SRC		= 	main.c \
 			expander/expander_recursive.c \
 			expander/separate_expanded.c \
 			expander/expand_wildcards.c \
+			expander/expand_wildcards_utils.c \
 			expander/quotes.c \
 			misc/signal.c \
 			misc/prompt.c \

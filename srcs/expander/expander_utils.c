@@ -99,3 +99,28 @@ bool	skip_in_single_quote(char *str, int *i)
 		(*i)++;
 	return (true);
 }
+
+bool	skip_quoted(char *str, int *i)
+{
+	if (!str || (str[*i] != SINGLE_QUOTE && str[*i] != DOUBLE_QUOTE))
+		return (false);
+	if (str[*i] == SINGLE_QUOTE)
+	{
+		(*i)++;
+		while (str[*i] && str[*i] != SINGLE_QUOTE)
+			(*i)++;
+		if (str[*i] == SINGLE_QUOTE)
+			(*i)++;
+		return (true);
+	}
+	else if (str[*i] == DOUBLE_QUOTE)
+	{
+		(*i)++;
+		while (str[*i] && str[*i] != DOUBLE_QUOTE)
+			(*i)++;
+		if (str[*i] == DOUBLE_QUOTE)
+			(*i)++;
+		return (true);
+	}
+	return (true);
+}

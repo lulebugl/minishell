@@ -22,9 +22,12 @@ int		expander(t_data *data, t_command *cmd);
 int		separate_expanded(t_data *data, t_list *args);
 char	*replace_key(char *str, char *replace, int start, int key_len);
 int		remove_quotes(t_data *data, t_list *args);
-int		expand_wildcard(t_list **current);
+void	expand_wildcard(t_list **current);
 int		expand_keys(t_data *data, t_list *args);
 char	*replace_substring(char *str, size_t start, size_t len, char *replace);
+
+/* wildcards */
+int		expand_wildcards(t_data *data, t_command *cmd);
 
 /* utils */
 int		del_empty_args(t_list **head, t_list *node_to_delete);
