@@ -21,16 +21,12 @@
 #  define DEBUG false
 # endif
 
-extern int	g_sig;
-
 # include "debug.h"
 # include "exec.h"
 # include "expander.h"
 # include "parser.h"
 # include "structures.h"
 # include "tokenizer.h"
-
-/* standard */
 # include <dirent.h>
 # include <errno.h>
 # include <fcntl.h>
@@ -42,6 +38,10 @@ extern int	g_sig;
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+
+extern int	g_sig;
+
+/* standard */
 
 # define PROMPT "\x1b[38;5;87mminishell > \033[0m"
 # define PROMPT2 "\033[34m└─➤ \033[0m"
@@ -114,4 +114,3 @@ char		*get_git_branch(void);
 t_list		*del_node_and_join(t_list **head, t_list *node_to_delete);
 
 #endif
-

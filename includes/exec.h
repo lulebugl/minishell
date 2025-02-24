@@ -49,6 +49,4 @@ int		exec_builtin(t_data *data, t_command *cmd, t_exec *exec);
 bool	is_builtin(t_command *cmd);
 void	exec_single_builtin(t_data *data, t_command *cmd, t_exec *exec);
 
-
 #endif
-
