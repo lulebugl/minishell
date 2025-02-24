@@ -17,19 +17,18 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 	if (!cmd || !cmd->arg_lst)
 		return (1);
 	if (!last)
+	{
 		if (pipe(exec->pipe) == -1)
 		{
 			cleanup_exec(exec);
 			err_and_exit(data);
 		}
+	}
 	exec->pid = fork();
 	if (exec->pid < 0)
 	{
-		if (!last)
-		{
-			close(exec->pipe[0]);
+		if (!last && !close(exec->pipe[0]))
 			close(exec->pipe[1]);
-		}
 		cleanup_exec(exec);
 		err_and_exit(data);
 	}

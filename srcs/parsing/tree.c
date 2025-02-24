@@ -12,99 +12,76 @@
 
 #include "minishell.h"
 
-void	free_tree(t_tree_node *root)
+t_tree_node	*handle_open_par(t_data *data, t_token **token, t_tree_node *root)
 {
-	if (!root)
-		return ;
-	if (root->type == NODE_COMMAND)
-		free_command(root->cmd);
-	free_tree(root->left);
-	free_tree(root->right);
-	free(root);
+	t_tree_node	*tmp_node;
+
+	*token = (*token)->next;
+	tmp_node = new_tree(data, token);
+	if (!tmp_node)
+		return (free_tree(root), NULL);
+	return (tmp_node);
 }
 
-static t_tree_node	*new_node(t_node_type type)
+t_tree_node	*handle_command(t_data *data, t_token **token, t_tree_node *root)
 {
-	t_tree_node	*node;
+	t_tree_node	*tmp_node;
 
-	if (type < 0) // to prevent destroying my pc
-	{
-		printf("not implemented yet\n");
-		exit(1);
-	}
-	node = malloc(sizeof(t_tree_node));
-	if (!node)
+	tmp_node = new_node(NODE_COMMAND);
+	if (!tmp_node)
+		return (free_tree(root), NULL);
+	tmp_node->cmd = get_command(data, token);
+	if (!tmp_node->cmd)
+		return (free(tmp_node), free_tree(root), NULL);
+	return (tmp_node);
+}
+
+t_tree_node	*handle_other_nodes(t_token **token)
+{
+	return (new_node(get_node_type((*token)->type)));
+}
+
+t_tree_node	*process_token(t_data *data, t_token **token, t_tree_node *root)
+{
+	t_tree_node	*tmp_node;
+
+	tmp_node = NULL;
+	if ((*token)->type == TOKEN_OPEN_PAR)
+		tmp_node = handle_open_par(data, token, root);
+	else if ((*token)->type == TOKEN_CLOSE_PAR)
+		return (root);
+	else if (token_is_part_of_command((*token)->type))
+		tmp_node = handle_command(data, token, root);
+	else
+		tmp_node = handle_other_nodes(token);
+	if (!tmp_node)
 		return (NULL);
-	node->left = NULL;
-	node->right = NULL;
-	node->cmd = NULL;
-	node->type = type;
-	return (node);
-}
-
-static t_node_type	get_node_type(t_token_type token_type)
-{
-	if (token_type == TOKEN_AND)
-		return (NODE_AND);
-	if (token_type == TOKEN_OR)
-		return (NODE_OR);
-	if (token_type == TOKEN_PIPE)
-		return (NODE_PIPE);
-	if (token_type == TOKEN_WORD)
-		return (NODE_COMMAND);
-	if (token_type == TOKEN_IN)
-		return (NODE_COMMAND);
-	if (token_type == TOKEN_OUT)
-		return (NODE_COMMAND);
-	if (token_type == TOKEN_APPEND)
-		return (NODE_COMMAND);
-	if (token_type == TOKEN_HEREDOC)
-		return (NODE_COMMAND);
-	return (-1); // to prevent destroying my pc
+	if (!root)
+		root = tmp_node;
+	else if (root->left && !root->right)
+		root->right = tmp_node;
+	else
+	{
+		tmp_node->left = root;
+		root = tmp_node;
+	}
+	if ((*token) && tmp_node->type != NODE_COMMAND)
+		(*token) = (*token)->next;
+	return (root);
 }
 
 t_tree_node	*new_tree(t_data *data, t_token **token)
 {
 	t_tree_node	*root;
-	t_tree_node	*tmp_node;
 
 	root = NULL;
-	tmp_node = NULL;
 	if (!(*token))
 		return (NULL);
 	while ((*token))
 	{
-		if ((*token)->type == TOKEN_OPEN_PAR)
-		{
-			*token = (*token)->next;
-			tmp_node = new_tree(data, token);
-			if (!tmp_node)
-				return (free_tree(root), NULL);
-		}
-		else if ((*token)->type == TOKEN_CLOSE_PAR)
-			return (root);
-		else if (token_is_part_of_command((*token)->type))
-		{
-			tmp_node = new_node(NODE_COMMAND);
-			if (!tmp_node)
-				return (free(root), NULL);
-			tmp_node->cmd = get_command(data, token);
-			if (!tmp_node->cmd)
-				return (free(tmp_node), free_tree(root), NULL);
-		}
-		else
-			tmp_node = new_node(get_node_type((*token)->type));
+		root = process_token(data, token, root);
 		if (!root)
-			root = tmp_node;
-		else if (root->left && !root->right)
-			root->right = tmp_node;
-		else
-		{
-			tmp_node->left = root;
-			root = tmp_node;
-		}
-		if ((*token) && tmp_node->type != NODE_COMMAND)
-			(*token) = (*token)->next;
+			return (NULL);
 	}
 	return (root);
 }

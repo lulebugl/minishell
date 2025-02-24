@@ -17,6 +17,8 @@
 
 t_tree_node		*new_tree(t_data *data, t_token **token);
 t_command		*get_command(t_data *data, t_token **token);
+t_tree_node		*new_node(t_node_type type);
+t_node_type		get_node_type(t_token_type token_type);
 void			free_command(t_command *cmd);
 void			free_redirections(t_redirection *root);
 void			free_tree(t_tree_node *root);

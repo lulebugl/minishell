@@ -32,6 +32,15 @@ void	sigint_handler(int sig)
 	g_sig = sig;
 }
 
+void	sigint_heredoc_handler(int sig)
+{
+	g_sig = sig;
+	write(2, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
 void	sigquit_handler(int sig)
 {
 	g_sig = sig;

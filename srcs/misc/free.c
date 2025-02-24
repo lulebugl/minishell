@@ -71,3 +71,14 @@ void	free_str_arr(char **strs)
 	}
 	free(strs);
 }
+
+void	free_tree(t_tree_node *root)
+{
+	if (!root)
+		return ;
+	if (root->type == NODE_COMMAND)
+		free_command(root->cmd);
+	free_tree(root->left);
+	free_tree(root->right);
+	free(root);
+}

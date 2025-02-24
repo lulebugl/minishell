@@ -83,7 +83,7 @@ SRC		= 	main.c \
 			parsing/command.c \
 			parsing/redirections.c \
 			parsing/tree.c \
-			parsing/parser.c	\
+			parsing/tree_utils.c \
 			parsing/heredoc.c \
 			exec/debug.c \
 			exec/exec.c \

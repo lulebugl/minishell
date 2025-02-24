@@ -87,30 +87,30 @@ int	process_redirections(t_data *data, t_command *cmd)
 	return (0);
 }
 
-int redirect_fd(t_data *data, t_command *cmd)
+int	redirect_fd(t_data *data, t_command *cmd)
 {
-    int saved_stdin;
-    int saved_stdout;
+	int	saved_stdin;
+	int	saved_stdout;
 
-    saved_stdin = dup(STDIN_FILENO);
-    saved_stdout = dup(STDOUT_FILENO);
-    if (saved_stdin == -1 || saved_stdout == -1)
-        return (ERROR);
-    if (process_redirections(data, cmd) == ERROR)
-    {
-        if (saved_stdin != -1)
-        {
-            dup2(saved_stdin, STDIN_FILENO);
-            close(saved_stdin);
-        }
-        if (saved_stdout != -1)
-        {
-            dup2(saved_stdout, STDOUT_FILENO);
-            close(saved_stdout);
-        }
-        return (ERROR);
-    }
-    data->saved_stdin = saved_stdin;
-    data->saved_stdout = saved_stdout;
-    return (SUCCESS);
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	if (saved_stdin == -1 || saved_stdout == -1)
+		return (ERROR);
+	if (process_redirections(data, cmd) == ERROR)
+	{
+		if (saved_stdin != -1)
+		{
+			dup2(saved_stdin, STDIN_FILENO);
+			close(saved_stdin);
+		}
+		if (saved_stdout != -1)
+		{
+			dup2(saved_stdout, STDOUT_FILENO);
+			close(saved_stdout);
+		}
+		return (ERROR);
+	}
+	data->saved_stdin = saved_stdin;
+	data->saved_stdout = saved_stdout;
+	return (SUCCESS);
 }

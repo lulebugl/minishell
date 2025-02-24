@@ -34,7 +34,7 @@ bool	is_builtin(t_command *cmd)
 		return (false);
 }
 
-void pre_exit(t_data *data, char **argv, t_exec *exec)
+void	pre_exit(t_data *data, char **argv, t_exec *exec)
 {
 	cleanup_exec(exec);
 	restore_fd(data);
