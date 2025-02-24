@@ -85,7 +85,6 @@ int	launch_program(t_data *data)
 		if (!rl)
 		{
 			// ctrl-D
-			printf("What\n");
 			if (data->exit_code == 0)
 				return (1);
 			// ctrl-C

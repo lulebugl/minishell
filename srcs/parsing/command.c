@@ -96,7 +96,7 @@ static int	set_command(t_token **token, t_command *cmd)
 	return (1);
 }
 
-t_command	*get_command(t_token **token)
+t_command	*get_command(t_data *data, t_token **token)
 {
 	t_command		*cmd;
 
@@ -111,7 +111,7 @@ t_command	*get_command(t_token **token)
 			return (free_command(cmd), NULL);
 	cmd->arg_count = ft_lstsize(cmd->arg_lst);
 	cmd->redir_count = count_redirections(cmd->redirections);
-	if (!parse_heredoc(&(cmd->redirections)))
+	if (!parse_heredoc(data, &(cmd->redirections)))
 		return (NULL);
 	return (cmd);
 }

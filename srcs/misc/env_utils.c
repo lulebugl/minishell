@@ -78,12 +78,12 @@ static void	env_update_shlvl(t_env **env)
 	int		tmp;
 
 	if (!env_key_exists(*env, "SHLVL"))
-		env_add_key(env, "SHLVL", "1");
+		env_add_key(env, ft_strdup("SHLVL"), ft_strdup("1"));
 	else
 	{
 		tmp = ft_atoi(env_get_value(*env, "SHLVL"));
 		if (tmp < 0)
-			env_update_key(*env, "SHLVL", "0");
+			env_update_key(*env, "SHLVL", ft_strdup("0"));
 		else
 			env_update_key(*env, "SHLVL", ft_itoa(tmp + 1));
 	}
@@ -109,7 +109,7 @@ void	env_init(t_env **env, char **env_arr)
 		*env = env_create_elem(ft_strdup("SHLVL"), ft_strdup("1"));
 		if (!env)
 			return ;
-		(*env)->next = env_create_elem("PWD",
+		(*env)->next = env_create_elem(ft_strdup("PWD"),
 				ft_strdup(getcwd(curr, PATH_MAX)));
 		return ;
 	}

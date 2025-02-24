@@ -69,6 +69,7 @@ SRC		= 	main.c \
 			expander/expander_utils.c \
 			expander/expander_recursive.c \
 			expander/separate_expanded.c \
+			expander/expand_wildcards.c \
 			misc/signal.c \
 			misc/prompt.c \
 			misc/prompt_git.c \
@@ -81,7 +82,6 @@ SRC		= 	main.c \
 			parsing/ast_debug.c \
 			parsing/command.c \
 			parsing/redirections.c \
-			parsing/wildcards.c \
 			parsing/tree.c \
 			parsing/parser.c	\
 			parsing/heredoc.c \

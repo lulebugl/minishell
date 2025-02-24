@@ -87,7 +87,9 @@ t_tree_node	*new_tree(t_data *data, t_token **token)
 		{
 			tmp_node = new_node(NODE_COMMAND);
 			//rajouter protect
-			tmp_node->cmd = get_command(token);
+			if (!tmp_node)
+				return (free(root), NULL);
+			tmp_node->cmd = get_command(data, token);
 			if (!tmp_node->cmd)
 				return (free(tmp_node), free_tree(root), NULL);
 		}

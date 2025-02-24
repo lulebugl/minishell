@@ -12,83 +12,87 @@
 
 #include "minishell.h"
 
-static void	write_variable(t_data *data, int fd, char *buff, int *i)
+static void	heredoc_sigint_handler(int sig)
 {
-	char	*var;
-	char	*value;
-	int		start;
+	pid_t	pid;
+	int		status;
 
-	(*i)++;
-	if (buff[*i] == '?')
-	{
-		var = ft_itoa(data->exit_code);
-		write(fd, var, ft_strlen(var));
-		free(var);
-		(*i)++;
-	}
+	g_sig = sig;
+	pid = waitpid(-1, &status, 0);
+	if (WTERMSIG(status) == SIGINT || (pid > 0 && (WIFSIGNALED(status)
+				&& WTERMSIG(status) == SIGINT)))
+		write(2, "\n", 1);
 	else
 	{
-		start = *i;
-		while (buff[*i] && (ft_isalnum(buff[*i]) || buff[*i] == '_'))
-			(*i)++;
-		var = ft_strndup(&buff[start], *i - start);
-		if (env_key_exists(data->env, var))
-			value = env_get_value(data->env, var);
-		else
-			value = "";
-		write(fd, value, ft_strlen(value));
-		free(var);
+		// write(2, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		// print_details();
+		// rl_redisplay();
+		exit(130);
 	}
+	g_sig = sig;
 }
 
-static void	write_heredoc(t_data *data, int fd, char *buff)
+static void	init_heredoc_signals(void)
 {
-	int		i;
-	int		start;
+	struct sigaction	act;
 
-	i = 0;
-	start = 0;
-	while (buff[i])
-	{
-		if (buff[i] == '$')
-		{
-			write(fd, &buff[start], i - start);
-			write_variable(data, fd, buff, &i);
-			start = i;
-		}
-		else
-			i++;
-	}
-	write(fd, &buff[start], i - start);
+	ft_bzero(&act, sizeof(act));
+	act.sa_flags = SA_RESTART;
+	sigemptyset(&act.sa_mask);
+	act.sa_handler = &heredoc_sigint_handler;
+	sigaction(SIGINT, &act, NULL);
+	act.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &act, NULL);
 }
 
-static void	read_heredoc(t_data *data, int fd, char *eof)
+static void	read_heredoc(int fd, char *eof)
 {
 	char	*buff;
 	int		i;
+	pid_t	pid;
+	int		status;
 
-	i = 0;
-	while (true)
+	status = 0;
+	pid = fork();
+	if (pid == 0)
 	{
-		buff = NULL;
-		buff = readline("> ");
-		i++;
-		if (!buff)
+		i = 0;
+		while (true)
 		{
-			ft_printf_fd(2, "minishell: warning: here-document at line %d \
-delimited by end-of-file (wanted '%s')\n", i, eof);
-			break ;
+			init_heredoc_signals();
+			buff = readline("> ");
+			reset_sigquit();
+			i++;
+			if (!buff)
+			{
+				ft_printf_fd(2,
+								"minishell: warning: here-document at line %d \
+delimited by end-of-file (wanted '%s')\n",
+								i,
+								eof);
+				exit(0);
+			}
+			if (ft_strcmp(buff, eof) == 0)
+			{
+				free(buff);
+				exit(0);
+			}
+			write(fd, buff, ft_strlen(buff));
+			write(fd, "\n", 1);
+			free(buff);
 		}
-		if (ft_strcmp(buff, eof) == 0)
-			break ;
-		write_heredoc(data, fd, buff);
-		write(fd, "\n", 1);
-		free(buff);
 	}
-	free(buff);
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (WIFSIGNALED(status) || WEXITSTATUS(status) == 130)
+			g_sig = SIGINT;
+	}
 }
 
-static int	get_heredoc(t_data *data, char *eof)
+static int	get_heredoc(char *eof)
 {
 	int	fd;
 
@@ -98,12 +102,12 @@ static int	get_heredoc(t_data *data, char *eof)
 	fd = open(".minishell.tmp", O_CREAT | O_RDWR, 0644);
 	if (!fd)
 		return (0);
-	read_heredoc(data, fd, eof);
+	read_heredoc(fd, eof);
 	close(fd);
 	return (1);
 }
 
-int	parse_heredoc(t_data *data, t_redirection **redir_root)
+int	parse_heredoc(t_redirection **redir_root)
 {
 	t_redirection	*head;
 	t_redirection	*last_hdoc;
@@ -115,7 +119,7 @@ int	parse_heredoc(t_data *data, t_redirection **redir_root)
 		if (head->type == TOKEN_HEREDOC)
 		{
 			init_signals();
-			if (!get_heredoc(data, head->filename))
+			if (!get_heredoc(head->filename))
 				return (0);
 			reset_sigquit();
 			free(head->filename);
@@ -125,8 +129,11 @@ int	parse_heredoc(t_data *data, t_redirection **redir_root)
 		head = head->next;
 	}
 	if (last_hdoc)
+	{
 		last_hdoc->filename = ft_strdup(".minishell.tmp");
-	if (last_hdoc && !last_hdoc->filename)
-		return (0);
+		if (!last_hdoc->filename)
+			return (0);
+	}
 	return (1);
 }
+
