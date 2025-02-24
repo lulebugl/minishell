@@ -18,9 +18,8 @@ int	read_extended(t_token **tokens, t_data *data)
 
 	while (1)
 	{
-		init_signals();
+		signal(SIGINT, signal_ctlc);		
 		buf = readline("\033[35m> \033[0m");
-		reset_sigquit();
 		if (!buf)
 			return (1);
 		if (buf && buf[0] == '\0')

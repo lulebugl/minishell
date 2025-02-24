@@ -117,4 +117,3 @@ int	handle_io(const char *s, int *pos, t_token **tokens)
 			return (ERROR);
 	return (0);
 }
-
