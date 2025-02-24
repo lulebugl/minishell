@@ -71,9 +71,8 @@ static void	read_heredoc(t_data *data, int fd, char *eof)
 	while (true)
 	{
 		buff = NULL;
-		heredoc_signals();
+		signal(SIGINT, signal_ctlc_heredoc);
 		buff = readline("heredoc> ");
-		reset_sigquit();
 		i++;
 		if (!buff)
 		{

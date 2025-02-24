@@ -57,6 +57,9 @@ void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
 	char	*cmd_path;
 	char	**envp;
 
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	termios_change(true);
 	dup_fds(data, exec, last);
 	if (exec->pipe[0] != -1)
 		close(exec->pipe[0]);
@@ -76,4 +79,3 @@ void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
 	ft_free_tab(envp);
 	return (free(cmd_path), cleanup_exec(exec), err_and_exit(data));
 }
-

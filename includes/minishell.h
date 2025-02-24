@@ -38,6 +38,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <termios.h>
 
 extern int	g_sig;
 
@@ -72,12 +73,9 @@ void		reset_data(t_data *data);
 
 // SIGNALS
 
-void		init_signals(void);
-void		reset_sigquit(void);
-void		sigint_handler(int sig);
-void		sigquit_handler(int sig);
-void		sigint_heredoc_handler(int sig);
-void		heredoc_signals(void);
+int	termios_change(bool echo_ctl_chr);
+void	signal_ctlc_heredoc(int sig);
+void	signal_ctlc(int sig);
 
 // BUILTINS
 

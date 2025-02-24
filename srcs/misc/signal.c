@@ -12,39 +12,20 @@
 
 #include "minishell.h"
 
-void	reset_sigquit(void)
+int	termios_change(bool echo_ctl_chr)
 {
-	struct sigaction	act;
+	struct termios	terminos_p;
+	int				status;
 
-	ft_bzero(&act, sizeof(act));
-	act.sa_flags = SA_RESTART;
-	sigemptyset(&(act).sa_mask);
-	act.sa_handler = &sigquit_handler;
-	sigaction(SIGQUIT, &act, NULL);
-	act.sa_handler = &sigint_handler;
-	sigaction(SIGINT, &act, NULL);
-}
-
-void	heredoc_signals(void)
-{
-	struct sigaction	act;
-
-	ft_bzero(&act, sizeof(act));
-	act.sa_flags = SA_RESTART;
-	sigemptyset(&(act).sa_mask);
-	act.sa_handler = &sigint_heredoc_handler;
-	sigaction(SIGINT, &act, NULL);
-}
-
-void	init_signals(void)
-{
-	struct sigaction	act;
-
-	ft_bzero(&act, sizeof(act));
-	act.sa_flags = SA_RESTART;
-	sigemptyset(&(act).sa_mask);
-	act.sa_handler = &sigint_handler;
-	sigaction(SIGINT, &act, NULL);
-	act.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &act, NULL);
+	status = tcgetattr(STDOUT_FILENO, &terminos_p);
+	if (status == -1)
+		return (ERROR);
+	if (echo_ctl_chr)
+		terminos_p.c_lflag |= ECHOCTL;
+	else
+		terminos_p.c_lflag &= ~(ECHOCTL);
+	status = tcsetattr(STDOUT_FILENO, TCSANOW, &terminos_p);
+	if (status == -1)
+		return (ERROR);
+	return (0);
 }
