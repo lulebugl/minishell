@@ -86,7 +86,6 @@ t_tree_node	*new_tree(t_data *data, t_token **token)
 		else if (token_is_part_of_command((*token)->type))
 		{
 			tmp_node = new_node(NODE_COMMAND);
-			//rajouter protect
 			if (!tmp_node)
 				return (free(root), NULL);
 			tmp_node->cmd = get_command(data, token);

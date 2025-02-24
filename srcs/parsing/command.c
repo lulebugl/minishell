@@ -77,7 +77,7 @@ static int	set_command(t_token **token, t_command *cmd)
 		{
 			if (ft_strchr((*token)->content, '/'))
 				return (printf("minishell: wildcard in another \
-					directory not implemented.\n"), 0);
+directory not implemented.\n"), 0);
 		}
 		ft_lstadd_back(&(cmd->arg_lst),
 			ft_lstnew(ft_strdup((*token)->content)));
@@ -88,7 +88,7 @@ static int	set_command(t_token **token, t_command *cmd)
 		*token = (*token)->next;
 		if (ft_strchr((*token)->content, '*'))
 			return (printf("minishell: wildcard in \
-				redirection not implemented.\n"), 0);
+redirection not implemented.\n"), 0);
 		add_redirection(&(cmd->redirections),
 			new_redirection(type, (*token)->content));
 	}
