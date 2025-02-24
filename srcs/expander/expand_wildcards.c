@@ -79,8 +79,10 @@ int	expand_wildcard(t_list **current)
 	t_list	*tmp;
 	t_list	*matches;
 
-	if (!ft_strchr((*current)->content, '*'))
-		return (0);
+	if (!current || !*current || is_quote(((char*)(*current)->content)[0]))
+		return (1);
+	if (!ft_strchr((*current)->content, '*') )
+		return (1);
 	tmp = *current;
 	matches = find_matchs((*current)->content);
 	*current = matches;

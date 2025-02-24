@@ -85,7 +85,8 @@ static char	*expand_str(t_data *data, char *arg)
 				err_and_exit(data);
 			continue ;
 		}
-		i++;
+		if (arg[i])
+			i++;
 	}
 	return (arg);
 }

@@ -98,9 +98,9 @@ void	execute_ast(t_data *data, t_tree_node *root, t_list **waitlist)
 	else if (root->type == NODE_AND || root->type == NODE_OR)
 	{
 		execute_waitlist(waitlist, data);
-		if (root->type == NODE_AND && data->status != 0)
+		if (root->type == NODE_AND && data->exit_code != 0)
 			return ;
-		if (root->type == NODE_OR && data->status == 0)
+		if (root->type == NODE_OR && data->exit_code == 0)
 			return ;
 	}
 	execute_ast(data, root->right, waitlist);

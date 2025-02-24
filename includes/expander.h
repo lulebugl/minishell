@@ -30,6 +30,7 @@ char	*replace_substring(char *str, size_t start, size_t len, char *replace);
 int		del_empty_args(t_list **head, t_list *node_to_delete);
 int		only_empty_arg(char *arg);
 bool	skip_in_single_quote(char *str, int *i);
+int		is_quote(int c);
 
 #endif
 

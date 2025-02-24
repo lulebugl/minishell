@@ -98,8 +98,6 @@ int	expand_wildcards(t_data *data, t_command *cmd)
 			continue ;
 		}
 		handle_wildcards(&curr, &prev, cmd);
-		// if (!curr->content)
-		// 	return (1);
 		prev = curr;
 		curr = curr->next;
 	}
@@ -116,11 +114,8 @@ int expander(t_data *data, t_command *cmd)
         return (1);
     // if (split_words(data, cmd) != SUCCESS)
     //     return (1);
-    // // 4. Handle pathname/wildcards expansion (only if unquoted)
     if (expand_wildcards(data, cmd) != SUCCESS)
         return (1);
-
-    // // 5. Finally remove quotes from all arguments
     if (remove_quotes(data, cmd->arg_lst) != SUCCESS)
         return (1);
     //debug_expander(cmd);

@@ -54,6 +54,7 @@ SRC		= 	main.c \
 			tokenizer/token_utils.c \
 			tokenizer/token_handlers.c \
 			tokenizer/tokenizer.c \
+			tokenizer/extend_prompt.c \
 			tokenizer/validate_prompt.c \
 			tokenizer/debug.c \
 			builtins/env.c \
