@@ -70,6 +70,11 @@ char	*remove_line_read(char *current)
 	if (!endl)
 		return (NULL);
 	start = ft_strlen(current) - ft_strlen(ft_strchr(current, '\n')) + 1;
+	if (start >= ft_strlen(current))
+	{
+		free(current);
+		return (NULL);
+	}
 	new = ft_substr(current, start, ft_strlen(current));
 	free(current);
 	return (new);

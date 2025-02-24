@@ -58,7 +58,7 @@ void	test_arg_input(const char *input, t_data *data)
 	int		err;
 
 	tokens = NULL;
-	printf(PURPLE);
+	printf(MAGENTA);
 	err = tokenize_input(input, &tokens, data);
 	if (err)
 	{

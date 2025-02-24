@@ -12,6 +12,21 @@
 
 #include "minishell.h"
 
+int split_words(t_data *data, t_command *cmd)
+{
+	
+	return (0);
+}
+
+
+
+
+
+
+
+
+
+/*
 static t_list	*create_new_arg(char *str, size_t start, size_t len)
 {
 	t_list	*node;
@@ -77,3 +92,4 @@ int	separate_expanded(t_data *data, t_list *args)
 	}
 	return (free(str), 0);
 }
+*/

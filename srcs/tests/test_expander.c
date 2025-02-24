@@ -12,22 +12,25 @@
 
 #include "minishell.h"
 
-int	g_sig = 0;
+int		g_sig = 0;
 
 void	sigint_handler(int sig)
 {
 	pid_t	pid;
 	int		status;
 
-	
+	g_sig = sig;
+	status = 0;
 	pid = waitpid(-1, &status, 0);
-	if (WTERMSIG(status) == SIGINT || (pid > 0 && (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)))
+	if (WTERMSIG(status) == SIGINT || (pid > 0 && (WIFSIGNALED(status)
+				&& WTERMSIG(status) == SIGINT)))
 		write(2, "\n", 1);
 	else
 	{
 		write(2, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
+		print_details();
 		rl_redisplay();
 	}
 	g_sig = sig;
@@ -49,7 +52,7 @@ int	exec_prompt(const char *prompt, t_data *data)
 	if (data->status)
 		return (data->exit_code = data->status, clear_tokens(&data->tokens), 1);
 	token_head = data->tokens;
-	if (!data->tokens) // shouldn't be needed
+	if (!data->tokens)
 		return (0);
 	data->ast = new_tree(data, &token_head);
 	if (!data->ast)
@@ -73,8 +76,12 @@ int	launch_program(t_data *data)
 		{
 			data->exit_code = g_sig + 128;
 			g_sig = 0;
+			reset_sigquit();
+			continue ;
 		}
-		rl = readline(PROMPT);
+		print_details();
+		rl = readline(PROMPT3);
+		reset_sigquit();
 		if (!rl)
 		{
 			// ctrl-D
@@ -85,12 +92,12 @@ int	launch_program(t_data *data)
 			else
 				return (1);
 		}
-		// empty line
 		if (rl && rl[0] == '\0')
 		{
 			free(rl);
 			continue ;
 		}
+		data->rl = rl;
 		add_history(rl);
 		exec_prompt(rl, data);
 	}
@@ -110,3 +117,4 @@ int	main(int argc, char **argv, char **envp)
 	data_free(&data);
 	return (0);
 }
+

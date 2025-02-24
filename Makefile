@@ -33,18 +33,18 @@ ifeq ($(UNAME_S),Darwin)
     READLINE_LIB := -L/usr/local/opt/readline/lib
     READLINE_INC := -I/usr/local/opt/readline/include
     CFLAGS	+= -I/usr/local/opt/readline/include
-    
+
 else
     READLINE_LIB := -lreadline
     READLINE_INC :=
-    
+
 endif
 
 ifeq ($(MODE), debug)
 	CFLAGS	+= -fsanitize=address -gdwarf-4 -g -D DEBUG=true
 else ifeq ($(MODE), valgrind)
 	VALGRIND += valgrind --leak-check=full --show-leak-kinds=all --suppressions=leaks.supp
-endif 
+endif
 
 SRC_PATH = ./srcs/
 OBJ_PATH = ./objs/
@@ -64,11 +64,16 @@ SRC		= 	main.c \
 			builtins/exit.c \
 			builtins/cd.c \
 			expander/expander.c \
+			expander/expand_tilde.c \
+			expander/expand_keys.c \
 			expander/expander_utils.c \
 			expander/expander_recursive.c \
 			expander/separate_expanded.c \
 			misc/signal.c \
+			misc/prompt.c \
+			misc/prompt_git.c \
 			misc/error.c \
+			misc/lst_utils.c \
 			misc/env_utils.c \
 			misc/env_utils2.c \
 			misc/free.c \
@@ -82,11 +87,12 @@ SRC		= 	main.c \
 			parsing/heredoc.c \
 			exec/debug.c \
 			exec/exec.c \
+			exec/exec_builtin.c \
 			exec/utils.c \
 			exec/process.c \
 			exec/redirect.c \
 			exec/path.c
-		 
+
 
 OBJ		= $(SRC:.c=.o)
 OBJS	= $(addprefix $(OBJ_PATH), $(OBJ))
@@ -98,10 +104,10 @@ LIBFT = ./libft/libft.a
 
 # Main rule
 all: $(OBJ_PATH) $(LIBFT) $(NAME)
-	
+
 run : all
 	@./$(NAME)
-	
+
 # Objects directory rule
 $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)
@@ -144,14 +150,14 @@ TEST_NAME = lexer
 TESTER_DIR = testers
 TEST_OBJ = $(TEST_SRC:.c=.o)
 
-lexer: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) 
+lexer: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
 	mkdir -p $(OBJ_PATH)/testing
 	mkdir -p $(TESTER_DIR)
 	$(CC) $(CFLAGS) -c srcs/tests/test_tokenizer.c -o $(OBJ_PATH)/testing/test_tokenizer.o $(INC)
 	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_tokenizer.o -o $(TESTER_DIR)/lexer $(INC) $(LIBFT) -l readline
 	@echo "$(BLUE)lexer program compiled successfully!$(RESET)"
 	@$(TESTER_DIR)/lexer
-	
+
 expander: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
 	mkdir -p $(TESTER_DIR)
 	mkdir -p $(OBJ_PATH)/testing
@@ -167,7 +173,7 @@ ast: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
 	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_ast.o -o $(TESTER_DIR)/ast $(INC) $(LIBFT) -l readline
 	@echo "$(BLUE)ast program compiled successfully!$(RESET)"
 	$(if $(VALGRIND), $(VALGRIND)) $(TESTER_DIR)/ast
-	
+
 exec: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
 	mkdir -p $(TESTER_DIR)
 	mkdir -p $(OBJ_PATH)/testing

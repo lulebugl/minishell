@@ -29,13 +29,26 @@ int	handle_word(const char *s, int *pos, t_token **tokens)
 	int	start;
 
 	start = *pos;
-	if (!s[*pos])
+	if (!s || !s[*pos])
 		return (0);
-	while (s[*pos] && s[*pos] != ' '
-		&& !is_operator(s[*pos])
-		&& !is_logical_and(s + *pos)
-		&& s[*pos] != '\'' && s[*pos] != '\"')
-		(*pos)++;
+	while (s[*pos] && s[*pos] != ' ' && !is_operator(s[*pos])
+		&& !is_logical_and(s + *pos))
+	{
+		if (s[*pos] == '\'')
+		{
+			(*pos)++;
+			while (s[(*pos)] && s[*pos] != '\'')
+				(*pos)++;
+		}
+		else if (s[(*pos)] == '\"')
+		{
+			(*pos)++;
+			while (s[*pos] && s[*pos] != '\"')
+				(*pos)++;
+		}
+		else
+			(*pos)++;
+	}
 	if (add_token(tokens, s, (t_token_pos){start, *pos - start}, TOKEN_WORD))
 		return (1);
 	return (0);
@@ -48,7 +61,7 @@ int	handle_word(const char *s, int *pos, t_token **tokens)
  */
 int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (s[i])
@@ -57,8 +70,6 @@ int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 			i++;
 		if (!s[i])
 			break ;
-		if (s[i] == '\'' || s[i] == '\"')
-			data->status = handle_quotes(s, &i, s[i], tokens);
 		else if (s[i] && (s[i] == '<' || s[i] == '>'))
 			data->status = handle_io(s, &i, tokens);
 		else if (s[i] && (s[i] == '(' || s[i] == ')'))
@@ -69,15 +80,10 @@ int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 			data->status = handle_pipes(s, &i, tokens, data);
 		else
 			data->status = handle_word(s, &i, tokens);
-		if (data->status != 0)
-		{
-			if (errno != 0)
-			{
-				data->status = errno;
-				perror(strerror(errno));
-			}
+		if (data->status != 0 && errno != 0)
+			return (data->status = errno, perror(strerror(errno)), 1);
+		else if (data->status != 0)
 			return (1);
-		}
 	}
 	return (0);
 }

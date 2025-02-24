@@ -12,90 +12,30 @@
 
 #include "minishell.h"
 
-// static void heredoc_sigint_handler(int sig)
-// {
-//     (void)sig;
-//     exit(130);
-// }
-
-static void	heredoc_sigint_handler(int sig)
-{
-	pid_t	pid;
-	int		status;
-
-	g_sig = sig;
-	pid = waitpid(-1, &status, 0);
-	if (WTERMSIG(status) == SIGINT || (pid > 0 && (WIFSIGNALED(status)
-				&& WTERMSIG(status) == SIGINT)))
-		write(2, "\n", 1);
-	else
-	{
-		// write(2, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		// print_details();
-		// rl_redisplay();
-		exit(130);
-	}
-	g_sig = sig;
-}
-
-static void	init_heredoc_signals(void)
-{
-	struct sigaction	act;
-
-	ft_bzero(&act, sizeof(act));
-	act.sa_flags = SA_RESTART;
-	sigemptyset(&act.sa_mask);
-	act.sa_handler = &heredoc_sigint_handler;
-	sigaction(SIGINT, &act, NULL);
-	act.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &act, NULL);
-}
-
 static void	read_heredoc(int fd, char *eof)
 {
 	char	*buff;
 	int		i;
-	pid_t	pid;
-	int		status;
 
-	status = 0;
-	pid = fork();
-	if (pid == 0)
+	i = 0;
+	while (true)
 	{
-		i = 0;
-		while (true)
+		buff = NULL;
+		buff = readline("> ");
+		i++;
+		if (!buff)
 		{
-			init_heredoc_signals();
-			buff = readline("> ");
-			reset_sigquit();
-			i++;
-			if (!buff)
-			{
-				ft_printf_fd(2,
-								"minishell: warning: here-document at line %d \
-delimited by end-of-file (wanted '%s')\n",
-								i,
-								eof);
-				exit(0);
-			}
-			if (ft_strcmp(buff, eof) == 0)
-			{
-				free(buff);
-				exit(0);
-			}
-			write(fd, buff, ft_strlen(buff));
-			write(fd, "\n", 1);
-			free(buff);
+			ft_printf_fd(2, "minishell: warning: here-document at line %d \
+delimited by end-of-file (wanted '%s')\n", i, eof);
+			break ;
 		}
+		if (ft_strcmp(buff, eof) == 0)
+			break ;
+		write(fd, buff, ft_strlen(buff));
+		write(fd, "\n", 1);
+		free(buff);
 	}
-	else
-	{
-		waitpid(pid, &status, 0);
-		if (WIFSIGNALED(status) || WEXITSTATUS(status) == 130)
-			g_sig = SIGINT;
-	}
+	free(buff);
 }
 
 static int	get_heredoc(char *eof)
@@ -142,4 +82,3 @@ int	parse_heredoc(t_redirection **redir_root)
 	}
 	return (1);
 }
-

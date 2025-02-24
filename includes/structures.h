@@ -86,13 +86,13 @@ typedef struct s_tree_node
 
 typedef struct s_exec
 {
-	int						stdin_backup;
-	int						stdout_backup;
 	int						fd_in;
 	int						fd_out;
 	pid_t					pid;
+	t_list					**waitlist;
 	pid_t					*child_pids;
 	int						id;
+	int						child_count;
 	int						pipe[2];
 }							t_exec;
 
@@ -101,6 +101,7 @@ typedef struct s_data
 	t_env					*env;
 	t_token					*tokens;
 	t_tree_node				*ast;
+	char					*rl;
 	int						status;
 	int						exit_code;
 	bool					print_token;

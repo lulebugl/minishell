@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-char	*try_relative(t_data *data, char *str)
+char	*try_relative(t_data *data, char *str, t_exec *exec)
 {
 	char	*valid_path;
 
@@ -21,14 +21,18 @@ char	*try_relative(t_data *data, char *str)
 		return (err_and_exit(data), NULL);
 	if (access(valid_path, F_OK) == -1)
 	{
-		free(valid_path);
 		ft_printf_fd(STDERR_FILENO, "minishell: %s: command not found\n", str);
+		free(valid_path);
+		data_free(data);
+		cleanup_exec(exec);
 		exit(127);
 	}
 	if (access(valid_path, X_OK) == -1)
 	{
-		free(valid_path);
 		ft_printf_fd(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
+		free(valid_path);
+		data_free(data);
+		cleanup_exec(exec);
 		exit(126);
 	}
 	return (valid_path);

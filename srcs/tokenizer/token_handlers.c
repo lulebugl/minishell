@@ -117,37 +117,29 @@ int	handle_pipes(const char *s, int *pos, t_token **tokens, t_data *data)
 
 int	handle_io(const char *s, int *pos, t_token **tokens)
 {
-	int		i;
 	char	next;
 
-	i = *pos;
 	next = 0;
-	if (s[i + 1])
-		next = s[i + 1];
-	if (next && (s[i] == '<' && next == '<'))
+	if (s[*pos + 1])
+		next = s[*pos + 1];
+	if (next && (s[*pos] == '<' && next == '<'))
 	{
-		if (add_token(tokens, s, (t_token_pos){i, 2}, TOKEN_HEREDOC))
-			return (ENOSPC);
+		if (add_token(tokens, s, (t_token_pos){*pos, 2}, TOKEN_HEREDOC))
+			return (ERROR);
 		(*pos) += 2;
 	}
-	else if (next && (s[i] == '>' && next == '>'))
+	if (next && (s[*pos] == '>' && next == '>'))
 	{
-		if (add_token(tokens, s, (t_token_pos){i, 2}, TOKEN_APPEND))
-			return (ENOSPC);
+		if (add_token(tokens, s, (t_token_pos){*pos, 2}, TOKEN_APPEND))
+			return (ERROR);
 		(*pos) += 2;
 	}
-	else if (s[i] == '<')
-	{
-		if (add_token(tokens, s, (t_token_pos){i, 1}, TOKEN_IN))
-			return (ENOSPC);
-		(*pos)++;
-	}
-	else if (s[i] == '>')
-	{
-		if (add_token(tokens, s, (t_token_pos){i, 1}, TOKEN_OUT))
-			return (ENOSPC);
-		(*pos)++;
-	}
+	if (s[*pos] == '<')
+		if (add_token(tokens, s, (t_token_pos){(*pos)++, 1}, TOKEN_IN))
+			return (ERROR);
+	if (s[*pos] == '>')
+		if (add_token(tokens, s, (t_token_pos){(*pos)++, 1}, TOKEN_OUT))
+			return (ERROR);
 	return (0);
 }
 
@@ -159,18 +151,15 @@ int	handle_edge_pipe(t_token **tokens, t_data *data)
 	while (1)
 	{
 		init_signals();
-		buf = readline("> ");
+		buf = readline("\033[35m> \033[0m");
 		reset_sigquit();
 		if (!buf)
 		{
-			// ctrl-D
 			if (errno == 0)
 				return (1);
-			// ctrl-C
 			else
 				return (1);
 		}
-		// empty line
 		if (buf && buf[0] == '\0')
 		{
 			free(buf);

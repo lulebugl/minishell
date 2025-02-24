@@ -88,5 +88,9 @@ void				ft_free_tab(char **tab);
 long				ft_atol(const char *str);
 char				*ft_strndup(const char *s1, size_t n);
 int					ft_strcmp(char *s1, char *s2);
+char				*ft_strstr(char *str, char *to_find);
+char				*ft_strcpy(char *dest, char *src);
+char				*str_del_all_char(char *str, int c);
+char				*str_del_char(char *str, const char *char_to_del);
 
 #endif
