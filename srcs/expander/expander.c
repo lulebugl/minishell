@@ -24,7 +24,7 @@ int expander(t_data *data, t_command *cmd)
         return (1);
     // if (split_words(data, cmd) != SUCCESS)
     //     return (1);
-    if (expand_wildcards(data, cmd) != SUCCESS)
+    if (expand_wildcards(cmd) != SUCCESS)
         return (1);
     if (remove_quotes(data, cmd->arg_lst) != SUCCESS)
         return (1);

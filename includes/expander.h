@@ -27,7 +27,7 @@ int		expand_keys(t_data *data, t_list *args);
 char	*replace_substring(char *str, size_t start, size_t len, char *replace);
 
 /* wildcards */
-int		expand_wildcards(t_data *data, t_command *cmd);
+int		expand_wildcards(t_command *cmd);
 
 /* utils */
 int		del_empty_args(t_list **head, t_list *node_to_delete);

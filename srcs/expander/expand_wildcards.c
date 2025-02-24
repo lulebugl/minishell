@@ -29,11 +29,10 @@ void	expand_wildcard(t_list **current)
 	free(tmp);
 }
 
-int	expand_wildcards(t_data *data, t_command *cmd)
+int	expand_wildcards(t_command *cmd)
 {
 	t_list	*curr;
 	t_list	*prev;
-	char	*arg;
 
 	if (!cmd || !cmd->arg_lst)
 		return (ERROR);

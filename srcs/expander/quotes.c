@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static char *unquote_arg(t_data *data, char *arg)
+static char *unquote_arg(char *arg)
 {
 	int i;
 	
@@ -67,7 +67,7 @@ int remove_quotes(t_data *data, t_list *args)
 			curr = curr->next;
 			continue ;
 		}
-		curr->content = unquote_arg(data, arg);
+		curr->content = unquote_arg(arg);
 		if (curr->content)
 		{
 			curr = curr->next;
