@@ -75,7 +75,7 @@ int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 		else if (s[i] && (s[i] == '(' || s[i] == ')'))
 			data->status = handle_parenthesis(s, &i, tokens);
 		else if (s[i] && s[i + 1] && (s[i] == '&') && (s[i + 1] == '&'))
-			data->status = handle_logical_and(s, &i, tokens);
+			data->status = handle_logical_and(data, s, &i, tokens);
 		else if (s[i] && s[i] == '|')
 			data->status = handle_pipes(s, &i, tokens, data);
 		else

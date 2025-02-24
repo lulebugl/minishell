@@ -12,72 +12,82 @@
 
 #include "minishell.h"
 
-int expand_keys(t_data *data, t_list *args);
-int split_words(t_data *data, t_command *cmd);
-
-static char *unquote_arg(t_data *data, char *arg)
+static bool has_unquoted_space(const char *str)
 {
-	int i;
-	
-	i = 0;
-	while (arg[i])
-	{
-		if (arg[i] == SINGLE_QUOTE)
-		{
-			arg = str_del_char(arg, &arg[i]);
-			if (!arg)
-				return (NULL);
-			while (arg[i] && arg[i] != SINGLE_QUOTE)
-				i++;
-			arg = str_del_char(arg, &arg[i]);
-			if (!arg)
-				return (NULL);
-			if (!arg[i])
-				return (arg);
-		}
-		else if (arg[i] == DOUBLE_QUOTE)
-		{
-			arg = str_del_char(arg, &arg[i]);
-			if (!arg)
-				return (NULL);
-			while (arg[i] && arg[i] != DOUBLE_QUOTE)
-				i++;
-			arg = str_del_char(arg, &arg[i]);
-			if (!arg)
-				return (NULL);
-			if (!arg[i])
-				return (arg);
-		}
-		else
-			i++;
-	}
-	return (arg);
+    int i;
+    
+    i = 0;
+    while (str && str[i])
+    {
+        if (str[i] == SINGLE_QUOTE)
+        {
+            i++;
+            while (str[i] && str[i] != SINGLE_QUOTE)
+                i++;
+            if (str[i])
+                i++;
+        }
+        else if (str[i] == DOUBLE_QUOTE)
+        {
+            i++;
+            while (str[i] && str[i] != DOUBLE_QUOTE)
+                i++;
+            if (str[i])
+                i++;
+        }
+        else if (str[i] == ' ')
+            return (true);
+        else
+            i++;
+    }
+    return (false);
 }
 
-int remove_quotes2(t_data *data, t_list *args)
+/*
+ * Function: split_expanded_arguments
+ * ----------------------------
+ * After parameter expansion, some arguments might contain spaces
+ * from expanded environment variables. This function splits those.
+ */
+int split_expanded_arguments(t_data *data, t_command *cmd)
 {
-	t_list	*curr;
-	char	*arg;
+    t_list *curr;
+    t_list *next;
+    t_list *prev;
+    
+    if (!cmd || !cmd->arg_lst)
+        return (SUCCESS);
+    curr = cmd->arg_lst;
+    prev = NULL;
+    while (curr)
+    {
+        next = curr->next;
+        if (curr->content && has_unquoted_space(curr->content))
+        {
+            if (separate_expanded(data, curr) != SUCCESS)
+                return (ERROR);
+            if (!prev)
+                cmd->arg_lst = curr;
+            else
+                prev->next = curr;
+            while (curr && curr->next)
+            {
+                prev = curr;
+                curr = curr->next;
+            }
+            curr->next = next;
+        }
+        else
+            prev = curr;        
+        curr = next;
+    }
+    
+    return (SUCCESS);
+}
 
-	if (!args)
-		return (0);
-	curr = args;
-	while (curr)
-	{
-		arg = curr->content;
-		if (!arg)
-		{
-			curr = curr->next;
-			continue ;
-		}
-		curr->content = unquote_arg(data, arg);
-		if (curr->content)
-		{
-			curr = curr->next;
-			continue ;
-		}
-		curr = curr->next;
-	}
+int split_words(t_data *data, t_command *cmd)
+{
+	
 	return (0);
 }
 
@@ -89,14 +99,11 @@ int expander(t_data *data, t_command *cmd)
         return (1);
     if (expand_keys(data, cmd->arg_lst) != SUCCESS)
         return (1);
-    // if (split_words(data, cmd) != SUCCESS)
-    //     return (1);
-    // // 4. Handle pathname/wildcards expansion (only if unquoted)
-    // if (expand_wildcards(data, cmd) != SUCCESS)
-    //     return (1);
-
-    // // 5. Finally remove quotes from all arguments
-    if (remove_quotes2(data, cmd->arg_lst) != SUCCESS)
+    if (split_expanded_arguments(data, cmd) != SUCCESS)
+            return (1);
+    if (expand_wildcards(cmd) != SUCCESS)
+        return (1);
+    if (remove_quotes(data, cmd->arg_lst) != SUCCESS)
         return (1);
     //debug_expander(cmd);
     cmd->arg_count = ft_lstsize(cmd->arg_lst);

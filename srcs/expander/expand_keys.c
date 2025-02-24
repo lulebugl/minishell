@@ -37,7 +37,6 @@ static char	*key_not_found(t_data *data, char *str, int start, int len)
 
 static char	*expand_var(t_data *data, char *str, int *i)
 {
-	char	*expanded;
 	char	*value;
 	int		len;
 	int		start;
@@ -85,7 +84,8 @@ static char	*expand_str(t_data *data, char *arg)
 				err_and_exit(data);
 			continue ;
 		}
-		i++;
+		if (arg[i])
+			i++;
 	}
 	return (arg);
 }
@@ -93,7 +93,6 @@ static char	*expand_str(t_data *data, char *arg)
 int	expand_keys(t_data *data, t_list *args)
 {
 	t_list	*curr;
-	char	*arg;
 
 	if (!args)
 		return (0);

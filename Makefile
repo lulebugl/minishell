@@ -54,6 +54,7 @@ SRC		= 	main.c \
 			tokenizer/token_utils.c \
 			tokenizer/token_handlers.c \
 			tokenizer/tokenizer.c \
+			tokenizer/extend_prompt.c \
 			tokenizer/validate_prompt.c \
 			tokenizer/debug.c \
 			builtins/env.c \
@@ -70,6 +71,8 @@ SRC		= 	main.c \
 			expander/expander_recursive.c \
 			expander/separate_expanded.c \
 			expander/expand_wildcards.c \
+			expander/expand_wildcards_utils.c \
+			expander/quotes.c \
 			misc/signal.c \
 			misc/prompt.c \
 			misc/prompt_git.c \
