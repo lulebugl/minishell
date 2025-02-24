@@ -12,12 +12,39 @@
 
 #include "minishell.h"
 
+static void	write_variable(t_data *data, int fd, char *buff, int *i)
+{
+	char	*var;
+	char	*value;
+	int		start;
+
+	(*i)++;
+	if (buff[*i] == '?')
+	{
+		var = ft_itoa(data->exit_code);
+		write(fd, var, ft_strlen(var));
+		free(var);
+		(*i)++;
+	}
+	else
+	{
+		start = *i;
+		while (buff[*i] && (ft_isalnum(buff[*i]) || buff[*i] == '_'))
+			(*i)++;
+		var = ft_strndup(&buff[start], *i - start);
+		if (env_key_exists(data->env, var))
+			value = env_get_value(data->env, var);
+		else
+			value = "";
+		write(fd, value, ft_strlen(value));
+		free(var);
+	}
+}
+
 static void	write_heredoc(t_data *data, int fd, char *buff)
 {
 	int		i;
 	int		start;
-	char	*var;
-	char	*value;
 
 	i = 0;
 	start = 0;
@@ -26,27 +53,7 @@ static void	write_heredoc(t_data *data, int fd, char *buff)
 		if (buff[i] == '$')
 		{
 			write(fd, &buff[start], i - start);
-			i++;
-			if (buff[i] == '?')
-			{
-				var = ft_itoa(data->exit_code);
-				write(fd, var, ft_strlen(var));
-				free(var);
-				i++;
-			}
-			else
-			{
-				start = i;
-				while (buff[i] && (ft_isalnum(buff[i]) || buff[i] == '_'))
-					i++;
-				var = ft_strndup(&buff[start], i - start);
-				if (env_key_exists(data->env, var))
-					value = env_get_value(data->env, var);
-				else
-					value = "";
-				write(fd, value, ft_strlen(value));
-				free(var);
-			}
+			write_variable(data, fd, buff, &i);
 			start = i;
 		}
 		else
