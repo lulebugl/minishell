@@ -74,7 +74,7 @@ t_list	*find_matchs(char *pattern)
 	return (matchs);
 }
 
-int	expand_wildcards(t_list **current)
+int	expand_wildcard(t_list **current)
 {
 	t_list	*tmp;
 	t_list	*matches;

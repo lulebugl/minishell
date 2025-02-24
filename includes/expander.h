@@ -21,13 +21,14 @@ int		handle_env_var(t_list *arg_node, t_env *env, int *i);
 int		expander(t_data *data, t_command *cmd);
 int		separate_expanded(t_data *data, t_list *args);
 char	*replace_key(char *str, char *replace, int start, int key_len);
-char	*remove_quotes(t_data *data, char *str, bool *expand, int *quoted);
-int		del_empty_args(t_list **head, t_list *node_to_delete);
-int		only_empty_arg(char *arg);
-int		expand_wildcards(t_list **current);
+int		remove_quotes(t_data *data, t_list *args);
+int		expand_wildcard(t_list **current);
+int		expand_keys(t_data *data, t_list *args);
 char	*replace_substring(char *str, size_t start, size_t len, char *replace);
 
 /* utils */
+int		del_empty_args(t_list **head, t_list *node_to_delete);
+int		only_empty_arg(char *arg);
 bool	skip_in_single_quote(char *str, int *i);
 
 #endif
