@@ -28,40 +28,6 @@
 // 	return (0);
 // }
 
-// static int	process_argument(t_data *data, t_list *args, bool *expand,
-// 		int *quoted)
-// {
-// 	char	*arg;
-
-// 	arg = args->content;
-// 	// args->content = remove_quotes(data, arg, expand, quoted);
-// 	if (!arg)
-// 		return (1);
-// 	// if (expand_tilde(data, args, *expand))
-// 	// 	return (1);
-// 	if (expand_arg_recursive(data, args, *expand))
-// 		return (1);
-// 	return (0);
-// }
-
-// static int	handle_wildcards_original(t_list **args, t_list **prev,
-// 		t_command *cmd)
-// {
-// 	if (!*prev)
-// 	{
-// 		if (expand_wildcards(args))
-// 			return (1);
-// 		cmd->arg_lst = *args;
-// 	}
-// 	else
-// 	{
-// 		if (expand_wildcards(args))
-// 			return (1);
-// 		(*prev)->next = *args;
-// 	}
-// 	return (0);
-// }
-
 // static int expand_args(t_data *data, t_command *cmd, t_list **args, t_list **prev)
 // {
 //     t_list *next;
