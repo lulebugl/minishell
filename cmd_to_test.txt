@@ -26,6 +26,8 @@ echo """"""''""
 echo 123 | wc -c | sleep 1 | echo 568 | cat leaks.supp | exit3 | exit 2 | echo $? | wc -l
 ls &&
 cat << eof > test // huge leaks, probably a data_free forgotten somewhere
+/bin/ls
+
 // Heredoc :
 
 cat << eof
