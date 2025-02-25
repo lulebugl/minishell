@@ -21,31 +21,25 @@
 
 typedef struct s_data	t_data;
 
-int						tokenize_input(const char *s, t_token **tokens,
-							t_data *data);
-void					msg_custom_err(char *msg, char *details);
-int						handle_quotes(const char *s, int *pos, char type,
-							t_token **tokens);
-int						handle_io(const char *s, int *pos, t_token **tokens);
-int						handle_pipes(const char *s, int *pos, t_token **tokens,
-							t_data *data);
-int						handle_parenthesis(const char *s, int *pos,
-							t_token **tokens);
-int						handle_logical_and(t_data *data, const char *s, int *pos,
-							t_token **tokens);
+int		tokenize_input(const char *s, t_token **tokens, t_data *data);
+void	msg_custom_err(char *msg, char *details);
+int		handle_quotes(const char *s, int *pos, char type, t_token **tokens);
+int		handle_io(const char *s, int *pos, t_token **tokens);
+int		handle_pipes(const char *s, int *pos, t_token **tokens, t_data *data);
+int		handle_parenthesis(const char *s, int *pos, t_token **tokens);
+int		handle_logical_and(t_data *data, const char *s,
+			int *pos, t_token **tokens);
 
-int						validate_prompt(t_token *token);
+int		validate_prompt(t_token *token);
 
 /* utils */
-int						add_token(t_token **tokens, const char *prompt,
-							t_token_pos pos, t_token_type type);
-void					push_token(t_token **lst, t_token *node);
-t_token					*new_token(char *content, t_token_type type);
-void					clear_tokens(t_token **tokens);
-int						token_is_redir(t_token_type token_type);
-int						read_extended(t_token **tokens, t_data *data);
-int						extend_prompt(t_data *data, t_token **tokens,
-							const char *s, int *pos);
+int		add_token(t_token **tokens, const char *prompt,
+			t_token_pos pos, t_token_type type);
+void	push_token(t_token **lst, t_token *node);
+t_token	*new_token(char *content, t_token_type type);
+void	clear_tokens(t_token **tokens);
+int		token_is_redir(t_token_type token_type);
+int		read_extended(t_token **tokens, t_data *data);
+int		extend_prompt(t_data *data, t_token **tokens, const char *s, int *pos);
 
 #endif
-

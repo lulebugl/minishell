@@ -29,7 +29,7 @@ int				count_redirections(t_redirection *root);
 int				token_is_part_of_command(t_token_type token_type);
 char			**get_cmd_args_arr(t_command *cmd);
 int				parse_heredoc(t_data *data, t_redirection **redir_root);
-int 			event(void);
+int				event(void);
 t_list			*find_matchs(char *pattern);
 
 #endif
