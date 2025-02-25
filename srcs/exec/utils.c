@@ -64,6 +64,7 @@ int	get_env_size(t_env *env)
  * ----------------------------
  *	Convert linked list t_env to array envp[].
  */
+
 char	**t_env_to_envp(t_env *env)
 {
 	char	**envp;

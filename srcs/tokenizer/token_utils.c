@@ -12,9 +12,15 @@
 
 #include "../../includes/minishell.h"
 
-int	token_is_redir(t_token *token)
+int	token_is_redir(t_token_type token_type)
 {
-	if (token->type == TOKEN_IN || token->type == TOKEN_OUT || token->type == TOKEN_APPEND || token->type == TOKEN_HEREDOC)
+	if (token_type == TOKEN_IN)
+		return (1);
+	if (token_type == TOKEN_OUT)
+		return (1);
+	if (token_type == TOKEN_APPEND)
+		return (1);
+	if (token_type == TOKEN_HEREDOC)
 		return (1);
 	return (0);
 }

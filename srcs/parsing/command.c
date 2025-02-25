@@ -112,6 +112,6 @@ t_command	*get_command(t_data *data, t_token **token)
 	cmd->arg_count = ft_lstsize(cmd->arg_lst);
 	cmd->redir_count = count_redirections(cmd->redirections);
 	if (!parse_heredoc(data, &(cmd->redirections)))
-		return (NULL);
+		return (free_command(cmd), NULL);
 	return (cmd);
 }

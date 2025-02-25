@@ -68,7 +68,6 @@ SRC		= 	main.c \
 			expander/expand_tilde.c \
 			expander/expand_keys.c \
 			expander/expander_utils.c \
-			expander/expander_recursive.c \
 			expander/separate_expanded.c \
 			expander/expand_wildcards.c \
 			expander/expand_wildcards_utils.c \
@@ -88,6 +87,7 @@ SRC		= 	main.c \
 			parsing/tree.c \
 			parsing/tree_utils.c \
 			parsing/heredoc.c \
+			parsing/heredoc_utils.c \
 			exec/debug.c \
 			exec/exec.c \
 			exec/exec_builtin.c \

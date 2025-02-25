@@ -95,4 +95,3 @@ void	exec_single_builtin(t_data *data, t_command *cmd, t_exec *exec)
 		data->exit_code = ft_unset(data->env, argv);
 	return (cleanup_exec(exec), restore_fd(data), ft_free_tab(argv));
 }
-

@@ -31,14 +31,9 @@ void	signal_ctlc(int sig)
 void	signal_ctlc_heredoc(int sig)
 {
 	g_sig = sig;
-	
+
 	if (sig == SIGINT)
-	{
-		write(STDERR_FILENO, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-	}
+    	rl_done = 1;
 }
 
 int	exec_prompt(const char *prompt, t_data *data)

@@ -12,52 +12,47 @@
 
 #include "minishell.h"
 
-int	g_sig = 0;
+int		g_sig = 0;
 
-void	sigint_handler(int sig)
+void	signal_ctlc(int sig)
 {
-	pid_t	pid;
-	int		status;
-	
-	pid = waitpid(-1, &status, 0);
-	if (pid > 0 && (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT))
-		write(2, "\n", 1);
-	else
+	g_sig = sig;
+
+	if (sig == SIGINT)
 	{
-		write(2, "\n", 1);
-		rl_on_new_line();
+		write(STDERR_FILENO, "\n", 1);
 		rl_replace_line("", 0);
+		rl_on_new_line();
+		print_details();
 		rl_redisplay();
 	}
-	g_sig = sig;
 }
 
-void	sigint_heredoc_handler(int sig)
+void	signal_ctlc_heredoc(int sig)
 {
 	g_sig = sig;
-	write(2, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
-void	sigquit_handler(int sig)
-{
-	g_sig = sig;
-	write(2, "Quit\n", 5);
+	
+	if (sig == SIGINT)
+	{
+		write(STDERR_FILENO, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }
 
 int	exec_prompt(const char *prompt, t_data *data)
 {
 	t_token	*token_head;
 
+	signal(SIGINT, SIG_IGN);
 	if (tokenize_input(prompt, &data->tokens, data))
 		return (clear_tokens(&data->tokens), 1);
 	data->status = validate_prompt(data->tokens);
 	if (data->status)
 		return (data->exit_code = data->status, clear_tokens(&data->tokens), 1);
 	token_head = data->tokens;
-	if (!data->tokens) // shouldn't be needed
+	if (!data->tokens)
 		return (0);
 	data->ast = new_tree(data, &token_head);
 	if (!data->ast)
@@ -74,31 +69,31 @@ int	launch_program(t_data *data)
 {
 	char	*rl;
 
+	signal(SIGQUIT, SIG_IGN);
 	while (true)
 	{
-		init_signals();
+		signal(SIGINT, signal_ctlc);
+		termios_change(false);
 		if (g_sig)
 		{
 			data->exit_code = g_sig + 128;
 			g_sig = 0;
+			continue ;
 		}
-		rl = readline(PROMPT);
-		reset_sigquit();
+		print_details();
+		rl = readline(PROMPT3);
 		if (!rl)
 		{
 			// ctrl-D
-			if (data->exit_code == 0)
-				return (1);
-			// ctrl-C
-			else
-				return (1);
+			termios_change(true);
+			return (1);
 		}
-		// empty line
 		if (rl && rl[0] == '\0')
 		{
 			free(rl);
 			continue ;
 		}
+		data->rl = rl;
 		add_history(rl);
 		exec_prompt(rl, data);
 	}

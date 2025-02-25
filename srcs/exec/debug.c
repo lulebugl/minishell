@@ -55,4 +55,3 @@ void	debug_cmd(t_data *data, t_command *cmd)
 		printf("\n");
 	}
 }
-

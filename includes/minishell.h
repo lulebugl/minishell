@@ -73,7 +73,7 @@ void		reset_data(t_data *data);
 
 // SIGNALS
 
-int	termios_change(bool echo_ctl_chr);
+int		termios_change(bool echo_ctl_chr);
 void	signal_ctlc_heredoc(int sig);
 void	signal_ctlc(int sig);
 

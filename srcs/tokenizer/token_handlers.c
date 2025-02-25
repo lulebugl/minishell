@@ -14,7 +14,7 @@
 
 int	handle_quotes(const char *s, int *start, char type, t_token **tokens)
 {
-	int			len;
+	int	len;
 
 	len = ++(*start);
 	if (!s[len])
@@ -99,13 +99,13 @@ int	handle_io(const char *s, int *pos, t_token **tokens)
 		next = s[*pos + 1];
 	if (next && (s[*pos] == '<' && next == '<'))
 	{
-		if (add_token(tokens, s, (t_token_pos){*pos, 2}, TOKEN_HEREDOC))
+		if (add_token(tokens, s, (t_token_pos){(*pos), 2}, TOKEN_HEREDOC))
 			return (ERROR);
 		(*pos) += 2;
 	}
 	if (next && (s[*pos] == '>' && next == '>'))
 	{
-		if (add_token(tokens, s, (t_token_pos){*pos, 2}, TOKEN_APPEND))
+		if (add_token(tokens, s, (t_token_pos){(*pos), 2}, TOKEN_APPEND))
 			return (ERROR);
 		(*pos) += 2;
 	}

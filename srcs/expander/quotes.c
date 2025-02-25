@@ -12,32 +12,21 @@
 
 #include "minishell.h"
 
-static char *unquote_arg(char *arg)
+static char	*unquote_arg(char *arg)
 {
-	int i;
-	
+	int	i;
+	int	quote_type;
+
 	i = 0;
 	while (arg[i])
 	{
-		if (arg[i] == SINGLE_QUOTE)
+		if (arg[i] == SINGLE_QUOTE || arg[i] == DOUBLE_QUOTE)
 		{
+			quote_type = arg[i];
 			arg = str_del_char(arg, &arg[i]);
 			if (!arg)
 				return (NULL);
-			while (arg[i] && arg[i] != SINGLE_QUOTE)
-				i++;
-			arg = str_del_char(arg, &arg[i]);
-			if (!arg)
-				return (NULL);
-			if (!arg[i])
-				return (arg);
-		}
-		else if (arg[i] == DOUBLE_QUOTE)
-		{
-			arg = str_del_char(arg, &arg[i]);
-			if (!arg)
-				return (NULL);
-			while (arg[i] && arg[i] != DOUBLE_QUOTE)
+			while (arg[i] && arg[i] != quote_type)
 				i++;
 			arg = str_del_char(arg, &arg[i]);
 			if (!arg)
@@ -51,7 +40,7 @@ static char *unquote_arg(char *arg)
 	return (arg);
 }
 
-int remove_quotes(t_data *data, t_list *args)
+int	remove_quotes(t_data *data, t_list *args)
 {
 	t_list	*curr;
 	char	*arg;

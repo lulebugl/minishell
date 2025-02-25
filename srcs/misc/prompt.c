@@ -56,32 +56,30 @@ static char	*get_shortened_path(const char *path)
 // 	free(short_path);
 // }
 
-void print_details(void)
+void	print_details(void)
 {
-    char curr[PATH_MAX];
-    char *username;
-    char *short_path;
-    char *shlvl;
-    char *git_branch;
+	char	curr[PATH_MAX];
+	char	*username;
+	char	*short_path;
+	char	*shlvl;
+	char	*git_branch;
 
-    if (!getcwd(curr, PATH_MAX))
-        return ;
-    username = getenv("USER");
-    short_path = get_shortened_path(curr);
-    shlvl = getenv("SHLVL");
-    git_branch = get_git_branch();
-    if (!short_path)
-        return ;
-    printf("%s%s┌─[%s%s%s]",
-        BOLD, BLUE,
-        MAGENTA, short_path, BLUE);
-    if (shlvl)
-        printf("%s[%s%s%s]", BLUE, YELLOW, shlvl, BLUE);
-    if (git_branch)
-        {
-            printf("%s[%s%s%s]", BLUE, CYAN, git_branch, BLUE);
-            free(git_branch);
-        }
-    printf("\n");
-    free(short_path);
+	if (!getcwd(curr, PATH_MAX))
+		return ;
+	username = getenv("USER");
+	short_path = get_shortened_path(curr);
+	shlvl = getenv("SHLVL");
+	git_branch = get_git_branch();
+	if (!short_path)
+		return ;
+	printf("%s%s┌─[%s%s%s]", BOLD, BLUE, MAGENTA, short_path, BLUE);
+	if (shlvl)
+		printf("%s[%s%s%s]", BLUE, YELLOW, shlvl, BLUE);
+	if (git_branch)
+	{
+		printf("%s[%s%s%s]", BLUE, CYAN, git_branch, BLUE);
+		free(git_branch);
+	}
+	printf("\n");
+	free(short_path);
 }

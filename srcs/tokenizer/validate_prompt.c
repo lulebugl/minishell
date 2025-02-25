@@ -42,36 +42,36 @@ bool	has_balanced_parentheses(t_token *tokens)
 	return (count == -1);
 }
 
-bool    has_balanced_quotes(t_token *tokens)
+bool	has_balanced_quotes(t_token *tokens)
 {
-    t_token *curr;
-    char    *str;
-    int     i;
-    char    quote;
+	t_token	*curr;
+	char	*str;
+	int		i;
+	char	quote;
 
-    curr = tokens;
-    while (curr)
-    {
-        if (curr->type == TOKEN_WORD)
-        {
-            str = curr->content;
-            i = 0;
-            while (str[i])
-            {
-                if (str[i] == SINGLE_QUOTE || str[i] == DOUBLE_QUOTE)
-                {
-                    quote = str[i++];
-                    while (str[i] && str[i] != quote)
-                        i++;
-                    if (!str[i])
-                        return (false);
-                }
-                i++;
-            }
-        }
-        curr = curr->next;
-    }
-    return (true);
+	curr = tokens;
+	while (curr)
+	{
+		if (curr->type == TOKEN_WORD)
+		{
+			str = curr->content;
+			i = 0;
+			while (str[i])
+			{
+				if (str[i] == SINGLE_QUOTE || str[i] == DOUBLE_QUOTE)
+				{
+					quote = str[i++];
+					while (str[i] && str[i] != quote)
+						i++;
+					if (!str[i])
+						return (false);
+				}
+				i++;
+			}
+		}
+		curr = curr->next;
+	}
+	return (true);
 }
 
 int	validate_prompt(t_token *token)
@@ -120,11 +120,12 @@ int	validate_prompt(t_token *token)
 		}
 		if (curr->type == TOKEN_OR || curr->type == TOKEN_AND)
 		{
-			if (curr->next && (curr->next->type == TOKEN_PIPE || curr->next->type == TOKEN_OR || curr->next->type == TOKEN_AND))
+			if (curr->next && (curr->next->type == TOKEN_PIPE
+					|| curr->next->type == TOKEN_OR
+					|| curr->next->type == TOKEN_AND))
 				return (msg_unexpected_token(curr->next->content), ERR_SYNTAX);
 		}
 		curr = curr->next;
 	}
 	return (0);
 }
-

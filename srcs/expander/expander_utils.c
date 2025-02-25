@@ -17,12 +17,12 @@ int	is_quote(int c)
 	return (c == DOUBLE_QUOTE || c == SINGLE_QUOTE);
 }
 
-int find_first_quote(const char *str)
+int	find_first_quote(const char *str)
 {
 	while (*str)
 	{
-		if (*str == SINGLE_QUOTE || *str == DOUBLE_QUOTE )
-			return *str;
+		if (*str == SINGLE_QUOTE || *str == DOUBLE_QUOTE)
+			return (*str);
 		str++;
 	}
 	return (0);

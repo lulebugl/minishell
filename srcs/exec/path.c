@@ -80,4 +80,3 @@ char	*get_path(t_data *data, char *str, t_env *env)
 	}
 	return (NULL);
 }
-

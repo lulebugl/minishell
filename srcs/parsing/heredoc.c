@@ -62,17 +62,20 @@ static void	write_heredoc(t_data *data, int fd, char *buff)
 	write(fd, &buff[start], i - start);
 }
 
-static void	read_heredoc(t_data *data, int fd, char *eof)
+static int	read_heredoc(t_data *data, int fd, char *eof)
 {
 	char	*buff;
 	int		i;
 
 	i = 0;
+	signal(SIGINT, signal_ctlc_heredoc);
+	rl_event_hook = event;
 	while (true)
 	{
 		buff = NULL;
-		signal(SIGINT, signal_ctlc_heredoc);
 		buff = readline("heredoc> ");
+		if (g_sig == SIGINT)
+			return (free(buff), 0);
 		i++;
 		if (!buff)
 		{
@@ -86,7 +89,7 @@ delimited by end-of-file (wanted '%s')\n", i, eof);
 		write(fd, "\n", 1);
 		free(buff);
 	}
-	free(buff);
+	return (free(buff), 1);
 }
 
 static int	get_heredoc(t_data *data, char *eof)
@@ -99,7 +102,12 @@ static int	get_heredoc(t_data *data, char *eof)
 	fd = open(".minishell.tmp", O_CREAT | O_RDWR, 0644);
 	if (!fd)
 		return (0);
-	read_heredoc(data, fd, eof);
+	if (!read_heredoc(data, fd, eof))
+	{
+		close(fd);
+		unlink(".minishell.tmp");
+		return (0);
+	}
 	close(fd);
 	return (1);
 }

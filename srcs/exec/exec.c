@@ -16,13 +16,10 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 {
 	if (!cmd || !cmd->arg_lst)
 		return (1);
-	if (!last)
+	if (!last && pipe(exec->pipe) == -1)
 	{
-		if (pipe(exec->pipe) == -1)
-		{
-			cleanup_exec(exec);
-			err_and_exit(data);
-		}
+		cleanup_exec(exec);
+		err_and_exit(data);
 	}
 	exec->pid = fork();
 	if (exec->pid < 0)
@@ -117,4 +114,3 @@ int	exec(t_data *data)
 		execute_waitlist(&waitlist, data);
 	return (0);
 }
-

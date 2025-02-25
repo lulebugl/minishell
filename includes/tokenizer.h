@@ -42,7 +42,7 @@ int						add_token(t_token **tokens, const char *prompt,
 void					push_token(t_token **lst, t_token *node);
 t_token					*new_token(char *content, t_token_type type);
 void					clear_tokens(t_token **tokens);
-int						token_is_redir(t_token *token);
+int						token_is_redir(t_token_type token_type);
 int						read_extended(t_token **tokens, t_data *data);
 int						extend_prompt(t_data *data, t_token **tokens,
 							const char *s, int *pos);
