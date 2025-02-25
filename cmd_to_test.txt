@@ -36,3 +36,10 @@ cat << eof
 > eof
 
 env -i ./testers/expander puis exit (double free)
+
+
+
+NOTES:
+
+Parentheses ne fonctionnent plus (boucle infinie ?)
+Pourquoi return (ENOSPC); dans token_handlers ?
