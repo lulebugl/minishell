@@ -17,7 +17,6 @@ int		g_sig = 0;
 void	signal_ctlc(int sig)
 {
 	g_sig = sig;
-
 	if (sig == SIGINT)
 	{
 		write(STDERR_FILENO, "\n", 1);
@@ -31,9 +30,8 @@ void	signal_ctlc(int sig)
 void	signal_ctlc_heredoc(int sig)
 {
 	g_sig = sig;
-
 	if (sig == SIGINT)
-    	rl_done = 1;
+		rl_done = 1;
 }
 
 int	exec_prompt(const char *prompt, t_data *data)
@@ -64,7 +62,6 @@ int	launch_program(t_data *data)
 {
 	char	*rl;
 
-	signal(SIGQUIT, SIG_IGN);
 	while (true)
 	{
 		signal(SIGINT, signal_ctlc);
@@ -78,11 +75,7 @@ int	launch_program(t_data *data)
 		print_details();
 		rl = readline(PROMPT3);
 		if (!rl)
-		{
-			// ctrl-D
-			termios_change(true);
-			return (1);
-		}
+			return (printf("exit\n"), termios_change(true), 1);
 		if (rl && rl[0] == '\0')
 		{
 			free(rl);
@@ -104,8 +97,8 @@ int	main(int argc, char **argv, char **envp)
 	ft_memset(&data, 0, sizeof(t_data));
 	data_init(&data);
 	env_init(&data.env, envp);
+	signal(SIGQUIT, SIG_IGN);
 	launch_program(&data);
 	data_free(&data);
 	return (0);
 }
-
