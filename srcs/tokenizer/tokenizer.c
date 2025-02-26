@@ -37,7 +37,7 @@ int	handle_word(const char *s, int *pos, t_token **tokens)
 		if (s[*pos] == SINGLE_QUOTE)
 		{
 			(*pos)++;
-		while (s[(*pos)] && s[*pos] != SINGLE_QUOTE)
+			while (s[(*pos)] && s[*pos] != SINGLE_QUOTE)
 				(*pos)++;
 		}
 		else if (s[(*pos)] == DOUBLE_QUOTE)
@@ -49,7 +49,8 @@ int	handle_word(const char *s, int *pos, t_token **tokens)
 		else
 			(*pos)++;
 	}
-	return (add_token(tokens, s, (t_token_pos){start, *pos - start}, TOKEN_WORD));
+	return (add_token(tokens, s, (t_token_pos){start, *pos - start},
+		TOKEN_WORD));
 }
 
 /*

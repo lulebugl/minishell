@@ -24,7 +24,7 @@ int	expander(t_data *data, t_command *cmd)
 		return (1);
 	if (expand_wildcards(cmd) != SUCCESS)
 		return (1);
-	if (remove_quotes(data, cmd->arg_lst) != SUCCESS)
+	if (remove_quotes(cmd->arg_lst) != SUCCESS)
 		return (1);
 	// debug_expander(cmd);
 	cmd->arg_count = ft_lstsize(cmd->arg_lst);

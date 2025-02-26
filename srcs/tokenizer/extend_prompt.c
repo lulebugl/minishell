@@ -21,7 +21,11 @@ int	read_extended(t_token **tokens, t_data *data)
 		signal(SIGINT, signal_ctlc);
 		buf = readline("\033[35m> \033[0m");
 		if (!buf)
-			return (1);
+		{
+			ft_printf_fd(STDERR_FILENO,
+				"minishell: syntax error: unexpected end of file\n");
+			return (data_free(data), exit(ERR_SYNTAX), ERR_SYNTAX);
+		}
 		if (buf && buf[0] == '\0')
 		{
 			free(buf);

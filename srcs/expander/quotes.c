@@ -40,7 +40,7 @@ static char	*unquote_arg(char *arg)
 	return (arg);
 }
 
-int	remove_quotes(t_data *data, t_list *args)
+int	remove_quotes(t_list *args)
 {
 	t_list	*curr;
 	char	*arg;

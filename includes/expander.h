@@ -16,7 +16,7 @@
 # include "structures.h"
 
 int		expand_tilde(t_data *data, t_list *arg);
-int		remove_quotes(t_data *data, t_list *args);
+int		remove_quotes(t_list *args);
 int		expand_keys(t_data *data, t_list *args);
 void	expand_wildcard(t_list **current);
 int		expand_wildcards(t_command *cmd);

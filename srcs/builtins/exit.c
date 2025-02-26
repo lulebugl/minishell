@@ -52,7 +52,7 @@ int	ft_exit(t_data *data, char **args)
 		if (!check_arg(args[1]))
 		{
 			ft_printf_fd(2, "exit\nminishell: exit: %s:\
-					numeric argument required\n", args[1]);
+numeric argument required\n", args[1]);
 			data_free(data);
 			ft_free_tab(args);
 			exit(2);
