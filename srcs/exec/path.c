@@ -72,6 +72,8 @@ char	*get_path(t_data *data, char *str, t_env *env)
 	curr = env;
 	if (!str)
 		return (NULL);
+	if (access(str, F_OK) == 0)
+		return (ft_strdup(str));
 	while (curr)
 	{
 		if (curr->key && ft_strncmp(curr->key, "PATH", 4) == 0)
