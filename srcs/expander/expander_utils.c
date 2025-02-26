@@ -17,43 +17,6 @@ int	is_quote(int c)
 	return (c == DOUBLE_QUOTE || c == SINGLE_QUOTE);
 }
 
-int	find_first_quote(const char *str)
-{
-	while (*str)
-	{
-		if (*str == SINGLE_QUOTE || *str == DOUBLE_QUOTE)
-			return (*str);
-		str++;
-	}
-	return (0);
-}
-
-int	del_empty_args(t_list **head, t_list *node_to_delete)
-{
-	t_list	**curr;
-	t_list	*tmp;
-
-	if (!head || !*head || !node_to_delete)
-		return (1);
-	curr = head;
-	while (*curr && *curr != node_to_delete)
-		curr = &(*curr)->next;
-	if (*curr && (*curr)->content && ((char *)(*curr)->content)[0] == '\0')
-	{
-		tmp = *curr;
-		*curr = (*curr)->next;
-		if (tmp->content)
-		{
-			free(tmp->content);
-			tmp->content = NULL;
-		}
-		free(tmp);
-		tmp = NULL;
-		return (1);
-	}
-	return (0);
-}
-
 /*
  * Function: replace_substring
  * ----------------------------

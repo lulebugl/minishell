@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   separate_expanded.c                                :+:      :+:    :+:   */
+/*   split_expanded.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,6 +11,37 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static bool	has_unquoted_space(const char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str && str[i])
+	{
+		if (str[i] == SINGLE_QUOTE)
+		{
+			i++;
+			while (str[i] && str[i] != SINGLE_QUOTE)
+				i++;
+			if (str[i])
+				i++;
+		}
+		else if (str[i] == DOUBLE_QUOTE)
+		{
+			i++;
+			while (str[i] && str[i] != DOUBLE_QUOTE)
+				i++;
+			if (str[i])
+				i++;
+		}
+		else if (str[i] == ' ')
+			return (true);
+		else
+			i++;
+	}
+	return (false);
+}
 
 static t_list	*create_new_arg(char *str, size_t start, size_t len)
 {
@@ -49,7 +80,7 @@ static t_list	*insert_new_arg(t_list *args, t_list *new, t_list *next,
 	}
 }
 
-int	separate_expanded(t_data *data, t_list *args)
+static int	split_expanded(t_data *data, t_list *args)
 {
 	char	*str;
 	t_list	*next;
@@ -76,4 +107,45 @@ int	separate_expanded(t_data *data, t_list *args)
 		i += (str[i] == ' ');
 	}
 	return (free(str), 0);
+}
+
+/*
+ * Function: split_expanded_arguments
+ * ----------------------------
+ * After parameter expansion, some arguments might contain spaces
+ * from expanded environment variables. This function splits those.
+ */
+int	split_expanded_arguments(t_data *data, t_command *cmd)
+{
+	t_list	*curr;
+	t_list	*next;
+	t_list	*prev;
+
+	if (!cmd || !cmd->arg_lst)
+		return (SUCCESS);
+	curr = cmd->arg_lst;
+	prev = NULL;
+	while (curr)
+	{
+		next = curr->next;
+		if (curr->content && has_unquoted_space(curr->content))
+		{
+			if (split_expanded(data, curr) != SUCCESS)
+				return (ERROR);
+			if (!prev)
+				cmd->arg_lst = curr;
+			else
+				prev->next = curr;
+			while (curr && curr->next)
+			{
+				prev = curr;
+				curr = curr->next;
+			}
+			curr->next = next;
+		}
+		else
+			prev = curr;
+		curr = next;
+	}
+	return (SUCCESS);
 }

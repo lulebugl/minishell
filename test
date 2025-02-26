@@ -1,0 +1,18 @@
+total 184
+drwxr-xr-x  8 llebugle 2024_s19    247 Feb 26 18:22 .
+drwxr-xr-x 12 llebugle 2024_s19    193 Jan 31 17:42 ..
+-rw-r--r--  1 llebugle 2024_s19    362 Jan 22 21:43 .clangd
+-rw-r--r--  1 llebugle 2024_s19    767 Feb 26 17:10 cmd_to_test.txt
+-rw-r--r--  1 llebugle 2024_s19     94 Jan 22 17:03 compile_flags.txt
+drwxr-xr-x  8 llebugle 2024_s19    220 Feb 26 18:08 .git
+-rw-r--r--  1 llebugle 2024_s19    468 Jan 22 18:04 .gitignore
+drwxr-xr-x  2 llebugle 2024_s19    127 Feb 26 17:10 includes
+-rw-r--r--  1 llebugle 2024_s19    280 Feb 26 17:10 leaks.supp
+drwxr-xr-x  2 llebugle 2024_s19   4096 Feb 26 17:10 libft
+-rw-r--r--  1 llebugle 2024_s19   5881 Feb 26 18:15 Makefile
+-rwxr-xr-x  1 llebugle 2024_s19 147456 Feb 26 17:11 minishell
+drwxr-xr-x  9 llebugle 2024_s19    123 Feb 26 17:11 objs
+-rw-r--r--  1 llebugle 2024_s19    455 Feb 13 21:28 README.md
+drwxr-xr-x  9 llebugle 2024_s19    121 Feb 26 17:10 srcs
+-rw-r--r--  1 llebugle 2024_s19      0 Feb 26 18:22 test
+drwxr-xr-x  2 llebugle 2024_s19     22 Feb 26 18:21 testers

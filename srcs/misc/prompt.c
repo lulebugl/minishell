@@ -34,28 +34,6 @@ static char	*get_shortened_path(const char *path)
 	return (ft_strdup(path));
 }
 
-// void	print_details(void)
-// {
-// 	char	curr[PATH_MAX];
-// 	char	*short_path;
-// 	char	*git_branch;
-
-// 	if (!getcwd(curr, PATH_MAX))
-// 		return ;
-// 	short_path = get_shortened_path(curr);
-// 	if (!short_path)
-// 		return ;
-// 	printf("%s%s%s", MAGENTA, short_path, RESET);
-// 	git_branch = get_git_branch();
-// 	if (git_branch)
-// 	{
-// 		printf(" %s%s%s", DGRAY, git_branch, RESET);
-// 		free(git_branch);
-// 	}
-// 	printf("\n");
-// 	free(short_path);
-// }
-
 void	print_details(void)
 {
 	char	curr[PATH_MAX];
@@ -83,3 +61,25 @@ void	print_details(void)
 	printf("\n");
 	free(short_path);
 }
+
+// void	print_details(void)
+// {
+// 	char	curr[PATH_MAX];
+// 	char	*short_path;
+// 	char	*git_branch;
+
+// 	if (!getcwd(curr, PATH_MAX))
+// 		return ;
+// 	short_path = get_shortened_path(curr);
+// 	if (!short_path)
+// 		return ;
+// 	printf("%s%s%s", MAGENTA, short_path, RESET);
+// 	git_branch = get_git_branch();
+// 	if (git_branch)
+// 	{
+// 		printf(" %s%s%s", DGRAY, git_branch, RESET);
+// 		free(git_branch);
+// 	}
+// 	printf("\n");
+// 	free(short_path);
+// }
