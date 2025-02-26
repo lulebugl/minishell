@@ -100,7 +100,6 @@ int	split_expanded_arguments(t_data *data, t_command *cmd)
 	t_list	*curr;
 	t_list	*next;
 	t_list	*prev;
-	t_list	*last;
 
 	curr = cmd->arg_lst;
 	prev = NULL;

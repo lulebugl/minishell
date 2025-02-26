@@ -22,7 +22,23 @@ char	*try_relative(t_data *data, char *str, t_exec *exec)
 	if (access(valid_path, F_OK) == -1)
 	{
 		if (access(str, F_OK) == 0)
-			return (ft_strdup(str));
+		{
+			printf("here\n");
+			if (access(str, X_OK | R_OK) == 0)
+			{
+				printf("here2\n");
+				return (ft_strdup(str));
+			}
+			else
+			{
+				ft_printf_fd(STDERR_FILENO,
+					"minishell: %s: Permission denied\n", str);
+				free(valid_path);
+				data_free(data);
+				cleanup_exec(exec);
+				exit(126);
+			}
+		}
 		ft_printf_fd(STDERR_FILENO, "minishell: %s: command not found\n", str);
 		free(valid_path);
 		data_free(data);
@@ -82,3 +98,4 @@ char	*get_path(t_data *data, char *str, t_env *env)
 	}
 	return (NULL);
 }
+

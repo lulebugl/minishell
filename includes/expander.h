@@ -25,6 +25,7 @@ char	*replace_substring(char *str, size_t start, size_t len, char *replace);
 bool	skip_in_single_quote(char *str, int *i);
 int		is_quote(int c);
 int		expander(t_data *data, t_command *cmd);
+bool	has_unquoted_space(const char *str);
 
 #endif
 
