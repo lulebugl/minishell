@@ -95,7 +95,7 @@ int	expand_keys(t_data *data, t_list *args)
 	t_list	*curr;
 
 	if (!args)
-		return (0);
+		return (1);
 	curr = args;
 	while (curr)
 	{

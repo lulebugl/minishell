@@ -20,13 +20,16 @@ int	expander(t_data *data, t_command *cmd)
 		return (1);
 	if (expand_keys(data, cmd->arg_lst) != SUCCESS)
 		return (1);
+	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content
+		|| !((char *)cmd->arg_lst->content)[0])
+		return (1);
 	if (split_expanded_arguments(data, cmd) != SUCCESS)
 		return (1);
 	if (expand_wildcards(cmd) != SUCCESS)
 		return (1);
 	if (remove_quotes(cmd->arg_lst) != SUCCESS)
 		return (1);
-	// debug_expander(cmd);
 	cmd->arg_count = ft_lstsize(cmd->arg_lst);
 	return (SUCCESS);
 }
+

@@ -21,6 +21,8 @@ char	*try_relative(t_data *data, char *str, t_exec *exec)
 		return (err_and_exit(data), NULL);
 	if (access(valid_path, F_OK) == -1)
 	{
+		if (access(str, F_OK) == 0)
+			return (ft_strdup(str));
 		ft_printf_fd(STDERR_FILENO, "minishell: %s: command not found\n", str);
 		free(valid_path);
 		data_free(data);
@@ -72,8 +74,6 @@ char	*get_path(t_data *data, char *str, t_env *env)
 	curr = env;
 	if (!str)
 		return (NULL);
-	if (access(str, F_OK) == 0)
-		return (ft_strdup(str));
 	while (curr)
 	{
 		if (curr->key && ft_strncmp(curr->key, "PATH", 4) == 0)

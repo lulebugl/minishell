@@ -12,37 +12,6 @@
 
 #include "minishell.h"
 
-static bool	has_unquoted_space(const char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str && str[i])
-	{
-		if (str[i] == SINGLE_QUOTE)
-		{
-			i++;
-			while (str[i] && str[i] != SINGLE_QUOTE)
-				i++;
-			if (str[i])
-				i++;
-		}
-		else if (str[i] == DOUBLE_QUOTE)
-		{
-			i++;
-			while (str[i] && str[i] != DOUBLE_QUOTE)
-				i++;
-			if (str[i])
-				i++;
-		}
-		else if (str[i] == ' ')
-			return (true);
-		else
-			i++;
-	}
-	return (false);
-}
-
 static t_list	*create_new_arg(char *str, size_t start, size_t len)
 {
 	t_list	*node;
@@ -80,7 +49,7 @@ static t_list	*insert_new_arg(t_list *args, t_list *new, t_list *next,
 	}
 }
 
-static int	split_expanded(t_data *data, t_list *args)
+static void	split_expanded(t_data *data, t_list *args)
 {
 	char	*str;
 	t_list	*next;
@@ -89,7 +58,7 @@ static int	split_expanded(t_data *data, t_list *args)
 	int		start;
 
 	if (!args || !args->content)
-		return (0);
+		return ;
 	next = args->next;
 	str = ft_strdup(args->content);
 	if (!str)
@@ -102,11 +71,22 @@ static int	split_expanded(t_data *data, t_list *args)
 			i++;
 		new = create_new_arg(str, start, i - start);
 		if (!new)
-			return (free(str), err_and_exit(data), 1);
+			return (free(str), err_and_exit(data));
 		args = insert_new_arg(args, new, next, start);
 		i += (str[i] == ' ');
 	}
-	return (free(str), 0);
+	return (free(str));
+}
+
+t_list	*lst_get_last_and_prev(t_list *curr, t_list **prev, t_list *next)
+{
+	while (curr && curr->next)
+	{
+		*prev = curr;
+		curr = curr->next;
+	}
+	curr->next = next;
+	return (curr);
 }
 
 /*
@@ -120,9 +100,8 @@ int	split_expanded_arguments(t_data *data, t_command *cmd)
 	t_list	*curr;
 	t_list	*next;
 	t_list	*prev;
+	t_list	*last;
 
-	if (!cmd || !cmd->arg_lst)
-		return (SUCCESS);
 	curr = cmd->arg_lst;
 	prev = NULL;
 	while (curr)
@@ -130,18 +109,12 @@ int	split_expanded_arguments(t_data *data, t_command *cmd)
 		next = curr->next;
 		if (curr->content && has_unquoted_space(curr->content))
 		{
-			if (split_expanded(data, curr) != SUCCESS)
-				return (ERROR);
+			split_expanded(data, curr);
 			if (!prev)
 				cmd->arg_lst = curr;
 			else
 				prev->next = curr;
-			while (curr && curr->next)
-			{
-				prev = curr;
-				curr = curr->next;
-			}
-			curr->next = next;
+			curr = lst_get_last_and_prev(curr, &prev, next);
 		}
 		else
 			prev = curr;
@@ -149,3 +122,4 @@ int	split_expanded_arguments(t_data *data, t_command *cmd)
 	}
 	return (SUCCESS);
 }
+

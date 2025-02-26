@@ -87,3 +87,28 @@ bool	skip_quoted(char *str, int *i)
 	}
 	return (true);
 }
+
+bool	has_unquoted_space(const char *str)
+{
+	int	i;
+	char quote;
+	
+	i = 0;
+	while (str && str[i])
+	{
+		if (str[i] == SINGLE_QUOTE || str[i] == DOUBLE_QUOTE)
+		{
+			quote = str[i++];
+			while (str[i] && str[i] != quote)
+				i++;
+			if (str[i])
+				i++;
+		}
+		else if (str[i] == ' ')
+			return (true);
+		else
+			i++;
+	}
+	return (false);
+}
+

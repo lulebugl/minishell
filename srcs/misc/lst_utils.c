@@ -21,6 +21,8 @@ t_list	*del_node_and_join(t_list **head, t_list *node_to_delete)
 		return (NULL);
 	if (!node_to_delete)
 		return (*head);
+	if (ft_lstsize(*head) == 1 && (*head == node_to_delete))
+		return (NULL);
 	curr = head;
 	while (*curr && *curr != node_to_delete)
 		curr = &(*curr)->next;

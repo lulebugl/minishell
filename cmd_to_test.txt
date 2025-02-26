@@ -28,6 +28,7 @@ ls &&
 cat << eof > test // huge leaks, probably a data_free forgotten somewhere
 /bin/ls
 ls test "*"
+$test $test (avec test="ls -la") boucle infini
 
 // Heredoc :
 
