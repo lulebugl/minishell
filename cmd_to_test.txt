@@ -18,6 +18,7 @@ exit display "exit" when exiting
 export TEST="ls -la"
 echo "'aa""aa'"
 echo "'aa" "aa'"
+"ls akdad"  ' kdpoakdkda'
 ./t
 export test=-la
 ls (wc -l)
@@ -29,7 +30,8 @@ cat << eof > test // huge leaks, probably a data_free forgotten somewhere
 /bin/ls // ok
 ls test "*"
 $test $test (avec test="ls -la") boucle infini
-
+printf("split\n");
+ctrl-c in extend prompt
 // need to fix path to check is_dir
 
 

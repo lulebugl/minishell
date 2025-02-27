@@ -39,18 +39,22 @@ int	handle_word(const char *s, int *pos, t_token **tokens)
 			(*pos)++;
 			while (s[(*pos)] && s[*pos] != SINGLE_QUOTE)
 				(*pos)++;
+			if (s[(*pos)] == SINGLE_QUOTE)
+				(*pos)++;
 		}
 		else if (s[(*pos)] == DOUBLE_QUOTE)
 		{
 			(*pos)++;
 			while (s[*pos] && s[*pos] != DOUBLE_QUOTE)
 				(*pos)++;
+			if (s[(*pos)] == DOUBLE_QUOTE)
+				(*pos)++;
 		}
 		else
 			(*pos)++;
 	}
 	return (add_token(tokens, s, (t_token_pos){start, *pos - start},
-		TOKEN_WORD));
+			TOKEN_WORD));
 }
 
 /*
@@ -86,3 +90,4 @@ int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 	}
 	return (0);
 }
+

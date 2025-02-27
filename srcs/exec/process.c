@@ -72,6 +72,8 @@ void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
 	cmd_path = get_path(data, cmd->arg_lst->content, data->env);
 	if (!cmd_path)
 		cmd_path = try_relative(data, cmd->arg_lst->content, exec);
+	// if (access(cmd_path, X_OK) != 0)
+	// 		return_error(path, "Permission denied", 126, node);
 	envp = t_env_to_envp(data->env);
 	if (!envp)
 		return (free(cmd_path), cleanup_exec(exec), err_and_exit(data));

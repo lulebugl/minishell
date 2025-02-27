@@ -33,7 +33,7 @@ void	debug_cmd(t_data *data, t_command *cmd)
 	t_list	*tmp;
 
 	i = -1;
-	if (!cmd || !cmd->arg_lst || cmd->arg_count == 0)
+	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content || cmd->arg_count == 0)
 		return ;
 	if (ft_strcmp(cmd->arg_lst->content, "token") == 0)
 		data->print_token ^= 1;
@@ -53,5 +53,6 @@ void	debug_cmd(t_data *data, t_command *cmd)
 			}
 		}
 		printf("\n");
+		debug_expander(cmd);
 	}
 }
