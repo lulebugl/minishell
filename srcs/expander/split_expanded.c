@@ -78,8 +78,7 @@ static int	split_expanded(t_list *args)
 	return (free(str), 0);
 }
 
-t_list	*split_arg(t_list *curr, t_list *prev, t_list *next,
-		t_list **head)
+t_list	*split_arg(t_list *curr, t_list *prev, t_list *next, t_list **head)
 {
 	t_list	*last;
 
@@ -109,16 +108,15 @@ int	split_expanded_arguments(t_data *data, t_command *cmd)
 	while (curr)
 	{
 		next = curr->next;
-        if (curr->content && has_unquoted_space(curr->content))
-        {
-            prev = split_arg(curr, prev, next, &cmd->arg_lst);
-            if (!prev)
-            	err_and_exit(data);
-        }
-        else
-            prev = curr;
-        curr = next;
+		if (curr->content && has_unquoted_space(curr->content))
+		{
+			prev = split_arg(curr, prev, next, &cmd->arg_lst);
+			if (!prev)
+				err_and_exit(data);
+		}
+		else
+			prev = curr;
+		curr = next;
 	}
 	return (SUCCESS);
 }
-

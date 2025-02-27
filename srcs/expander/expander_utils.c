@@ -90,9 +90,9 @@ bool	skip_quoted(char *str, int *i)
 
 bool	has_unquoted_space(const char *str)
 {
-	int	i;
-	char quote;
-	
+	int		i;
+	char	quote;
+
 	i = 0;
 	while (str && str[i])
 	{
@@ -111,4 +111,3 @@ bool	has_unquoted_space(const char *str)
 	}
 	return (false);
 }
-

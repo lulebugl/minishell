@@ -32,4 +32,3 @@ int	expander(t_data *data, t_command *cmd)
 	cmd->arg_count = ft_lstsize(cmd->arg_lst);
 	return (SUCCESS);
 }
-
