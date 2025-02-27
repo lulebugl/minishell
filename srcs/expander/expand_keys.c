@@ -61,12 +61,12 @@ static char	*expand_var(t_data *data, char *str, int *i)
 	return (str);
 }
 
-static char	*expand_str(t_data *data, char *arg)
+char	*expand_str(t_data *data, char *arg)
 {
 	int	i;
 
 	i = 0;
-	while (arg[i])
+	while (arg && arg[i])
 	{
 		if (skip_in_single_quote(arg, &i) == true)
 			continue ;

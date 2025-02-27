@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static char	*unquote_arg(char *arg)
+char	*unquote_arg(char *arg)
 {
 	int	i;
 	int	quote_type;

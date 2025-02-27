@@ -72,6 +72,7 @@ int	launch_program(t_data *data)
 		}
 		print_details();
 		data->rl = readline(PROMPT3);
+		// data->rl = readline("> ");
 		if (!data->rl)
 			return (printf("exit\n"), termios_change(true), 1);
 		if (data->rl && data->rl[0] == '\0')

@@ -29,24 +29,13 @@ ls &&
 cat << eof > test // huge leaks, probably a data_free forgotten somewhere
 /bin/ls // ok
 ls test "*"
-$test $test (avec test="ls -la") boucle infini
+$test $test (avec test="ls -la") boucle infini // fixed
 printf("split\n");
 ctrl-c in extend prompt
 ls && (ls fdgfdgd || (echo 1 && echo 2) || ls)
-// need to fix path to check is_dir
 
-
-// Heredoc :
-
-cat << eof
-> "$test"
-> eof
-
-env -i ./testers/expander puis exit (double free)
-
-
-
-NOTES:
-
-Parentheses ne fonctionnent plus (boucle infinie ?)
-Pourquoi return (ENOSPC); dans token_handlers ?
+// found with tester
+cd $PWD // crash
+echo <"test" "bonjour       42"
+echo ls > "test1" // i remove the quotes after filename is created which in this case is problematic, also true for expansion i think
+$EMPTY echo hi // crash

@@ -45,7 +45,6 @@ void	restore_fd(t_data *data);
 
 /* path */
 
-char	*try_relative(t_data *data, char *str, t_exec *exec);
 char	*get_path(t_data *data, t_command *cmd);
 void	error_path(t_data *data, t_exec *exec, char *path, int err);
 

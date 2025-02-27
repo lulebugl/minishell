@@ -36,8 +36,16 @@ bool	is_builtin(t_command *cmd)
 
 void	pre_exit(t_data *data, char **argv, t_exec *exec)
 {
-	cleanup_exec(exec);
-	restore_fd(data);
+	int i;
+	
+	i = 0;
+	while (argv && argv[i])
+		i++;
+	if (i < 2)
+	{
+		cleanup_exec(exec);
+		restore_fd(data);
+	}
 	data->exit_code = ft_exit(data, argv);
 }
 
@@ -95,3 +103,4 @@ void	exec_single_builtin(t_data *data, t_command *cmd, t_exec *exec)
 		data->exit_code = ft_unset(data->env, argv);
 	return (cleanup_exec(exec), restore_fd(data), ft_free_tab(argv));
 }
+

@@ -35,24 +35,12 @@ void	error_path(t_data *data, t_exec *exec, char *path, int err)
 	{
 		ft_printf_fd(STDERR_FILENO, \
 			"minishell: %s: No such file or directory\n", path);
-		// free(path);
 	}
 	cleanup_exec(exec);
 	data_free(data);
 	if (err == PERMISSION_DENIED)
 		exit(126);
 	exit(127);
-}
-
-char	*try_relative(t_data *data, char *path, t_exec *exec)
-{
-	if (!path)
-		return (NULL);
-	if (!access(path, F_OK) && access(path, X_OK))
-		return (error_path(data, exec, path, PERMISSION_DENIED), NULL);
-	if (access(path, F_OK) == -1)
-		return (error_path(data, exec, path, CMD_NOT_FOUND), NULL);
-	return (path);
 }
 
 static char	*try_path(t_data *data, char *str, char *env)

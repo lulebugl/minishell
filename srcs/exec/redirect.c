@@ -54,6 +54,22 @@ int	process_infile(char *filename)
 	return (SUCCESS);
 }
 
+int expand_redirection(t_data *data, char **str, t_token_type type)
+{
+	if (!*str)
+		return (ERROR);
+	if (type == TOKEN_HEREDOC)
+		return (SUCCESS);
+	*str = expand_str(data, *str);
+	if (!*str)
+		return (ERROR);
+	// what about wildcards? 
+	*str = unquote_arg(*str);
+	if (!*str)
+		return (ERROR);
+	return (SUCCESS);
+}
+
 int	process_redirections(t_data *data, t_command *cmd)
 {
 	t_redirection	*curr;
@@ -65,6 +81,7 @@ int	process_redirections(t_data *data, t_command *cmd)
 	{
 		if (!token_is_redir(curr->type))
 			return (ERROR);
+		expand_redirection(data, &curr->filename, curr->type);
 		if (curr->type == TOKEN_IN)
 			if (process_infile(curr->filename) == ERROR)
 				return (data->exit_code = errno, ERROR);
@@ -79,8 +96,7 @@ int	process_redirections(t_data *data, t_command *cmd)
 				return (data->exit_code = errno, ERROR);
 		curr = curr->next;
 	}
-	unlink(".minishell.tmp");
-	return (0);
+	return (unlink(".minishell.tmp"), 0);
 }
 
 int	redirect_fd(t_data *data, t_command *cmd)

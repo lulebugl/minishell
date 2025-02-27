@@ -85,7 +85,7 @@ void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
 	if (!path)
 		return (data_free(data), cleanup_exec(exec), exit(0));
 	if (access(path, F_OK) != 0)
-		return (error_path(data, exec, path, NO_SUCH_FILE));
+		return (error_path(data, exec, path, CMD_NOT_FOUND));
 	if (is_dir(path) || access(path, F_OK | X_OK) != 0)
 		return (error_path(data, exec, path, PERMISSION_DENIED));
 	envp = t_env_to_envp(data->env);

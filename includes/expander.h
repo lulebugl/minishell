@@ -27,5 +27,7 @@ int		is_quote(int c);
 int		expander(t_data *data, t_command *cmd);
 bool	has_unquoted_space(const char *str);
 int		is_dir(char *str);
+char	*expand_str(t_data *data, char *arg);
+char	*unquote_arg(char *arg);
 
 #endif

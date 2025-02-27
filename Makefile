@@ -6,7 +6,7 @@
 #    By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 18:54:13 by llebugle          #+#    #+#              #
-#    Updated: 2025/02/19 16:26:14 by maxweert         ###   ########.fr        #
+#    Updated: 2025/02/27 21:25:34 by llebugle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,8 +23,7 @@ RESET	=\033[0m
 
 # Compiler and compilation flags
 CC		= cc
-# CFLAGS	= -Werror -Wextra -Wall -gdwarf-4 -g
-CFLAGS	= -Wextra -Wall -gdwarf-4 -g
+CFLAGS	= -Werror -Wextra -Wall -gdwarf-4 -g
 VALGRIND =
 
 UNAME_S := $(shell uname -s)
