@@ -35,7 +35,7 @@ void	error_path(t_data *data, t_exec *exec, char *path, int err)
 	{
 		ft_printf_fd(STDERR_FILENO, \
 			"minishell: %s: No such file or directory\n", path);
-		free(path);
+		// free(path);
 	}
 	cleanup_exec(exec);
 	data_free(data);
@@ -96,7 +96,7 @@ char	*get_path(t_data *data, t_command *cmd, t_exec *exec)
 		return (NULL);
 	path = cmd->arg_lst->content;
 	if (access(path, F_OK) == 0 && !is_dir(path) && access(path, X_OK) == 0)
-		return (ft_strdup(path));
+		return (cmd->arg_lst->content);
 	while (curr)
 	{
 		if (curr->key && ft_strncmp(curr->key, "PATH", 4) == 0)

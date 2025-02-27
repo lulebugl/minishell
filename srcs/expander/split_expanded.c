@@ -49,7 +49,7 @@ static t_list	*insert_new_arg(t_list *args, t_list *new, t_list *next,
 	}
 }
 
-static void	split_expanded(t_data *data, t_list *args)
+static int	split_expanded(t_list *args)
 {
 	char	*str;
 	t_list	*next;
@@ -58,11 +58,11 @@ static void	split_expanded(t_data *data, t_list *args)
 	int		start;
 
 	if (!args || !args->content)
-		return ;
+		return (0);
 	next = args->next;
 	str = ft_strdup(args->content);
 	if (!str)
-		err_and_exit(data);
+		return (1);
 	i = 0;
 	while (str[i])
 	{
@@ -71,53 +71,53 @@ static void	split_expanded(t_data *data, t_list *args)
 			i++;
 		new = create_new_arg(str, start, i - start);
 		if (!new)
-			return (free(str), err_and_exit(data));
+			return (free(str), 1);
 		args = insert_new_arg(args, new, next, start);
 		i += (str[i] == ' ');
 	}
-	return (free(str));
+	return (free(str), 0);
 }
 
-t_list	*lst_get_last_and_prev(t_list *curr, t_list **prev, t_list *next)
+t_list	*split_arg(t_list *curr, t_list *prev, t_list *next,
+		t_list **head)
 {
-	while (curr && curr->next)
-	{
-		*prev = curr;
-		curr = curr->next;
-	}
-	curr->next = next;
-	return (curr);
+	t_list	*last;
+
+	if (split_expanded(curr) == ERROR)
+		return (NULL);
+	if (!prev)
+		*head = curr;
+	else
+		prev->next = curr;
+	last = curr;
+	while (last->next && last->next != next)
+		last = last->next;
+	last->next = next;
+	return (last);
 }
 
-/*
- * Function: split_expanded_arguments
- * ----------------------------
- * After parameter expansion, some arguments might contain spaces
- * from expanded environment variables. This function splits those.
- */
 int	split_expanded_arguments(t_data *data, t_command *cmd)
 {
 	t_list	*curr;
 	t_list	*next;
 	t_list	*prev;
 
+	if (!cmd || !cmd->arg_lst)
+		return (SUCCESS);
 	curr = cmd->arg_lst;
 	prev = NULL;
 	while (curr)
 	{
 		next = curr->next;
-		if (curr->content && has_unquoted_space(curr->content))
-		{
-			split_expanded(data, curr);
-			if (!prev)
-				cmd->arg_lst = curr;
-			else
-				prev->next = curr;
-			curr = lst_get_last_and_prev(curr, &prev, next);
-		}
-		else
-			prev = curr;
-		curr = next;
+        if (curr->content && has_unquoted_space(curr->content))
+        {
+            prev = split_arg(curr, prev, next, &cmd->arg_lst);
+            if (!prev)
+            	err_and_exit(data);
+        }
+        else
+            prev = curr;
+        curr = next;
 	}
 	return (SUCCESS);
 }
