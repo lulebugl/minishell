@@ -20,42 +20,13 @@ t_tree_node	*handle_open_par(t_data *data, t_token **token, t_tree_node *root)
 	tmp_node = new_tree(data, token);
 	if (!tmp_node)
 		return (free_tree(root), NULL);
+	if (*token && (*token)->type == TOKEN_CLOSE_PAR)
+		*token = (*token)->next;
 	return (tmp_node);
 }
 
-t_tree_node	*handle_command(t_data *data, t_token **token, t_tree_node *root)
+t_tree_node	*update_tree_structure(t_tree_node *root, t_tree_node *tmp_node)
 {
-	t_tree_node	*tmp_node;
-
-	tmp_node = new_node(NODE_COMMAND);
-	if (!tmp_node)
-		return (free_tree(root), NULL);
-	tmp_node->cmd = get_command(data, token);
-	if (!tmp_node->cmd)
-		return (free(tmp_node), free_tree(root), NULL);
-	return (tmp_node);
-}
-
-t_tree_node	*handle_other_nodes(t_token **token)
-{
-	return (new_node(get_node_type((*token)->type)));
-}
-
-t_tree_node	*process_token(t_data *data, t_token **token, t_tree_node *root)
-{
-	t_tree_node	*tmp_node;
-
-	tmp_node = NULL;
-	if ((*token)->type == TOKEN_OPEN_PAR)
-		tmp_node = handle_open_par(data, token, root);
-	else if ((*token)->type == TOKEN_CLOSE_PAR)
-		return (root);
-	else if (token_is_part_of_command((*token)->type))
-		tmp_node = handle_command(data, token, root);
-	else
-		tmp_node = handle_other_nodes(token);
-	if (!tmp_node)
-		return (NULL);
 	if (!root)
 		root = tmp_node;
 	else if (root->left && !root->right)
@@ -65,9 +36,47 @@ t_tree_node	*process_token(t_data *data, t_token **token, t_tree_node *root)
 		tmp_node->left = root;
 		root = tmp_node;
 	}
-	if ((*token) && tmp_node->type != NODE_COMMAND)
-		(*token) = (*token)->next;
 	return (root);
+}
+
+t_tree_node	*process_current_token(t_data *data, t_token **token,
+		t_tree_node *root)
+{
+	t_tree_node	*tmp_node;
+
+	if ((*token)->type == TOKEN_OPEN_PAR)
+		return (handle_open_par(data, token, root));
+	else if ((*token)->type == TOKEN_CLOSE_PAR)
+		return (root);
+	else if (token_is_part_of_command((*token)->type))
+	{
+		tmp_node = new_node(NODE_COMMAND);
+		if (!tmp_node)
+			return (free_tree(root), NULL);
+		tmp_node->cmd = get_command(data, token);
+		if (!tmp_node->cmd)
+			return (free(tmp_node), free_tree(root), NULL);
+		return (tmp_node);
+	}
+	else
+	{
+		tmp_node = new_node(get_node_type((*token)->type));
+		if (tmp_node && *token)
+			*token = (*token)->next;
+		return (tmp_node);
+	}
+}
+
+t_tree_node	*process_token(t_data *data, t_token **token, t_tree_node *root)
+{
+	t_tree_node	*tmp_node;
+
+	if (!token || !*token)
+		return (root);
+	tmp_node = process_current_token(data, token, root);
+	if (!tmp_node)
+		return (NULL);
+	return (update_tree_structure(root, tmp_node));
 }
 
 t_tree_node	*new_tree(t_data *data, t_token **token)
@@ -75,10 +84,12 @@ t_tree_node	*new_tree(t_data *data, t_token **token)
 	t_tree_node	*root;
 
 	root = NULL;
-	if (!(*token))
+	if (!token || !(*token))
 		return (NULL);
 	while ((*token))
 	{
+		if ((*token)->type == TOKEN_CLOSE_PAR)
+			break ;
 		root = process_token(data, token, root);
 		if (!root)
 			return (NULL);

@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maxweert <maxweert@student.s19.be>         +#+  +:+       +#+        */
+/*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/18 16:06:14 by maxweert          #+#    #+#             */
-/*   Updated: 2025/02/20 20:30:59 by maxweert         ###   ########.fr       */
+/*   Created: 2025/02/27 20:38:37 by llebugle          #+#    #+#             */
+/*   Updated: 2025/02/27 20:38:41 by llebugle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
 int	event(void)
 {
+	return (0);
 }
