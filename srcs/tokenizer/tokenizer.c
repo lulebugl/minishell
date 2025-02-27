@@ -26,35 +26,29 @@ static int	is_logical_and(const char *s)
 
 int	handle_word(const char *s, int *pos, t_token **tokens)
 {
-	int	start;
+	int		start;
+	char	quotes;
 
 	start = *pos;
 	if (!s || !s[*pos])
 		return (0);
+	quotes = 0;
 	while (s[*pos] && s[*pos] != ' ' && !is_operator(s[*pos])
 		&& !is_logical_and(s + *pos))
 	{
-		if (s[*pos] == SINGLE_QUOTE)
+		if (s[*pos] == SINGLE_QUOTE || s[*pos] == DOUBLE_QUOTE)
 		{
-			(*pos)++;
-			while (s[(*pos)] && s[*pos] != SINGLE_QUOTE)
+			quotes = s[(*pos)++];
+			while (s[*pos] && s[*pos] != quotes)
 				(*pos)++;
-			if (s[(*pos)] == SINGLE_QUOTE)
-				(*pos)++;
-		}
-		else if (s[(*pos)] == DOUBLE_QUOTE)
-		{
-			(*pos)++;
-			while (s[*pos] && s[*pos] != DOUBLE_QUOTE)
-				(*pos)++;
-			if (s[(*pos)] == DOUBLE_QUOTE)
+			if (s[(*pos)] == quotes)
 				(*pos)++;
 		}
 		else
 			(*pos)++;
 	}
 	return (add_token(tokens, s, (t_token_pos){start, *pos - start},
-			TOKEN_WORD));
+		TOKEN_WORD));
 }
 
 /*
@@ -90,4 +84,3 @@ int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 	}
 	return (0);
 }
-

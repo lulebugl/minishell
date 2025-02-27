@@ -56,6 +56,18 @@ void	dup_fds(t_data *data, t_exec *exec, bool last)
 		close(exec->pipe[1]);
 }
 
+void	parent_process(t_exec *exec, bool last)
+{
+	if (exec->fd_in != STDIN_FILENO)
+		close(exec->fd_in);
+	if (!last)
+	{
+		close(exec->pipe[1]);
+		exec->fd_in = exec->pipe[0];
+	}
+	exec->child_pids[exec->id++] = exec->pid;
+}
+
 void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
 {
 	char	*path;

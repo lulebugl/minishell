@@ -16,18 +16,17 @@ int	read_extended(t_token **tokens, t_data *data)
 {
 	char	*buf;
 
+	rl_event_hook = event;
 	while (1)
 	{
-		signal(SIGINT, signal_ctlc);
+		signal(SIGINT, signal_ctlc_heredoc);
 		buf = readline("\033[35m> \033[0m");
 		if (g_sig == SIGINT)
 			return (free(buf), 1);
 		if (!buf)
-		{
-			ft_printf_fd(STDERR_FILENO,
-				"minishell: syntax error: unexpected end of file\n");
-			return (data_free(data), exit(ERR_SYNTAX), ERR_SYNTAX);
-		}
+			return (ft_printf_fd(STDERR_FILENO,
+					"minishell: syntax error: unexpected end of file\nexit\n"),
+				data_free(data), exit(ERR_SYNTAX), ERR_SYNTAX);
 		if (buf && buf[0] == '\0')
 		{
 			free(buf);

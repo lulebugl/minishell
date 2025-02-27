@@ -60,8 +60,6 @@ int	exec_prompt(const char *prompt, t_data *data)
 
 int	launch_program(t_data *data)
 {
-	char	*rl;
-
 	while (true)
 	{
 		signal(SIGINT, signal_ctlc);
@@ -73,17 +71,16 @@ int	launch_program(t_data *data)
 			continue ;
 		}
 		print_details();
-		rl = readline(PROMPT3);
-		if (!rl)
+		data->rl = readline(PROMPT3);
+		if (!data->rl)
 			return (printf("exit\n"), termios_change(true), 1);
-		if (rl && rl[0] == '\0')
+		if (data->rl && data->rl[0] == '\0')
 		{
-			free(rl);
+			free(data->rl);
 			continue ;
 		}
-		data->rl = rl;
-		add_history(rl);
-		exec_prompt(rl, data);
+		add_history(data->rl);
+		exec_prompt(data->rl, data);
 	}
 	return (0);
 }

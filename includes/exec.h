@@ -30,6 +30,7 @@ int		exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last);
 /* process */
 int		wait_child(t_exec *exec);
 void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last);
+void	parent_process(t_exec *exec, bool last);
 
 /* utils */
 void	init_exec(t_data *data, t_exec *exec, t_list **wailtist);
