@@ -20,6 +20,10 @@
 # define APPEND 1
 # define TRUNC 2
 
+# define PERMISSION_DENIED 1
+# define CMD_NOT_FOUND 2
+# define NO_SUCH_FILE 4
+
 int		exec(t_data *data);
 int		exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last);
 
@@ -41,7 +45,8 @@ void	restore_fd(t_data *data);
 /* path */
 
 char	*try_relative(t_data *data, char *str, t_exec *exec);
-char	*get_path(t_data *data, char *str, t_env *env);
+char	*get_path(t_data *data, t_command *cmd, t_exec *exec);
+void	error_path(t_data *data, t_exec *exec, char *path, int err);
 
 /* builtins */
 

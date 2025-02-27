@@ -21,108 +21,92 @@ int	is_dir(char *str)
 	return (S_ISDIR(st.st_mode));
 }
 
-// char	*try_relative(t_data *data, char *str, t_exec *exec)
-// {
-// 	char	*valid_path;
-
-// 	valid_path = ft_strjoin("./", str);
-// 	if (!access(str, F_OK) && access(str, X_OK))
-// 	{
-// 		ft_printf_fd(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
-// 		free(valid_path);
-// 		data_free(data);
-// 		cleanup_exec(exec);
-// 		exit(126);
-// 	}
-// 	if (!valid_path)
-// 		return (err_and_exit(data), NULL);
-// 	if (access(valid_path, F_OK) == -1)
-// 	{
-// 		ft_printf_fd(STDERR_FILENO, "minishell: %s: command not found\n", str);
-// 		free(valid_path);
-// 		data_free(data);
-// 		cleanup_exec(exec);
-// 		exit(127);
-// 	}
-// 	if (!access(valid_path, F_OK) && access(valid_path, X_OK))
-// 	{
-// 		ft_printf_fd(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
-// 		free(valid_path);
-// 		data_free(data);
-// 		cleanup_exec(exec);
-// 		exit(126);
-// 	}
-// 	return (valid_path);
-// }
-
-char	*try_relative(t_data *data, char *str, t_exec *exec)
+void	error_path(t_data *data, t_exec *exec, char *path, int err)
 {
-	if (!access(str, F_OK) && access(str, X_OK))
+	if (err == PERMISSION_DENIED)
 	{
-		ft_printf_fd(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
-		data_free(data);
-		cleanup_exec(exec);
+		ft_printf_fd(STDERR_FILENO, "minishell: %s: Permission denied\n", path);
+	}
+	else if (err == CMD_NOT_FOUND)
+	{
+		ft_printf_fd(STDERR_FILENO, "minishell: %s: command not found\n", path);
+	}
+	else if (err == NO_SUCH_FILE)
+	{
+		ft_printf_fd(STDERR_FILENO, \
+			"minishell: %s: No such file or directory\n", path);
+		free(path);
+	}
+	cleanup_exec(exec);
+	data_free(data);
+	if (err == PERMISSION_DENIED)
 		exit(126);
-	}
-	if (access(str, F_OK) == -1)
-	{
-		ft_printf_fd(STDERR_FILENO, "minishell: %s: command not found\n", str);
-		data_free(data);
-		cleanup_exec(exec);
-		exit(127);
-	}
-	if (!access(str, F_OK) && access(str, X_OK))
-	{
-		ft_printf_fd(STDERR_FILENO, "minishell: %s: Permission denied\n", str);
-		data_free(data);
-		cleanup_exec(exec);
-		exit(126);
-	}
-	return (str);
+	exit(127);
+}
+
+char	*try_relative(t_data *data, char *path, t_exec *exec)
+{
+	if (!path)
+		return (NULL);
+	if (!access(path, F_OK) && access(path, X_OK))
+		return (error_path(data, exec, path, PERMISSION_DENIED), NULL);
+	if (access(path, F_OK) == -1)
+		return (error_path(data, exec, path, CMD_NOT_FOUND), NULL);
+	return (path);
 }
 
 static char	*try_path(t_data *data, char *str, char *env)
 {
 	int		i;
 	char	**path;
-	char	*valid_path;
+	char	*found;
 	char	*tmp;
 
 	i = -1;
-	valid_path = NULL;
+	found = NULL;
+	if (str && (str[0] == '.' || str[0] == '/'))
+		return (NULL);
 	path = ft_split(env, ':');
 	if (!path)
 		return (err_and_exit(data), NULL);
 	while (path[++i])
 	{
 		tmp = ft_strjoin(path[i], "/");
-		valid_path = ft_strjoin_n_free(tmp, str);
-		if (access(valid_path, F_OK) == 0)
+		found = ft_strjoin_n_free(tmp, str);
+		if (access(found, F_OK) == 0 && !is_dir(found) && access(found,
+				X_OK) == 0)
 			break ;
-		free(valid_path);
-		valid_path = NULL;
+		free(found);
+		found = NULL;
 	}
 	ft_free_tab(path);
-	return (valid_path);
+	return (found);
 }
 
-char	*get_path(t_data *data, char *str, t_env *env)
+char	*get_path(t_data *data, t_command *cmd, t_exec *exec)
 {
 	int		i;
 	t_env	*curr;
+	char	*path;
+	char	*found;
 
 	i = 0;
-	curr = env;
-	if (!str)
+	curr = data->env;
+	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content)
 		return (NULL);
-	if (access(str, F_OK) == 0 && !is_dir(str) && access(str, X_OK) == 0)
-		return (ft_strdup(str));
+	path = cmd->arg_lst->content;
+	if (access(path, F_OK) == 0 && !is_dir(path) && access(path, X_OK) == 0)
+		return (ft_strdup(path));
 	while (curr)
 	{
 		if (curr->key && ft_strncmp(curr->key, "PATH", 4) == 0)
-			return (try_path(data, str, curr->value));
+		{
+			found = try_path(data, path, curr->value);
+			if (!found)
+				break ;
+			return (found);
+		}
 		curr = curr->next;
 	}
-	return (NULL);
+	return (cmd->arg_lst->content);
 }
-

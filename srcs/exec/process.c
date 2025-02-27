@@ -50,34 +50,36 @@ void	dup_fds(t_data *data, t_exec *exec, bool last)
 			return (cleanup_exec(exec), err_and_exit(data));
 		close(exec->pipe[1]);
 	}
+	if (exec->pipe[0] != -1)
+		close(exec->pipe[0]);
+	if (exec->pipe[1] != -1)
+		close(exec->pipe[1]);
 }
 
 void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
 {
-	char	*cmd_path;
+	char	*path;
 	char	**envp;
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	termios_change(true);
 	dup_fds(data, exec, last);
-	if (exec->pipe[0] != -1)
-		close(exec->pipe[0]);
-	if (exec->pipe[1] != -1)
-		close(exec->pipe[1]);
 	if (redirect_fd(data, cmd) == ERROR)
 		return (cleanup_exec(exec), data_free(data), exit(1));
 	if (exec_builtin(data, cmd, exec))
 		return (cleanup_exec(exec), data_free(data), exit(1));
-	cmd_path = get_path(data, cmd->arg_lst->content, data->env);
-	if (!cmd_path)
-		cmd_path = try_relative(data, cmd->arg_lst->content, exec);
-	// if (access(cmd_path, X_OK) != 0)
-	// 		return_error(path, "Permission denied", 126, node);
+	path = get_path(data, cmd, exec);
+	if (!path)
+		return (data_free(data), cleanup_exec(exec), exit(0));
+	if (access(path, F_OK) != 0)
+		return (error_path(data, exec, path, NO_SUCH_FILE));
+	if (is_dir(path) || access(path, F_OK | X_OK) != 0)
+		return (error_path(data, exec, path, PERMISSION_DENIED));
 	envp = t_env_to_envp(data->env);
 	if (!envp)
-		return (free(cmd_path), cleanup_exec(exec), err_and_exit(data));
-	execve(cmd_path, get_cmd_args_arr(cmd), envp);
+		return (free(path), cleanup_exec(exec), err_and_exit(data));
+	execve(path, get_cmd_args_arr(cmd), envp);
 	ft_free_tab(envp);
-	return (free(cmd_path), cleanup_exec(exec), err_and_exit(data));
+	return (free(path), cleanup_exec(exec), err_and_exit(data));
 }
