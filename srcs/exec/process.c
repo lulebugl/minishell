@@ -69,7 +69,7 @@ void	child_process(t_data *data, t_command *cmd, t_exec *exec, bool last)
 		return (cleanup_exec(exec), data_free(data), exit(1));
 	if (exec_builtin(data, cmd, exec))
 		return (cleanup_exec(exec), data_free(data), exit(1));
-	path = get_path(data, cmd, exec);
+	path = get_path(data, cmd);
 	if (!path)
 		return (data_free(data), cleanup_exec(exec), exit(0));
 	if (access(path, F_OK) != 0)

@@ -20,6 +20,8 @@ int	read_extended(t_token **tokens, t_data *data)
 	{
 		signal(SIGINT, signal_ctlc);
 		buf = readline("\033[35m> \033[0m");
+		if (g_sig == SIGINT)
+			return (free(buf), 1);
 		if (!buf)
 		{
 			ft_printf_fd(STDERR_FILENO,

@@ -83,7 +83,7 @@ static char	*try_path(t_data *data, char *str, char *env)
 	return (found);
 }
 
-char	*get_path(t_data *data, t_command *cmd, t_exec *exec)
+char	*get_path(t_data *data, t_command *cmd)
 {
 	int		i;
 	t_env	*curr;

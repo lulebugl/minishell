@@ -32,6 +32,7 @@ ls test "*"
 $test $test (avec test="ls -la") boucle infini
 printf("split\n");
 ctrl-c in extend prompt
+ls && (ls fdgfdgd || (echo 1 && echo 2) || ls)
 // need to fix path to check is_dir
 
 

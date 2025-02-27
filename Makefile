@@ -57,7 +57,6 @@ SRC		= 	main.c \
 			tokenizer/token_utils.c \
 			tokenizer/extend_prompt.c \
 			tokenizer/validate_prompt.c \
-			tokenizer/debug.c \
 			builtins/env.c \
 			builtins/pwd.c \
 			builtins/unset.c \
@@ -82,20 +81,21 @@ SRC		= 	main.c \
 			misc/env_utils2.c \
 			misc/free.c \
 			misc/init.c \
-			parsing/ast_debug.c \
 			parsing/command.c \
 			parsing/redirections.c \
 			parsing/tree.c \
 			parsing/tree_utils.c \
 			parsing/heredoc.c \
 			parsing/heredoc_utils.c \
-			exec/debug.c \
 			exec/exec.c \
 			exec/exec_builtin.c \
 			exec/utils.c \
 			exec/process.c \
 			exec/redirect.c \
-			exec/path.c
+			exec/path.c \
+			debug/debug_ast.c \
+			debug/debug_exec.c \
+			debug/debug_tokenizer.c \
 
 
 OBJ		= $(SRC:.c=.o)
@@ -112,7 +112,6 @@ all: $(OBJ_PATH) $(LIBFT) $(NAME)
 run : all
 	@./$(NAME)
 
-# Objects directory rule
 $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)
 	mkdir -p $(OBJ_PATH)/tokenizer
@@ -121,32 +120,27 @@ $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)/parsing
 	mkdir -p $(OBJ_PATH)/exec
 	mkdir -p $(OBJ_PATH)/expander
+	mkdir -p $(OBJ_PATH)/debug
 
-# Objects rule
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	$(CC) $(CFLAGS) -c $< -o $@ $(INC)
 
-# Project file rule
 $(NAME): $(OBJS)
-# $(CC) $(CFLAGS) $(OBJS) -o $@ $(INC) $(LIBFT) -l readline
 	$(CC) $(CFLAGS) $(OBJS) -o $@ $(INC) $(LIBFT) $(READLINE_LIB) $(READLINE_INC) -l readline
 
 # Libft rule
 $(LIBFT):
 	make -C $(LIBFT_PATH)
 
-# Clean up build files rule
 clean:
 	rm -rf $(OBJ_PATH)
 	make -C $(LIBFT_PATH) clean
 
-# Remove program executable
 fclean: clean
 	rm -f $(NAME)
 	rm -rf $(TESTER_DIR)
 	make -C $(LIBFT_PATH) fclean
 
-# Clean + remove executable
 re: fclean all
 
 # Testing rule
@@ -169,21 +163,5 @@ expander: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
 	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_expander.o -o $(TESTER_DIR)/expander $(INC) $(LIBFT) -l readline
 	@echo "$(BLUE)expander program compiled successfully!$(RESET)"
 	$(if $(VALGRIND), $(VALGRIND)) $(TESTER_DIR)/expander
-
-ast: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
-	mkdir -p $(TESTER_DIR)
-	mkdir -p $(OBJ_PATH)/testing
-	$(CC) $(CFLAGS) -c srcs/tests/test_ast.c -o $(OBJ_PATH)testing/test_ast.o $(INC)
-	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_ast.o -o $(TESTER_DIR)/ast $(INC) $(LIBFT) -l readline
-	@echo "$(BLUE)ast program compiled successfully!$(RESET)"
-	$(if $(VALGRIND), $(VALGRIND)) $(TESTER_DIR)/ast
-
-exec: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
-	mkdir -p $(TESTER_DIR)
-	mkdir -p $(OBJ_PATH)/testing
-	$(CC) $(CFLAGS) -c srcs/tests/test_exec.c -o $(OBJ_PATH)testing/test_exec.o $(INC)
-	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_exec.o -o $(TESTER_DIR)/exec $(INC) $(LIBFT) $(READLINE_LIB) $(READLINE_INC) -l readline
-	@echo "$(BLUE)exec program compiled successfully!$(RESET)"
-	$(if $(VALGRIND), $(VALGRIND)) $(TESTER_DIR)/exec
 
 .PHONY: all re clean fclean run test lexer expander ast
