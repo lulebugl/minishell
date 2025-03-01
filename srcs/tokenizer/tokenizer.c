@@ -80,7 +80,7 @@ int	tokenize_input(const char *s, t_token **tokens, t_data *data)
 		if (data->status != 0 && errno != 0)
 			return (data->status = errno, perror(strerror(errno)), 1);
 		else if (data->status != 0)
-			return (1);
+			return (data->status);
 	}
 	return (0);
 }

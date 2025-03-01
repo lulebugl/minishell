@@ -40,7 +40,7 @@ int	exec_prompt(const char *prompt, t_data *data)
 
 	signal(SIGINT, SIG_IGN);
 	if (tokenize_input(prompt, &data->tokens, data))
-		return (clear_tokens(&data->tokens), 1);
+		return (data->exit_code = data->status, clear_tokens(&data->tokens), 1);
 	data->status = validate_prompt(data->tokens);
 	if (data->status)
 		return (data->exit_code = data->status, clear_tokens(&data->tokens), 1);
@@ -64,14 +64,14 @@ int	launch_program(t_data *data)
 	{
 		signal(SIGINT, signal_ctlc);
 		termios_change(false);
-		print_details();
-		data->rl = readline(PROMPT3);
+		// print_details();
+		// data->rl = readline(PROMPT3);
+		data->rl = readline("> ");
 		if (g_sig)
 		{
 			data->exit_code = g_sig + 128;
 			g_sig = 0;
 		}
-		// data->rl = readline("> ");
 		if (!data->rl)
 			return (printf("exit\n"), termios_change(true), 1);
 		if (data->rl && data->rl[0] == '\0')

@@ -76,18 +76,18 @@ int	validate_prompt(t_token *token)
 		return (msg_custom_err("unclosed parentheses.\n", "syntax error : "),
 			ERR_SYNTAX);
 	if (has_balanced_quotes(&token) == false)
-		return (msg_custom_err(ERR_MSG_QUOTES, ERR_MSG_SYNTAX), 1);
+		return (msg_custom_err(ERR_MSG_QUOTES, ERR_MSG_SYNTAX), ERR_SYNTAX);
 	if (curr && (curr->type == TOKEN_PIPE || curr->type == TOKEN_AND
 			|| curr->type == TOKEN_OR))
 		return (msg_unexpected_token(curr->content), ERR_SYNTAX);
 	while (curr)
 	{
 		if (check_empty_parenthesis(curr))
-			return (ERROR);
+			return (ERR_SYNTAX);
 		if (check_redirections(curr))
-			return (ERROR);
+			return (ERR_SYNTAX);
 		if (check_others(curr))
-			return (1);
+			return (ERR_SYNTAX);
 		curr = curr->next;
 	}
 	return (0);

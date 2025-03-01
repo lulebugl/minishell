@@ -50,7 +50,7 @@ int	extend_prompt(t_data *data, t_token **tokens, const char *s, int *pos)
 	if (!s[*pos])
 	{
 		if (validate_prompt(*tokens) || read_extended(tokens, data))
-			return (1);
+			return (ERR_SYNTAX);
 	}
 	else if (s[*pos] == ' ')
 	{
@@ -59,7 +59,7 @@ int	extend_prompt(t_data *data, t_token **tokens, const char *s, int *pos)
 			i++;
 		if (!s[*pos + i])
 			if (validate_prompt(*tokens) || read_extended(tokens, data))
-				return (1);
+				return (ERR_SYNTAX);
 		(*pos) += i;
 	}
 	return (0);
