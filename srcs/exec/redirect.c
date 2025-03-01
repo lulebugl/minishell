@@ -84,16 +84,16 @@ int	process_redirections(t_data *data, t_command *cmd)
 		expand_redirection(data, &curr->filename, curr->type);
 		if (curr->type == TOKEN_IN)
 			if (process_infile(curr->filename) == ERROR)
-				return (data->exit_code = errno, ERROR);
+				return (data->exit_code = ERROR, ERROR);
 		if (curr->type == TOKEN_OUT)
 			if (process_outfile(curr->filename, TRUNC) == ERROR)
-				return (data->exit_code = errno, ERROR);
+				return (data->exit_code = ERROR, ERROR);
 		if (curr->type == TOKEN_APPEND)
 			if (process_outfile(curr->filename, APPEND) == ERROR)
-				return (data->exit_code = errno, ERROR);
+				return (data->exit_code = ERROR, ERROR);
 		if (curr->type == TOKEN_HEREDOC && curr->filename)
 			if (process_infile(curr->filename) == ERROR)
-				return (data->exit_code = errno, ERROR);
+				return (data->exit_code = ERROR, ERROR);
 		curr = curr->next;
 	}
 	return (unlink(".minishell.tmp"), 0);

@@ -54,7 +54,7 @@ int	ft_exit(t_data *data, char **args)
 		{
 			ft_printf_fd(STDERR_FILENO, "minishell: exit: %s: \
 numeric argument required\n", args[1]);
-			return (data_free(data), ft_free_tab(args), exit(2), 1);
+			return (ft_free_tab(args), data_free(data), exit(2), 1);
 		}
 		else
 			ret = ft_atoi(args[1]);

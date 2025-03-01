@@ -67,11 +67,12 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 		cmd = current->content;
 		if (expander(data, cmd) == ERROR)
 			return (data->exit_code = wait_child(&exec), cleanup_exec(&exec));
-		data->status = exec_cmd(data, cmd, &exec, !(current->next));
+		data->exit_code = exec_cmd(data, cmd, &exec, !(current->next));
 		exec.child_pids[exec.child_count++] = exec.pid;
 		current = current->next;
 	}
 	data->exit_code = wait_child(&exec);
+	
 	cleanup_exec(&exec);
 }
 

@@ -18,7 +18,7 @@ int	expander(t_data *data, t_command *cmd)
 		return (1);
 	if (expand_tilde(data, cmd->arg_lst) != SUCCESS)
 		return (1);
-	if (expand_keys(data, cmd->arg_lst) != SUCCESS)
+	if (expand_keys(data, &cmd->arg_lst) != SUCCESS)
 		return (1);
 	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content
 		|| !((char *)cmd->arg_lst->content)[0])
