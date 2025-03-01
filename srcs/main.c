@@ -49,7 +49,7 @@ int	exec_prompt(const char *prompt, t_data *data)
 		return (0);
 	data->ast = new_tree(data, &token_head);
 	if (!data->ast)
-		return (reset_data(data), 0);
+		return (data->exit_code = 1, reset_data(data), 0);
 	if (data->print_token)
 		print_tokens_formatted(data->tokens);
 	if (data->print_ast)
