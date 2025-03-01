@@ -99,6 +99,7 @@ int			env_key_exists(t_env *env, char *key);
 void		env_update_key(t_env *env, char *key, char *value);
 char		*env_key_from_str(char *str);
 char		*env_value_from_str(char *str);
+char		*env_value_from_str2(char *str, t_env *env);
 
 // ERROR
 
@@ -109,6 +110,5 @@ void		err_and_exit(t_data *data);
 // MISC
 void		print_details(void);
 char		*get_git_branch(void);
-t_list		*del_node_and_join(t_list **head, t_list *node_to_delete);
 
 #endif

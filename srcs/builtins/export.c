@@ -120,7 +120,7 @@ int	ft_export(t_env *env, char **args)
 	{
 		if (env_var_is_valid(args[i]) && ft_strchr(args[i], '='))
 			env_add_key(&env, env_key_from_str(args[i]),
-				env_value_from_str(args[i]));
+				env_value_from_str2(args[i], env));
 		else if (!env_var_is_valid(args[i]))
 		{
 			err = 1;

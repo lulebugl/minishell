@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lst_utils.c                                        :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: llebugle <llebugle@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,28 +12,26 @@
 
 #include "minishell.h"
 
-t_list	*del_node_and_join(t_list **head, t_list *node_to_delete)
+char	*env_value_from_str2(char *str, t_env *env)
 {
-	t_list	**curr;
-	t_list	*tmp;
+	int		i;
+	char	*home;
 
-	if (!head || !*head)
+	i = 0;
+	if (!ft_strchr(str, '='))
 		return (NULL);
-	if (!node_to_delete)
-		return (*head);
-	if (ft_lstsize(*head) == 1 && (*head == node_to_delete))
-		return (NULL);
-	curr = head;
-	while (*curr && *curr != node_to_delete)
-		curr = &(*curr)->next;
-	if (*curr)
+	while (str[i] && str[i] != '=')
+		i++;
+	i++;
+	if (str[i] == '~' && (str[i + 1] == '\0' || str[i + 1] == '/'))
 	{
-		tmp = *curr;
-		*curr = (*curr)->next;
-		if (tmp->content)
-			free(tmp->content);
-		free(tmp);
-		return (*curr);
+		home = env_get_value(env, "HOME");
+		if (!home)
+			return (ft_strdup(&str[i]));
+		if (str[i + 1] == '\0')
+			return (ft_strdup(home));
+		else
+			return (ft_strjoin(home, str + i + 1));
 	}
-	return (*head);
+	return (ft_strdup(&str[i]));
 }
