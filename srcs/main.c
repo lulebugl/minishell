@@ -64,14 +64,13 @@ int	launch_program(t_data *data)
 	{
 		signal(SIGINT, signal_ctlc);
 		termios_change(false);
+		print_details();
+		data->rl = readline(PROMPT3);
 		if (g_sig)
 		{
 			data->exit_code = g_sig + 128;
 			g_sig = 0;
-			continue ;
 		}
-		print_details();
-		data->rl = readline(PROMPT3);
 		// data->rl = readline("> ");
 		if (!data->rl)
 			return (printf("exit\n"), termios_change(true), 1);
