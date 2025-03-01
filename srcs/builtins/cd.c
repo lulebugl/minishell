@@ -58,9 +58,9 @@ int	ft_cd(t_env *env, char **args)
 	if (ret != 0)
 		return (ft_printf_fd(STDERR_FILENO,
 				"minishell: cd: %s: %s\n", path, strerror(errno)), ERROR);
-	env_add_key(&env, "OLDPWD", ft_strdup(curr));
+	env_add_key(&env, ft_strdup("OLDPWD"), ft_strdup(curr));
 	if (!getcwd(curr, PATH_MAX))
 		return (ERROR);
-	env_add_key(&env, "PWD", ft_strdup(curr));
+	env_add_key(&env, ft_strdup("PWD"), ft_strdup(curr));
 	return (SUCCESS);
 }
