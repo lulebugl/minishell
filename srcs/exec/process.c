@@ -12,31 +12,31 @@
 
 #include "minishell.h"
 
-int wait_child(t_exec *exec)
+int	wait_child(t_exec *exec)
 {
-    int i;
-    int status;
-    int last_status;
-    
-    last_status = 0;
-    status = 0;
-    i = exec->child_count - 1;
-    while (i >= 0)
-    {
-        if (exec->child_pids[i] > 0)
-        {
-            waitpid(exec->child_pids[i], &status, 0);
-            if (i == exec->child_count - 1)
-            {
-                if (WIFEXITED(status))
-                    last_status = WEXITSTATUS(status);
-                else if (WIFSIGNALED(status))
-                    last_status = 128 + WTERMSIG(status);
-            }
-        }
-        i--;
-    }
-    return (last_status);
+	int	i;
+	int	status;
+	int	last_status;
+
+	last_status = 0;
+	status = 0;
+	i = exec->child_count - 1;
+	while (i >= 0)
+	{
+		if (exec->child_pids[i] > 0)
+		{
+			waitpid(exec->child_pids[i], &status, 0);
+			if (i == exec->child_count - 1)
+			{
+				if (WIFEXITED(status))
+					last_status = WEXITSTATUS(status);
+				else if (WIFSIGNALED(status))
+					last_status = 128 + WTERMSIG(status);
+			}
+		}
+		i--;
+	}
+	return (last_status);
 }
 
 void	dup_fds(t_data *data, t_exec *exec, bool last)

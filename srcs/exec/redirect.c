@@ -54,7 +54,7 @@ int	process_infile(char *filename)
 	return (SUCCESS);
 }
 
-int expand_redirection(t_data *data, char **str, t_token_type type)
+int	expand_redirection(t_data *data, char **str, t_token_type type)
 {
 	if (!*str)
 		return (ERROR);
@@ -63,7 +63,6 @@ int expand_redirection(t_data *data, char **str, t_token_type type)
 	*str = expand_str(data, *str);
 	if (!*str)
 		return (ERROR);
-	// what about wildcards? 
 	*str = unquote_arg(*str);
 	if (!*str)
 		return (ERROR);

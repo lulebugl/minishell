@@ -18,11 +18,11 @@ int	expander(t_data *data, t_command *cmd)
 		return (1);
 	if (expand_tilde(data, cmd->arg_lst) != SUCCESS)
 		return (1);
-	if (expand_keys(data, &cmd->arg_lst) != SUCCESS)
+	if (expand_keys(data, cmd->arg_lst) != SUCCESS)
 		return (1);
-	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content
-		|| !((char *)cmd->arg_lst->content)[0])
+	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content)
 		return (1);
+	ft_lst_remove_if(&cmd->arg_lst, "", ft_strcmp, free);
 	if (split_expanded_arguments(data, cmd) != SUCCESS)
 		return (1);
 	if (expand_wildcards(cmd) != SUCCESS)

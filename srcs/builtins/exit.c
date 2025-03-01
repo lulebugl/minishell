@@ -44,7 +44,7 @@ static int	check_arg(char *arg)
 
 int	ft_exit(t_data *data, char **args)
 {
-	int	ret;
+	unsigned int	ret;
 
 	ret = data->exit_code;
 	printf("exit\n");
@@ -57,7 +57,11 @@ numeric argument required\n", args[1]);
 			return (ft_free_tab(args), data_free(data), exit(2), 1);
 		}
 		else
-			ret = ft_atoi(args[1]);
+		{
+			ret = ft_atol(args[1]);
+			if (ret > 255)
+				ret = ret % 256;
+		}
 	}
 	if (args && args[1] && args[2])
 	{

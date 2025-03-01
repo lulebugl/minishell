@@ -142,25 +142,4 @@ fclean: clean
 
 re: fclean all
 
-# Testing rule
-TEST_NAME = lexer
-TESTER_DIR = testers
-TEST_OBJ = $(TEST_SRC:.c=.o)
-
-lexer: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
-	mkdir -p $(OBJ_PATH)/testing
-	mkdir -p $(TESTER_DIR)
-	$(CC) $(CFLAGS) -c ./tests/test_tokenizer.c -o $(OBJ_PATH)/testing/test_tokenizer.o $(INC)
-	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_tokenizer.o -o $(TESTER_DIR)/lexer $(INC) $(LIBFT) -l readline
-	@echo "$(BLUE)lexer program compiled successfully!$(RESET)"
-	@$(TESTER_DIR)/lexer
-
-expander: $(OBJ_PATH) $(filter-out $(OBJ_PATH)main.o, $(OBJS))
-	mkdir -p $(TESTER_DIR)
-	mkdir -p $(OBJ_PATH)/testing
-	$(CC) $(CFLAGS) -c ./tests/test_expander.c -o $(OBJ_PATH)testing/test_expander.o $(INC)
-	$(CC) $(CFLAGS) $(filter-out $(OBJ_PATH)main.o, $(OBJS)) $(OBJ_PATH)/testing/test_expander.o -o $(TESTER_DIR)/expander $(INC) $(LIBFT) -l readline
-	@echo "$(BLUE)expander program compiled successfully!$(RESET)"
-	$(if $(VALGRIND), $(VALGRIND)) $(TESTER_DIR)/expander
-
-.PHONY: all re clean fclean run test lexer expander ast
+.PHONY: all re clean fclean run 

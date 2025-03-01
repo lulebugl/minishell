@@ -45,4 +45,3 @@ int		check_redirections(t_token *curr);
 int		check_others(t_token *curr);
 
 #endif
-

@@ -79,6 +79,8 @@ void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 						void (*del)(void *));
 void				ft_lstsort(t_list **begin_list, int (*cmp)());
+void				ft_lst_remove_if(t_list **begin_list, void *data_ref,
+						int (*cmp)(), void (*free_fct)(void *));
 char				*get_next_line(int fd);
 int					ft_printf(const char *format, ...);
 int					ft_printf_fd(int fd, const char *format, ...);

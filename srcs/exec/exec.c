@@ -33,7 +33,6 @@ int	exec_cmd(t_data *data, t_command *cmd, t_exec *exec, bool last)
 		child_process(data, cmd, exec, last);
 	else
 		parent_process(exec, last);
-	debug_cmd(data, cmd); // remove at the end
 	return (0);
 }
 
@@ -72,7 +71,6 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 		current = current->next;
 	}
 	data->exit_code = wait_child(&exec);
-	
 	cleanup_exec(&exec);
 }
 

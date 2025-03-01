@@ -60,6 +60,7 @@ SRCS	= 	ft_isalpha.c		\
 			ft_lstsize.c		\
 			ft_lstlast.c		\
 			ft_lstsort.c		\
+			ft_lst_remove_if.c	\
 			get_next_line.c		\
 			ft_printf.c			\
 			ft_printf_fd.c		\

@@ -29,7 +29,6 @@ void	cleanup_exec(t_exec *exec)
 void	init_exec(t_data *data, t_exec *exec, t_list **waitlist)
 {
 	ft_memset(exec, 0, sizeof(t_exec));
-	// exec->child_count = ft_lstsize(*waitlist);
 	exec->child_pids = malloc(sizeof(pid_t) * ft_lstsize(*waitlist));
 	if (!exec->child_pids)
 		err_and_exit(data);

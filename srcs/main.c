@@ -64,9 +64,8 @@ int	launch_program(t_data *data)
 	{
 		signal(SIGINT, signal_ctlc);
 		termios_change(false);
-		// print_details();
-		// data->rl = readline(PROMPT3);
-		data->rl = readline("> ");
+		print_details();
+		data->rl = readline(PROMPT3);
 		if (g_sig)
 		{
 			data->exit_code = g_sig + 128;

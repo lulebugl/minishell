@@ -45,7 +45,7 @@ static char	*expand_var(t_data *data, char *str, int *i)
 	start = *i + 1;
 	len = 0;
 	while (str[start + len] && (ft_isalnum(str[start + len]) || str[start
-			+ len] == '_'))
+				+ len] == '_'))
 		len++;
 	key = ft_substr(str, start, len);
 	if (!key)
@@ -90,58 +90,24 @@ char	*expand_str(t_data *data, char *arg)
 	return (arg);
 }
 
-int expand_keys(t_data *data, t_list **args_ptr)
+int	expand_keys(t_data *data, t_list *args)
 {
-    t_list *curr;
-    t_list *prev = NULL;
+	t_list	*curr;
 
-    if (!args_ptr || !*args_ptr)
-        return (1);
-    
-    curr = *args_ptr;
-    
-    while (curr)
-    {
-        t_list *next = curr->next; // Save next before potential delete
-        
-        if (!curr->content)
-        {
-            prev = curr;
-            curr = next;
-            continue;
-        }
-        
-        curr->content = expand_str(data, curr->content);
-        if (!curr->content)
-            return (1);
-            
-        if (ft_strcmp(curr->content, "") == 0)
-        {
-            // If we're deleting the head node
-            if (curr == *args_ptr)
-            {
-                *args_ptr = next; // Update the head pointer
-                free(curr->content);
-                free(curr);
-                curr = next;
-                // prev remains NULL
-            }
-            else
-            {
-                // For non-head nodes
-                prev->next = next;
-                free(curr->content);
-                free(curr);
-                curr = next;
-                // prev stays the same
-            }
-        }
-        else
-        {
-            prev = curr;
-            curr = next;
-        }
-    }
-    
-    return (0);
+	if (!args)
+		return (1);
+	curr = args;
+	while (curr)
+	{
+		if (!curr->content)
+		{
+			curr = curr->next;
+			continue ;
+		}
+		curr->content = expand_str(data, curr->content);
+		if (!curr->content)
+			return (1);
+		curr = curr->next;
+	}
+	return (0);
 }

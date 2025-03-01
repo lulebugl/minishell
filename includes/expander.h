@@ -17,7 +17,7 @@
 
 int		expand_tilde(t_data *data, t_list *arg);
 int		remove_quotes(t_list *args);
-int		expand_keys(t_data *data, t_list **args);
+int		expand_keys(t_data *data, t_list *args);
 void	expand_wildcard(t_list **current);
 int		expand_wildcards(t_command *cmd);
 int		split_expanded_arguments(t_data *data, t_command *cmd);
