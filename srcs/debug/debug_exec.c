@@ -29,10 +29,8 @@ int	debug_expander(t_command *cmd)
 
 void	debug_cmd(t_data *data, t_command *cmd)
 {
-	int		i;
 	t_list	*tmp;
 
-	i = -1;
 	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content || cmd->arg_count == 0)
 		return ;
 	if (ft_strcmp(cmd->arg_lst->content, "token") == 0)

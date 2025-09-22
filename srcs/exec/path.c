@@ -73,12 +73,10 @@ static char	*try_path(t_data *data, char *str, char *env)
 
 char	*get_path(t_data *data, t_command *cmd)
 {
-	int		i;
 	t_env	*curr;
 	char	*path;
 	char	*found;
 
-	i = 0;
 	curr = data->env;
 	if (!cmd || !cmd->arg_lst || !cmd->arg_lst->content)
 		return (NULL);

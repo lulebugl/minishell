@@ -13,7 +13,7 @@
 #include "libft.h"
 
 void	ft_lst_remove_if(t_list **begin_list, void *data_ref,
-		int (*cmp)(), void (*free_fct)(void *))
+		int (*cmp)(char *, char*), void (*free_fct)(void *))
 {
 	t_list	*previous;
 	t_list	*tmp;

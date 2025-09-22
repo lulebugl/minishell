@@ -52,12 +52,10 @@ void	execute_waitlist(t_list **waitlist, t_data *data)
 	t_list		*current;
 	t_command	*cmd;
 	t_exec		exec;
-	int			i;
 
 	if (!waitlist || !*waitlist)
 		return ;
 	current = *waitlist;
-	i = 0;
 	init_exec(data, &exec, waitlist);
 	if (!current->next && is_builtin(current->content))
 		return (exec_single_builtin(data, current->content, &exec));
@@ -94,10 +92,8 @@ void	execute_ast(t_data *data, t_tree_node *root, t_list **waitlist)
 
 int	exec(t_data *data)
 {
-	t_tree_node	*root;
 	t_list		*waitlist;
 
-	root = data->ast;
 	waitlist = NULL;
 	execute_ast(data, data->ast, &waitlist);
 	if (waitlist)

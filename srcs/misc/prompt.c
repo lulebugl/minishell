@@ -37,14 +37,12 @@ static char	*get_shortened_path(const char *path)
 void	print_details(void)
 {
 	char	curr[PATH_MAX];
-	char	*username;
 	char	*short_path;
 	char	*shlvl;
 	char	*git_branch;
 
 	if (!getcwd(curr, PATH_MAX))
 		return ;
-	username = getenv("USER");
 	short_path = get_shortened_path(curr);
 	shlvl = getenv("SHLVL");
 	git_branch = get_git_branch();

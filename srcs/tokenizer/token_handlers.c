@@ -33,10 +33,8 @@ int	handle_quotes(const char *s, int *start, char type, t_token **tokens)
 int	handle_parenthesis(const char *s, int *pos, t_token **tokens)
 {
 	int		i;
-	char	next;
 
 	i = *pos;
-	next = 0;
 	if (s[i] == '(')
 	{
 		if (add_token(tokens, s, (t_token_pos){i, 1}, TOKEN_OPEN_PAR))
@@ -54,10 +52,8 @@ int	handle_parenthesis(const char *s, int *pos, t_token **tokens)
 int	handle_logical_and(t_data *data, const char *s, int *pos, t_token **tokens)
 {
 	int		i;
-	char	next;
 
 	i = *pos;
-	next = 0;
 	if (add_token(tokens, s, (t_token_pos){i, 2}, TOKEN_AND))
 		return (ENOSPC);
 	(*pos) += 2;

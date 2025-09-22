@@ -22,7 +22,7 @@ static t_list	*ft_swap_lst(t_list *lst1, t_list *lst2)
 	return (lst2);
 }
 
-void	ft_lstsort(t_list **begin_list, int (*cmp)())
+void	ft_lstsort(t_list **begin_list, int (*cmp)(char *, char*))
 {
 	int		lst_size;
 	int		i;
